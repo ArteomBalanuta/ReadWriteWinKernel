@@ -25,43 +25,29 @@ NTKERNELAPI NTSTATUS PsLookupProcessByProcessId(
     _Outptr_ PEPROCESS* Process
 );
 
-NTSTATUS KeReadProcessMemory(PEPROCESS Process, PVOID SourceAddress, PVOID TargetAddress, SIZE_T Size) {
-    PEPROCESS SourceProcess = Process;
-    PEPROCESS TargetProcess = PsGetCurrentProcess();
+NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID sourceAddress, PVOID targetAddress, SIZE_T Size) {
+    PEPROCESS sourceProcess = srcProcess;
+    PEPROCESS targetProcess = trgtProcess;
     SIZE_T Result;
-    if (NT_SUCCESS(MmCopyVirtualMemory(SourceProcess, SourceAddress, TargetProcess, TargetAddress, Size, KernelMode, &Result)))
+    if (NT_SUCCESS(MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, Size, KernelMode, &Result)))
         return STATUS_SUCCESS;
     else
         return STATUS_ACCESS_DENIED;
 }
 
-NTSTATUS KeWriteProcessMemory(PEPROCESS Process, PVOID SourceAddress, PVOID TargetAddress, SIZE_T Size) {
-    PEPROCESS SourceProcess = PsGetCurrentProcess();
-    PEPROCESS TargetProcess = Process;
-    SIZE_T Result;
-
-    if (NT_SUCCESS(MmCopyVirtualMemory(SourceProcess, SourceAddress, TargetProcess, TargetAddress, Size, KernelMode, &Result)))
-        return STATUS_SUCCESS;
-    else
-        return STATUS_ACCESS_DENIED;
-}
-
-VOID read(HANDLE processId, PVOID targetAddress, PVOID bufferAddress, SIZE_T size) {
-    PEPROCESS process;
-    PVOID buffer = ExAllocatePoolWithTag(NonPagedPool, 20, '0');
-
-    PsLookupProcessByProcessId(processId, &process);
-    KeReadProcessMemory(process, targetAddress, buffer, size * sizeof(char));
-
-    DbgPrintEx(DPFLTR_DEFAULT_ID,
-        DPFLTR_INFO_LEVEL,
-        "Read: %s",
-        buffer,
-        __FUNCTION__);
-}
-
-VOID readWriteProcess() {
+VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
+    PEPROCESS processSource, processTarget;
     
+    PsLookupProcessByProcessId(processSrcId, &processSource);
+    PsLookupProcessByProcessId(processTrgtId, &processTarget);
+
+    KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
+
+//    DbgPrintEx(DPFLTR_DEFAULT_ID,
+//        DPFLTR_INFO_LEVEL,
+//        "Read: %s",
+//        buffer,
+//        __FUNCTION__);
 }
 
 NTSTATUS DevioctlDispatch(
@@ -102,14 +88,20 @@ NTSTATUS DevioctlDispatch(
 
             DbgPrintEx(DPFLTR_DEFAULT_ID,
                 DPFLTR_INFO_LEVEL,
-                "%s requst: pid - %d, address - %p, bufferAdr - %p, size - %d",
+                "%s requst: from pid- %d from - %p, to pid - %d to - %p, size - %d",
                 __FUNCTION__,
                 rp->Param1,
                 rp->Param2,
                 rp->Param3,
-                rp->Param4);
+                rp->Param4,
+                rp->Param5,
+                rp->Param6,
+                rp->Param7,
+                rp->Param8,
+                rp->Param9,
+                rp->Param10);
 
-            read((HANDLE)rp->Param1, (PVOID)rp->Param2, (PVOID)rp->Param3, rp->Param4);
+            copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
 
             status = STATUS_SUCCESS;
             bytesIO = sizeof(INOUT_PARAM);            
@@ -196,7 +188,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\TDLD2");
+    RtlInitUnicodeString(&DevName, L"\\Device\\TDLD3");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -210,7 +202,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\TDLD2");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\TDLD3");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -250,7 +242,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\TDLD2");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\TDLD3");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
