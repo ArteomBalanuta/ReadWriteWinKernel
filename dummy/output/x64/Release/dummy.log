@@ -1,0 +1,19 @@
+﻿  Building 'dummy' with toolset 'WindowsKernelModeDriver10.0' and the 'Desktop' target platform.
+  Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.27.29112 для x64
+  (C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
+  cl /c /I.\output\x64\Release\ /Zi /W4 /WX- /diagnostics:column /MP /O1 /Oi /Os /Oy- /GL /D _WIN64 /D _AMD64_ /D AMD64 /D _WIN32_WINNT=0x0A00 /D WINVER=0x0A00 /D WINNT=1 /D NTDDI_VERSION=0x0A000008 /D KMDF_VERSION_MAJOR=1 /D KMDF_VERSION_MINOR=15 /GF /Gm- /Zp8 /GS- /guard:cf /Gy /fp:precise /Qspectre /Zc:wchar_t- /Zc:forScope /Zc:inline /GR- /Fx /FAcs /Fa".\output\x64\Release\\" /Fo".\output\x64\Release\\" /Fd".\output\x64\Release\vc142.pdb" /FR".\output\x64\Release\\" /Gz /TC /wd4603 /wd4627 /wd4986 /wd4987 /FI"C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\warning.h" /analyze- /FC /errorReport:prompt /kernel -cbstring -d2epilogunwind  /d1nodatetime /d1import_no_registry /d2AllowCompatibleILVersions /d2Zi+ main.c
+  main.c
+C:\Users\User\Desktop\driverlessdriver\dummy\main.c(11,2): warning C4273: ExAllocatePoolWithTag: несовместимое связывание dll
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\km\wdm.h(23115,1): message : см. предыдущее определение "ExAllocatePoolWithTag"
+C:\Users\User\Desktop\driverlessdriver\dummy\main.c(49,56): warning C4100: bufferAddress: неиспользованный формальный параметр
+  Microsoft (R) Incremental Linker Version 14.27.29112.0
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  "/OUT:.\output\x64\Release\dummy2.sys" "/VERSION:10.0" /INCREMENTAL:NO /WX "/SECTION:INIT,d" "C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\km\x64\BufferOverflowFastFailK.lib" "C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\km\x64\ntoskrnl.lib" "C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\km\x64\hal.lib" "C:\Program Files (x86)\Windows Kits\10\lib\10.0.19041.0\km\x64\wmilib.lib" "C:\Program Files (x86)\Windows Kits\10\lib\wdf\kmdf\x64\1.15\WdfLdr.lib" "C:\Program Files (x86)\Windows Kits\10\lib\wdf\kmdf\x64\1.15\WdfDriverEntry.lib" /NODEFAULTLIB /MANIFEST:NO "/PDB:.\output\x64\Release\dummy2.pdb" /MAP /MAPINFO:EXPORTS "/SUBSYSTEM:NATIVE,10.00" /LARGEADDRESSAWARE /Driver /OPT:REF /OPT:ICF /LTCG:incremental "/ENTRY:DriverEntry" /RELEASE /DYNAMICBASE /NXCOMPAT "/IMPLIB:.\output\x64\Release\dummy2.lib" "/MERGE:_TEXT=.text;_PAGE=PAGE" /MACHINE:X64 /guard:cf /NOCOFFGRPINFO /kernel /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221,4108,4088,4218,4218,4235 /osversion:10.0 /pdbcompress /debugtype:pdata .\output\x64\Release\main.obj 
+  Создание кода
+  9 of 9 functions (100.0%) were compiled.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  dummy.vcxproj -> C:\Users\User\Desktop\driverlessdriver\dummy\.\output\x64\Release\dummy2.sys
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\km\wdm.h(43640): warning BK4504: Їрщы ёюфхЁцшЄ ёыш°ъюь ьэюую ёё√ыюъ; фры№эхщ°шх ёё√ыъш шч ¤Єюую шёЄюўэшър сєфєЄ шуэюЁшЁютрЄ№ё
