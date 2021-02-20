@@ -38,16 +38,12 @@ NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID s
 VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
     PEPROCESS processSource, processTarget;
     
-    PsLookupProcessByProcessId(processSrcId, &processSource);
-    PsLookupProcessByProcessId(processTrgtId, &processTarget);
+    NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
+    NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
 
-    KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
-
-//    DbgPrintEx(DPFLTR_DEFAULT_ID,
-//        DPFLTR_INFO_LEVEL,
-//        "Read: %s",
-//        buffer,
-//        __FUNCTION__);
+    if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
+        KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
+    }
 }
 
 NTSTATUS DevioctlDispatch(
@@ -188,7 +184,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\TDLD3");
+    RtlInitUnicodeString(&DevName, L"\\Device\\pwn");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -202,7 +198,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\TDLD3");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\pwn");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -242,7 +238,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\TDLD3");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\pwn");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,

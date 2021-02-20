@@ -26,7 +26,7 @@ VOID sendRequest(ULONGLONG srcPid, ULONGLONG srcAddress, ULONGLONG targetPid, UL
     INOUT_PARAM     tmp;
     DWORD           bytesIO;
 
-    handle = CreateFile(TEXT("\\\\.\\TDLD3"), GENERIC_READ | GENERIC_WRITE,
+    handle = CreateFile(TEXT("\\\\.\\pwn"), GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
     if (handle != INVALID_HANDLE_VALUE) {
 
@@ -39,6 +39,8 @@ VOID sendRequest(ULONGLONG srcPid, ULONGLONG srcAddress, ULONGLONG targetPid, UL
         DeviceIoControl(handle, REQUEST,
             &tmp, sizeof(tmp), &tmp,
             sizeof(tmp), &bytesIO, NULL);
+        
+        printf("Request send!");
 
         CloseHandle(handle);
     }
@@ -69,8 +71,6 @@ int main(int argc, char * argv[]) {
     printf("size: %I64u \n", size);
 
     sendRequest(srcPid, srcAddress, targetPid, targetAddress, size);
-    
-    printf("Request send!");
     
     return 0;
 }
