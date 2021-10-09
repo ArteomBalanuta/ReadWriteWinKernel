@@ -25,11 +25,11 @@ NTKERNELAPI NTSTATUS PsLookupProcessByProcessId(
     _Outptr_ PEPROCESS* Process
 );
 
-NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID sourceAddress, PVOID targetAddress, SIZE_T Size) {
+NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID sourceAddress, PVOID targetAddress, SIZE_T size) {
     PEPROCESS sourceProcess = srcProcess;
     PEPROCESS targetProcess = trgtProcess;
     SIZE_T Result;
-    if (NT_SUCCESS(MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, Size, KernelMode, &Result)))
+    if (NT_SUCCESS(MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, size, KernelMode, &Result)))
         return STATUS_SUCCESS;
     else
         return STATUS_ACCESS_DENIED;
@@ -40,11 +40,16 @@ VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID
     
     NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
     NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
-
+    
     if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
         KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
     }
 }
+
+VOID read(PEPROCESS processSource, PEPROCESS processTarget, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
+    KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size);
+}
+
 
 NTSTATUS DevioctlDispatch(
     _In_ struct _DEVICE_OBJECT* DeviceObject,
@@ -82,23 +87,55 @@ NTSTATUS DevioctlDispatch(
                 break;
             }
 
-            DbgPrintEx(DPFLTR_DEFAULT_ID,
-                DPFLTR_INFO_LEVEL,
-                "%s requst: from pid- %d from - %p, to pid - %d to - %p, size - %d",
-                __FUNCTION__,
-                rp->Param1,
-                rp->Param2,
-                rp->Param3,
-                rp->Param4,
-                rp->Param5,
-                rp->Param6,
-                rp->Param7,
-                rp->Param8,
-                rp->Param9,
-                rp->Param10);
+            //copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
+            /* 0 - copy specific part 
+               1 - dump all the memory 
+            */
+            if (rp->Param6 == 0) {
+                copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
 
-            copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
+                DbgPrintEx(DPFLTR_DEFAULT_ID,
+                    DPFLTR_INFO_LEVEL,
+                    "%s WRITE REQUEST: from pid- %d from - %p, to pid - %d to - %p, size - %d, isReady - %d",
+                    __FUNCTION__,
+                    rp->Param1,
+                    rp->Param2,
+                    rp->Param3,
+                    rp->Param4,
+                    rp->Param5,
+                    rp->Param6);
+            }
 
+            if (rp->Param6 == 1) {
+                DbgPrintEx(DPFLTR_DEFAULT_ID,
+                    DPFLTR_INFO_LEVEL,
+                    "%s READ REQUEST: from pid- %d from - %p, to pid - %d to - %p, size - %d, isReady - %d",
+                    __FUNCTION__,
+                    rp->Param1,
+                    rp->Param2,
+                    rp->Param3,
+                    rp->Param4,
+                    rp->Param5,
+                    rp->Param6);
+
+                HANDLE processSrcId = (HANDLE)rp->Param1;
+                HANDLE processTrgtId = (HANDLE)rp->Param3;
+
+                PEPROCESS processSource, processTarget;
+                NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
+                NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
+
+                if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
+                    //~10mb = 18709120ULL
+                    //using size as number of megabytes to read 
+                    ULONGLONG step = 256ULL;
+                    ULONGLONG numberOfBytesToCopy = (rp->Param5 * 1024ULL) * 1024ULL;
+                    for (ULONGLONG i = 0ULL, address = 33554432ULL; i < numberOfBytesToCopy; i += step, address += step) {
+                        read(processSource, processTarget, (PVOID) address, (PVOID) (rp->Param4 + i) , step);
+                    }
+                }
+            }
+            
             status = STATUS_SUCCESS;
             bytesIO = sizeof(INOUT_PARAM);            
             break;
@@ -184,7 +221,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\pwn");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN3");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -198,7 +235,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\pwn");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN3");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -238,7 +275,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\pwn");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN3");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,

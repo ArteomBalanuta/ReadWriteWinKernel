@@ -1,2 +1,1 @@
-C:\Users\User\Desktop\driverLoader\KDU\Source\Examples\DummyDrv2\dummy\output\x64\Release\dummy2.sys
-C:\Users\User\Desktop\driverlessdriver\dummy\output\x64\Release\dummy2.sys
+C:\workspace\readDriver\dummy\output\x64\Release\dummy2.sys
