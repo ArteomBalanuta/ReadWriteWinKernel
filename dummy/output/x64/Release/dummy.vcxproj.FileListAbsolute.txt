@@ -1,1 +1,2 @@
 C:\workspace\readDriver\dummy\output\x64\Release\dummy2.sys
+D:\workspace\readDriver\dummy\output\x64\Release\dummy2.sys

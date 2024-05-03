@@ -45,10 +45,10 @@ VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID
         KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
     }
 }
-
+/*
 VOID read(PEPROCESS processSource, PEPROCESS processTarget, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
     KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size);
-}
+}*/
 
 
 NTSTATUS DevioctlDispatch(
@@ -105,7 +105,7 @@ NTSTATUS DevioctlDispatch(
                     rp->Param5,
                     rp->Param6);
             }
-
+            /*
             if (rp->Param6 == 1) {
                 DbgPrintEx(DPFLTR_DEFAULT_ID,
                     DPFLTR_INFO_LEVEL,
@@ -134,12 +134,13 @@ NTSTATUS DevioctlDispatch(
                         read(processSource, processTarget, (PVOID) address, (PVOID) (rp->Param4 + i) , step);
                     }
                 }
-            }
-            
-            status = STATUS_SUCCESS;
-            bytesIO = sizeof(INOUT_PARAM);            
-            break;
 
+            }
+            */ 
+
+            status = STATUS_SUCCESS;
+            bytesIO = sizeof(INOUT_PARAM);
+            break;
         default:
             DbgPrintEx(DPFLTR_DEFAULT_ID,
                 DPFLTR_INFO_LEVEL,

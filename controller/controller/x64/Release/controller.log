@@ -1,6 +1,6 @@
 ﻿  Source.c
-  Создание кода
+  Generating code
   Previous IPDB not found, fall back to full compilation.
   All 5 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Создание кода завершено
-  controller.vcxproj -> C:\workspace\readDriver\controller\x64\Release\controller.exe
+  Finished generating code
+  controller.vcxproj -> D:\workspace\readDriver\controller\x64\Release\controller.exe
