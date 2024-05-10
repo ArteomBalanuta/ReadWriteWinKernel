@@ -29,51 +29,35 @@ NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize);
 NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
 {
     NTSTATUS status = STATUS_SUCCESS;
-    try {
-        PEPROCESS process = NULL;
-        NTSTATUS isOk = PsLookupProcessByProcessId(ProcessId, &process);
+    HANDLE hProcess = NULL;
 
-        //Fetch the eprocess structure from the process id
-        if (STATUS_SUCCESS != isOk) {
-            logToFile(L"PsLookupProcessByProcessId", isOk);
-            return STATUS_NOT_FOUND;
-        }
-
-        // Validate address within process address space
-        if (!MmIsAddressValid(address)) {
-            logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
-            ObDereferenceObject(process);
-            return STATUS_INVALID_PARAMETER;
-        }
-
-        //attach our thread to the usermode process address space
-        KAPC_STATE state;
-        KeStackAttachProcess(process, &state);
-
-        ULONG curProtection = NULL;//variable to store the previous page protection   
-
-        SIZE_T size = pageSize;
-
-        //Attempting to change the page protection
-        status = ZwProtectVirtualMemory(ZwCurrentProcess(), address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
-
-        //Detach our thread from the user space
-        KeUnstackDetachProcess(&state);
-
-        //Free the pointer to the EPROCESS structure
-        ObDereferenceObject(process);
-
-        if (status != STATUS_SUCCESS) {
-            logToFile(L"ZwProtectVirtualMemory", status);
-        }
-        else {
-            logToFile(L"ZwProtectVirtualMemory", status);
-        }
+    // Open a handle to the target process
+    status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, NULL, ProcessId);
+    if (!NT_SUCCESS(status)) {
+        logToFile(L"ZwOpenProcess", status);
+        return status;
     }
-    except(EXCEPTION_EXECUTE_HANDLER) {
-        // Save exception using writeFailFile
-        logToFile(L"VirtualProtectMem Exception", GetExceptionCode());
-        status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
+
+    // Validate address within process address space
+    if (!MmIsAddressValid(address)) {
+        logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
+        ZwClose(hProcess);
+        return STATUS_INVALID_PARAMETER;
+    }
+
+    ULONG curProtection = NULL; // variable to store the previous page protection
+    SIZE_T size = pageSize;
+
+    // Attempting to change the page protection
+    status = ZwProtectVirtualMemory(hProcess, &address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
+
+    ZwClose(hProcess);
+
+    if (!NT_SUCCESS(status)) {
+        logToFile(L"ZwProtectVirtualMemory", status);
+    }
+    else {
+        logToFile(L"ZwProtectVirtualMemory", status);
     }
 
     return status;
@@ -141,8 +125,6 @@ void logToFile(const WCHAR* operation, NTSTATUS status)
             // Construct log content with operation and status information
             CHAR logContent[256]; // Adjust size according to your needs
 
-            // Match the status code with its description
-            const char* statusDescription;
             // Match the status code with its description
             const char* statusDescription;
             switch (status) {
@@ -398,7 +380,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN11");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN12");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -412,7 +394,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN11");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN12");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -452,7 +434,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN11");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN12");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,

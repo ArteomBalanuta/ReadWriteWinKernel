@@ -4,13 +4,23 @@ include listing.inc
 
 INCLUDELIB OLDNAMES
 
-PUBLIC	??_C@_1DG@LDCJCMOF@?$AAP?$AAs?$AAL?$AAo?$AAo?$AAk?$AAu?$AAp?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_1BM@CFALCGDO@?$AAZ?$AAw?$AAO?$AAp?$AAe?$AAn?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_1CA@DDOOPNNI@?$AAI?$AAn?$AAv?$AAa?$AAl?$AAi?$AAd?$AA?5?$AAA?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_1CO@JLIIMPMA@?$AAZ?$AAw?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
-PUBLIC	??_C@_1DI@LEAIAOJ@?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAM@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_1CI@EDIJMKFD@?$AAM?$AAm?$AAC?$AAo?$AAp?$AAy?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAM?$AAe@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_1DM@OOBLILGP@?$AAM?$AAm?$AAC?$AAo?$AAp?$AAy?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAM?$AAe@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_1DM@EEKDGDDE@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
-PUBLIC	??_C@_0BO@JELHCNNB@Operation?3?5?$CFS?5Status?3?50x?$CF08X?6@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0P@EPFFIDBN@STATUS_SUCCESS@FNODOBFM@	;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0BJ@CHCEKHNN@STATUS_INVALID_PARAMETER@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0BF@MEMFLPAP@STATUS_ACCESS_DENIED@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0BB@FOJNIANG@STATUS_NOT_FOUND@FNODOBFM@	;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0BO@GKEDLFHB@STATUS_INSUFFICIENT_RESOURCES@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0BB@NKBGLBFK@STATUS_NO_MEMORY@FNODOBFM@	;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0BN@HJOKFKIC@STATUS_OBJECT_NAME_NOT_FOUND@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0BN@MANINPDD@STATUS_OBJECT_NAME_COLLISION@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0P@HENFOCHP@STATUS_TIMEOUT@FNODOBFM@	;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0BE@FNCGEAEF@Unknown?5status?5code@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_0CD@OBLFNOL@Operation?3?5?$CFS?5Status?3?50x?$CF08X?5?$CI?$CF@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0BB@JDMGMFMP@DevioctlDispatch@FNODOBFM@	;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0FH@OJCOJELF@?$CFs?5WRITE?5REQUEST?3?5from?5pid?9?5?$CFd?5@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0EF@CFEKPEKL@?$CFs?5PAGEPROT?5REQUEST?3?5pid?5?9?5?$CFd?0?5@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
@@ -21,16 +31,16 @@ PUBLIC	??_C@_0O@LANPOMAE@CloseDispatch@FNODOBFM@	;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_08MEIEMPGC@?$CFs?5Close@FNODOBFM@		;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0BB@IBKDDIAO@DriverInitialize@FNODOBFM@	;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_03OFAPEBGM@?$CFs?6@FNODOBFM@		;  ?? ::FNODOBFM::`string'
-PUBLIC	??_C@_1BM@NGBPDEB@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
-PUBLIC	??_C@_1CE@GANNCNBF@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0CE@OGEKHAKP@?$CFs?5IoCreateSymbolicLink?$CI?$CFwZ?$CJ?5?$DN?5@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0M@GIPELPKM@DriverEntry@PBOPGDP@		;  ?? ::PBOPGDP::`string'
 PUBLIC	??_C@_03OFAPEBGM@?$CFs?6@PBOPGDP@		;  ?? ::PBOPGDP::`string'
-PUBLIC	??_C@_1BM@LPIEEIGA@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@PBOPGDP@ ;  ?? ::PBOPGDP::`string'
+PUBLIC	??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@ ;  ?? ::PBOPGDP::`string'
 PUBLIC	??_C@_0BO@PEJPEJGM@?$CFs?5IoCreateDriver?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@PBOPGDP@ ;  ?? ::PBOPGDP::`string'
 EXTRN	__imp_sprintf_s:PROC
-EXTRN	__imp_KeUnstackDetachProcess:PROC
+EXTRN	__imp_ZwOpenProcess:PROC
 EXTRN	__imp_ZwClose:PROC
 EXTRN	__imp_IoCreateSymbolicLink:PROC
 EXTRN	__imp_IofCompleteRequest:PROC
@@ -38,25 +48,24 @@ EXTRN	__imp_IoCreateDevice:PROC
 EXTRN	__imp_ZwProtectVirtualMemory:PROC
 EXTRN	__imp_ZwSetInformationFile:PROC
 EXTRN	__imp_PsLookupProcessByProcessId:PROC
-EXTRN	__imp_KeStackAttachProcess:PROC
 EXTRN	__imp_ZwWriteFile:PROC
 EXTRN	__imp_IoCreateDriver:PROC
 EXTRN	__imp_MmCopyVirtualMemory:PROC
 EXTRN	__imp_RtlInitUnicodeString:PROC
-EXTRN	__imp_ObfDereferenceObject:PROC
 EXTRN	__imp_ZwCreateFile:PROC
 EXTRN	__imp_DbgPrintEx:PROC
+EXTRN	__imp_MmIsAddressValid:PROC
 EXTRN	__imp___C_specific_handler:PROC
 ;	COMDAT ??_C@_0BO@PEJPEJGM@?$CFs?5IoCreateDriver?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@PBOPGDP@
 INIT$s	SEGMENT
 ??_C@_0BO@PEJPEJGM@?$CFs?5IoCreateDriver?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@PBOPGDP@ DB '%'
 	DB	's IoCreateDriver(%wZ) = %lx', 0aH, 00H	;  ?? ::PBOPGDP::`string'
 INIT$s	ENDS
-;	COMDAT ??_C@_1BM@LPIEEIGA@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@PBOPGDP@
+;	COMDAT ??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@
 INIT$s	SEGMENT
-??_C@_1BM@LPIEEIGA@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@PBOPGDP@ DB '\'
+??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@ DB '\'
 	DB	00H, 'D', 00H, 'r', 00H, 'i', 00H, 'v', 00H, 'e', 00H, 'r', 00H
-	DB	'\', 00H, 'P', 00H, 'W', 00H, 'N', 00H, '1', 00H, '1', 00H, 00H
+	DB	'\', 00H, 'P', 00H, 'W', 00H, 'N', 00H, '1', 00H, '2', 00H, 00H
 	DB	00H						;  ?? ::PBOPGDP::`string'
 INIT$s	ENDS
 ;	COMDAT ??_C@_03OFAPEBGM@?$CFs?6@PBOPGDP@
@@ -72,23 +81,23 @@ text$s	SEGMENT
 ??_C@_0CE@OGEKHAKP@?$CFs?5IoCreateSymbolicLink?$CI?$CFwZ?$CJ?5?$DN?5@FNODOBFM@ DB '%'
 	DB	's IoCreateSymbolicLink(%wZ) = %lx', 0aH, 00H ;  ?? ::FNODOBFM::`string'
 text$s	ENDS
-;	COMDAT ??_C@_1CE@GANNCNBF@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@
+;	COMDAT ??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@
 text$s	SEGMENT
-??_C@_1CE@GANNCNBF@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ DB '\'
+??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ DB '\'
 	DB	00H, 'D', 00H, 'o', 00H, 's', 00H, 'D', 00H, 'e', 00H, 'v', 00H
 	DB	'i', 00H, 'c', 00H, 'e', 00H, 's', 00H, '\', 00H, 'P', 00H, 'W'
-	DB	00H, 'N', 00H, '1', 00H, '1', 00H, 00H, 00H	;  ?? ::FNODOBFM::`string'
+	DB	00H, 'N', 00H, '1', 00H, '2', 00H, 00H, 00H	;  ?? ::FNODOBFM::`string'
 text$s	ENDS
 ;	COMDAT ??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@
 text$s	SEGMENT
 ??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@ DB '%'
 	DB	's IoCreateDevice(%wZ) = %lx', 0aH, 00H	;  ?? ::FNODOBFM::`string'
 text$s	ENDS
-;	COMDAT ??_C@_1BM@NGBPDEB@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@FNODOBFM@
+;	COMDAT ??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@
 text$s	SEGMENT
-??_C@_1BM@NGBPDEB@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@FNODOBFM@ DB '\'
+??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@ DB '\'
 	DB	00H, 'D', 00H, 'e', 00H, 'v', 00H, 'i', 00H, 'c', 00H, 'e', 00H
-	DB	'\', 00H, 'P', 00H, 'W', 00H, 'N', 00H, '1', 00H, '1', 00H, 00H
+	DB	'\', 00H, 'P', 00H, 'W', 00H, 'N', 00H, '1', 00H, '2', 00H, 00H
 	DB	00H						;  ?? ::FNODOBFM::`string'
 text$s	ENDS
 ;	COMDAT ??_C@_03OFAPEBGM@?$CFs?6@FNODOBFM@
@@ -136,10 +145,56 @@ text$s	ENDS
 text$s	SEGMENT
 ??_C@_0BB@JDMGMFMP@DevioctlDispatch@FNODOBFM@ DB 'DevioctlDispatch', 00H ;  ?? ::FNODOBFM::`string'
 text$s	ENDS
-;	COMDAT ??_C@_0BO@JELHCNNB@Operation?3?5?$CFS?5Status?3?50x?$CF08X?6@FNODOBFM@
+;	COMDAT ??_C@_0CD@OBLFNOL@Operation?3?5?$CFS?5Status?3?50x?$CF08X?5?$CI?$CF@FNODOBFM@
 text$s	SEGMENT
-??_C@_0BO@JELHCNNB@Operation?3?5?$CFS?5Status?3?50x?$CF08X?6@FNODOBFM@ DB 'O'
-	DB	'peration: %S Status: 0x%08X', 0aH, 00H	;  ?? ::FNODOBFM::`string'
+??_C@_0CD@OBLFNOL@Operation?3?5?$CFS?5Status?3?50x?$CF08X?5?$CI?$CF@FNODOBFM@ DB 'O'
+	DB	'peration: %S Status: 0x%08X (%s)', 0aH, 00H	;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0BE@FNCGEAEF@Unknown?5status?5code@FNODOBFM@
+text$s	SEGMENT
+??_C@_0BE@FNCGEAEF@Unknown?5status?5code@FNODOBFM@ DB 'Unknown status cod'
+	DB	'e', 00H					;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0P@HENFOCHP@STATUS_TIMEOUT@FNODOBFM@
+text$s	SEGMENT
+??_C@_0P@HENFOCHP@STATUS_TIMEOUT@FNODOBFM@ DB 'STATUS_TIMEOUT', 00H ;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0BN@MANINPDD@STATUS_OBJECT_NAME_COLLISION@FNODOBFM@
+text$s	SEGMENT
+??_C@_0BN@MANINPDD@STATUS_OBJECT_NAME_COLLISION@FNODOBFM@ DB 'STATUS_OBJE'
+	DB	'CT_NAME_COLLISION', 00H			;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0BN@HJOKFKIC@STATUS_OBJECT_NAME_NOT_FOUND@FNODOBFM@
+text$s	SEGMENT
+??_C@_0BN@HJOKFKIC@STATUS_OBJECT_NAME_NOT_FOUND@FNODOBFM@ DB 'STATUS_OBJE'
+	DB	'CT_NAME_NOT_FOUND', 00H			;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0BB@NKBGLBFK@STATUS_NO_MEMORY@FNODOBFM@
+text$s	SEGMENT
+??_C@_0BB@NKBGLBFK@STATUS_NO_MEMORY@FNODOBFM@ DB 'STATUS_NO_MEMORY', 00H ;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0BO@GKEDLFHB@STATUS_INSUFFICIENT_RESOURCES@FNODOBFM@
+text$s	SEGMENT
+??_C@_0BO@GKEDLFHB@STATUS_INSUFFICIENT_RESOURCES@FNODOBFM@ DB 'STATUS_INS'
+	DB	'UFFICIENT_RESOURCES', 00H			;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0BB@FOJNIANG@STATUS_NOT_FOUND@FNODOBFM@
+text$s	SEGMENT
+??_C@_0BB@FOJNIANG@STATUS_NOT_FOUND@FNODOBFM@ DB 'STATUS_NOT_FOUND', 00H ;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0BF@MEMFLPAP@STATUS_ACCESS_DENIED@FNODOBFM@
+text$s	SEGMENT
+??_C@_0BF@MEMFLPAP@STATUS_ACCESS_DENIED@FNODOBFM@ DB 'STATUS_ACCESS_DENIE'
+	DB	'D', 00H					;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0BJ@CHCEKHNN@STATUS_INVALID_PARAMETER@FNODOBFM@
+text$s	SEGMENT
+??_C@_0BJ@CHCEKHNN@STATUS_INVALID_PARAMETER@FNODOBFM@ DB 'STATUS_INVALID_'
+	DB	'PARAMETER', 00H				;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_0P@EPFFIDBN@STATUS_SUCCESS@FNODOBFM@
+text$s	SEGMENT
+??_C@_0P@EPFFIDBN@STATUS_SUCCESS@FNODOBFM@ DB 'STATUS_SUCCESS', 00H ;  ?? ::FNODOBFM::`string'
 text$s	ENDS
 ;	COMDAT ??_C@_1DM@EEKDGDDE@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@
 text$s	SEGMENT
@@ -166,15 +221,6 @@ text$s	SEGMENT
 	DB	'i', 00H, 'r', 00H, 't', 00H, 'u', 00H, 'a', 00H, 'l', 00H, 'M'
 	DB	00H, 'e', 00H, 'm', 00H, 'o', 00H, 'r', 00H, 'y', 00H, 00H, 00H ;  ?? ::FNODOBFM::`string'
 text$s	ENDS
-;	COMDAT ??_C@_1DI@LEAIAOJ@?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAM@FNODOBFM@
-text$s	SEGMENT
-??_C@_1DI@LEAIAOJ@?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAM@FNODOBFM@ DB 'V'
-	DB	00H, 'i', 00H, 'r', 00H, 't', 00H, 'u', 00H, 'a', 00H, 'l', 00H
-	DB	'P', 00H, 'r', 00H, 'o', 00H, 't', 00H, 'e', 00H, 'c', 00H, 't'
-	DB	00H, 'M', 00H, 'e', 00H, 'm', 00H, ' ', 00H, 'E', 00H, 'x', 00H
-	DB	'c', 00H, 'e', 00H, 'p', 00H, 't', 00H, 'i', 00H, 'o', 00H, 'n'
-	DB	00H, 00H, 00H				;  ?? ::FNODOBFM::`string'
-text$s	ENDS
 ;	COMDAT ??_C@_1CO@JLIIMPMA@?$AAZ?$AAw?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa@FNODOBFM@
 text$s	SEGMENT
 ??_C@_1CO@JLIIMPMA@?$AAZ?$AAw?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa@FNODOBFM@ DB 'Z'
@@ -183,13 +229,18 @@ text$s	SEGMENT
 	DB	00H, 'a', 00H, 'l', 00H, 'M', 00H, 'e', 00H, 'm', 00H, 'o', 00H
 	DB	'r', 00H, 'y', 00H, 00H, 00H			;  ?? ::FNODOBFM::`string'
 text$s	ENDS
-;	COMDAT ??_C@_1DG@LDCJCMOF@?$AAP?$AAs?$AAL?$AAo?$AAo?$AAk?$AAu?$AAp?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@
+;	COMDAT ??_C@_1CA@DDOOPNNI@?$AAI?$AAn?$AAv?$AAa?$AAl?$AAi?$AAd?$AA?5?$AAA?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs@FNODOBFM@
 text$s	SEGMENT
-??_C@_1DG@LDCJCMOF@?$AAP?$AAs?$AAL?$AAo?$AAo?$AAk?$AAu?$AAp?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@ DB 'P'
-	DB	00H, 's', 00H, 'L', 00H, 'o', 00H, 'o', 00H, 'k', 00H, 'u', 00H
-	DB	'p', 00H, 'P', 00H, 'r', 00H, 'o', 00H, 'c', 00H, 'e', 00H, 's'
-	DB	00H, 's', 00H, 'B', 00H, 'y', 00H, 'P', 00H, 'r', 00H, 'o', 00H
-	DB	'c', 00H, 'e', 00H, 's', 00H, 's', 00H, 'I', 00H, 'd', 00H, 00H
+??_C@_1CA@DDOOPNNI@?$AAI?$AAn?$AAv?$AAa?$AAl?$AAi?$AAd?$AA?5?$AAA?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs@FNODOBFM@ DB 'I'
+	DB	00H, 'n', 00H, 'v', 00H, 'a', 00H, 'l', 00H, 'i', 00H, 'd', 00H
+	DB	' ', 00H, 'A', 00H, 'd', 00H, 'd', 00H, 'r', 00H, 'e', 00H, 's'
+	DB	00H, 's', 00H, 00H, 00H			;  ?? ::FNODOBFM::`string'
+text$s	ENDS
+;	COMDAT ??_C@_1BM@CFALCGDO@?$AAZ?$AAw?$AAO?$AAp?$AAe?$AAn?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@
+text$s	SEGMENT
+??_C@_1BM@CFALCGDO@?$AAZ?$AAw?$AAO?$AAp?$AAe?$AAn?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@ DB 'Z'
+	DB	00H, 'w', 00H, 'O', 00H, 'p', 00H, 'e', 00H, 'n', 00H, 'P', 00H
+	DB	'r', 00H, 'o', 00H, 'c', 00H, 'e', 00H, 's', 00H, 's', 00H, 00H
 	DB	00H						;  ?? ::FNODOBFM::`string'
 text$s	ENDS
 PUBLIC	DriverEntry
@@ -236,8 +287,8 @@ $pdata$UnsupportedDispatch DD imagerel $LN4
 pdata	ENDS
 ;	COMDAT pdata
 pdata	SEGMENT
-$pdata$DevioctlDispatch DD imagerel $LN26
-	DD	imagerel $LN26+428
+$pdata$DevioctlDispatch DD imagerel $LN34
+	DD	imagerel $LN34+570
 	DD	imagerel $unwind$DevioctlDispatch
 pdata	ENDS
 ;	COMDAT pdata
@@ -248,8 +299,8 @@ $pdata$copy DD	imagerel $LN5
 pdata	ENDS
 ;	COMDAT pdata
 pdata	SEGMENT
-$pdata$logToFile DD imagerel $LN10
-	DD	imagerel $LN10+353
+$pdata$logToFile DD imagerel $LN22
+	DD	imagerel $LN22+522
 	DD	imagerel $unwind$logToFile
 pdata	ENDS
 ;	COMDAT pdata
@@ -260,21 +311,17 @@ $pdata$KCopyProcessMemory DD imagerel $LN10
 pdata	ENDS
 ;	COMDAT pdata
 pdata	SEGMENT
-$pdata$VirtualProtectMem DD imagerel $LN13
-	DD	imagerel $LN13+203
+$pdata$VirtualProtectMem DD imagerel $LN10
+	DD	imagerel $LN10+197
 	DD	imagerel $unwind$VirtualProtectMem
 pdata	ENDS
 ;	COMDAT xdata
 xdata	SEGMENT
-$unwind$VirtualProtectMem DD 04100aH
+$unwind$VirtualProtectMem DD 081702H
 	DD	06001602H
-	DD	0300cd210H
-	DD	imagerel __C_specific_handler
-	DD	01H
-	DD	imagerel $LN13+16
-	DD	imagerel $LN13+172
-	DD	01H
-	DD	imagerel $LN13+172
+	DD	0c7417H
+	DD	0a3417H
+	DD	050107217H
 xdata	ENDS
 ;	COMDAT xdata
 xdata	SEGMENT
@@ -308,10 +355,10 @@ $unwind$copy DD	0a1402H
 xdata	ENDS
 ;	COMDAT xdata
 xdata	SEGMENT
-$unwind$DevioctlDispatch DD 0c1402H
+$unwind$DevioctlDispatch DD 0c1702H
 	DD	0600160cH
-	DD	0123414H
-	DD	0f0109214H
+	DD	0143417H
+	DD	0f010b217H
 	DD	0d00ce00eH
 	DD	07008c00aH
 	DD	050066007H
@@ -384,153 +431,140 @@ _TEXT	ENDS
 ; File D:\workspace\readDriver\dummy\main.c
 ;	COMDAT VirtualProtectMem
 _TEXT	SEGMENT
-status$ = 48
-process$1 = 56
-state$2 = 64
-ProcessId$ = 128
-address$ = 136
-pageSize$ = 144
-curProtection$3 = 152
+hProcess$ = 48
+size$ = 56
+ProcessId$ = 80
+address$ = 88
+pageSize$ = 96
+curProtection$ = 104
 VirtualProtectMem PROC					; COMDAT
 
 ; 30   : {
 
-$LN13:
-  00000	48 8b c4	 mov	 rax, rsp
-  00003	44 89 40 18	 mov	 DWORD PTR [rax+24], r8d
-  00007	48 89 50 10	 mov	 QWORD PTR [rax+16], rdx
-  0000b	53		 push	 rbx
-  0000c	48 83 ec 70	 sub	 rsp, 112		; 00000070H
+$LN10:
+  00000	48 89 5c 24 08	 mov	 QWORD PTR [rsp+8], rbx
+  00005	48 89 7c 24 18	 mov	 QWORD PTR [rsp+24], rdi
+  0000a	48 89 54 24 10	 mov	 QWORD PTR [rsp+16], rdx
+  0000f	55		 push	 rbp
+  00010	48 8b ec	 mov	 rbp, rsp
+  00013	48 83 ec 40	 sub	 rsp, 64			; 00000040H
 
 ; 31   :     NTSTATUS status = STATUS_SUCCESS;
-; 32   :     try {
-; 33   :         PEPROCESS process = NULL;
+; 32   :     HANDLE hProcess = NULL;
 
-  00010	48 83 60 c0 00	 and	 QWORD PTR [rax-64], 0
+  00017	48 83 65 f0 00	 and	 QWORD PTR hProcess$[rbp-64], 0
 
-; 34   :         NTSTATUS isOk = PsLookupProcessByProcessId(ProcessId, &process);
+; 33   : 
+; 34   :     // Open a handle to the target process
+; 35   :     status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, NULL, ProcessId);
 
-  00015	48 8d 50 c0	 lea	 rdx, QWORD PTR [rax-64]
-  00019	ff 15 00 00 00
-	00		 call	 QWORD PTR __imp_PsLookupProcessByProcessId
+  0001c	4c 8b c9	 mov	 r9, rcx
+  0001f	41 8b f8	 mov	 edi, r8d
+  00022	48 8d 4d f0	 lea	 rcx, QWORD PTR hProcess$[rbp-64]
+  00026	45 33 c0	 xor	 r8d, r8d
+  00029	ba ff ff 1f 00	 mov	 edx, 2097151		; 001fffffH
+  0002e	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwOpenProcess
+  00034	8b d8		 mov	 ebx, eax
 
-; 35   : 
-; 36   :         //Fetch the eprocess structure from the process id
-; 37   :         if (STATUS_SUCCESS != isOk) {
+; 36   :     if (!NT_SUCCESS(status)) {
 
-  0001f	85 c0		 test	 eax, eax
-  00021	74 18		 je	 SHORT $LN3@VirtualPro
+  00036	85 c0		 test	 eax, eax
+  00038	79 09		 jns	 SHORT $LN2@VirtualPro
 
-; 38   :             logToFile(L"PsLookupProcessByProcessId", isOk);
+; 37   :         logToFile(L"ZwOpenProcess", status);
 
-  00023	8b d0		 mov	 edx, eax
-  00025	48 8d 0d 00 00
-	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1DG@LDCJCMOF@?$AAP?$AAs?$AAL?$AAo?$AAo?$AAk?$AAu?$AAp?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@
-  0002c	e8 00 00 00 00	 call	 logToFile
+  0003a	48 8d 0d 00 00
+	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1BM@CFALCGDO@?$AAZ?$AAw?$AAO?$AAp?$AAe?$AAn?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@
 
-; 39   :             return STATUS_NOT_FOUND;
+; 38   :         return status;
 
-  00031	b8 25 02 00 c0	 mov	 eax, -1073741275	; ffffffffc0000225H
-  00036	e9 8a 00 00 00	 jmp	 $LN1@VirtualPro
+  00041	eb 69		 jmp	 SHORT $LN7@VirtualPro
+$LN2@VirtualPro:
+
+; 39   :     }
+; 40   : 
+; 41   :     // Validate address within process address space
+; 42   :     if (!MmIsAddressValid(address)) {
+
+  00043	48 8b 4d 18	 mov	 rcx, QWORD PTR address$[rbp-64]
+  00047	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_MmIsAddressValid
+  0004d	84 c0		 test	 al, al
+  0004f	75 1f		 jne	 SHORT $LN3@VirtualPro
+
+; 43   :         logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
+
+  00051	bb 0d 00 00 c0	 mov	 ebx, -1073741811	; ffffffffc000000dH
+  00056	48 8d 0d 00 00
+	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1CA@DDOOPNNI@?$AAI?$AAn?$AAv?$AAa?$AAl?$AAi?$AAd?$AA?5?$AAA?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs@FNODOBFM@
+  0005d	8b d3		 mov	 edx, ebx
+  0005f	e8 00 00 00 00	 call	 logToFile
+
+; 44   :         ZwClose(hProcess);
+
+  00064	48 8b 4d f0	 mov	 rcx, QWORD PTR hProcess$[rbp-64]
+  00068	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwClose
+
+; 45   :         return STATUS_INVALID_PARAMETER;
+
+  0006e	eb 43		 jmp	 SHORT $LN8@VirtualPro
 $LN3@VirtualPro:
 
-; 40   :         }
-; 41   : 
-; 42   :         //attach our thread to the usermode process address space
-; 43   :         KAPC_STATE state;
-; 44   :         KeStackAttachProcess(process, &state);
-
-  0003b	48 8d 54 24 40	 lea	 rdx, QWORD PTR state$2[rsp]
-  00040	48 8b 4c 24 38	 mov	 rcx, QWORD PTR process$1[rsp]
-  00045	ff 15 00 00 00
-	00		 call	 QWORD PTR __imp_KeStackAttachProcess
-
-; 45   : 
-; 46   :         ULONG curProtection = NULL;//variable to store the previous page protection   
-
-  0004b	83 a4 24 98 00
-	00 00 00	 and	 DWORD PTR curProtection$3[rsp], 0
-
+; 46   :     }
 ; 47   : 
-; 48   :         SIZE_T size = pageSize;
-; 49   : 
-; 50   :         //Attempting to change the page protection
-; 51   :         status = ZwProtectVirtualMemory(ZwCurrentProcess(), &address, &pageSize, PAGE_EXECUTE_READWRITE, &curProtection);
+; 48   :     ULONG curProtection = NULL; // variable to store the previous page protection
+; 49   :     SIZE_T size = pageSize;
+; 50   : 
+; 51   :     // Attempting to change the page protection
+; 52   :     status = ZwProtectVirtualMemory(hProcess, &address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
 
-  00053	48 8d 84 24 98
-	00 00 00	 lea	 rax, QWORD PTR curProtection$3[rsp]
-  0005b	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
-  00060	41 b9 40 00 00
+  00070	48 8b 4d f0	 mov	 rcx, QWORD PTR hProcess$[rbp-64]
+  00074	48 8d 45 28	 lea	 rax, QWORD PTR curProtection$[rbp-64]
+  00078	83 65 28 00	 and	 DWORD PTR curProtection$[rbp-64], 0
+  0007c	4c 8d 45 f8	 lea	 r8, QWORD PTR size$[rbp-64]
+  00080	41 b9 40 00 00
 	00		 mov	 r9d, 64			; 00000040H
-  00066	4c 8d 84 24 90
-	00 00 00	 lea	 r8, QWORD PTR pageSize$[rsp]
-  0006e	48 8d 94 24 88
-	00 00 00	 lea	 rdx, QWORD PTR address$[rsp]
-  00076	48 83 c9 ff	 or	 rcx, -1
-  0007a	ff 15 00 00 00
+  00086	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
+  0008b	48 8d 55 18	 lea	 rdx, QWORD PTR address$[rbp-64]
+  0008f	48 89 7d f8	 mov	 QWORD PTR size$[rbp-64], rdi
+  00093	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_ZwProtectVirtualMemory
-  00080	8b d8		 mov	 ebx, eax
-  00082	89 44 24 30	 mov	 DWORD PTR status$[rsp], eax
 
-; 52   : 
-; 53   :         //Detach our thread from the user space
-; 54   :         KeUnstackDetachProcess(&state);
+; 53   : 
+; 54   :     ZwClose(hProcess);
 
-  00086	48 8d 4c 24 40	 lea	 rcx, QWORD PTR state$2[rsp]
-  0008b	ff 15 00 00 00
-	00		 call	 QWORD PTR __imp_KeUnstackDetachProcess
+  00099	48 8b 4d f0	 mov	 rcx, QWORD PTR hProcess$[rbp-64]
+  0009d	8b d8		 mov	 ebx, eax
+  0009f	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwClose
 
 ; 55   : 
-; 56   :         //Free the pointer to the EPROCESS structure
-; 57   :         ObDereferenceObject(process);
+; 56   :     if (!NT_SUCCESS(status)) {
+; 57   :         logToFile(L"ZwProtectVirtualMemory", status);
+; 58   :     }
+; 59   :     else {
+; 60   :         logToFile(L"ZwProtectVirtualMemory", status);
+; 61   :     }
+; 62   : 
+; 63   :     return status;
 
-  00091	48 8b 4c 24 38	 mov	 rcx, QWORD PTR process$1[rsp]
-  00096	ff 15 00 00 00
-	00		 call	 QWORD PTR __imp_ObfDereferenceObject
-
-; 58   : 
-; 59   :         if (status != STATUS_SUCCESS) {
-; 60   :             logToFile(L"ZwProtectVirtualMemory", status);
-; 61   :         }
-; 62   :         else {
-; 63   :             logToFile(L"ZwProtectVirtualMemory", status);
-; 64   :         }
-; 65   :     }
-
-  0009c	8b d3		 mov	 edx, ebx
-  0009e	48 8d 0d 00 00
+  000a5	48 8d 0d 00 00
 	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1CO@JLIIMPMA@?$AAZ?$AAw?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa@FNODOBFM@
-  000a5	e8 00 00 00 00	 call	 logToFile
-  000aa	eb 17		 jmp	 SHORT $LN11@VirtualPro
-$LN9@VirtualPro:
+$LN7@VirtualPro:
 
-; 66   :     except(EXCEPTION_EXECUTE_HANDLER) {
-; 67   :         // Save exception using writeFailFile
-; 68   :         logToFile(L"VirtualProtectMem Exception", GetExceptionCode());
+; 64   : }
 
-  000ac	8b d0		 mov	 edx, eax
-  000ae	48 8d 0d 00 00
-	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1DI@LEAIAOJ@?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAM@FNODOBFM@
-  000b5	e8 00 00 00 00	 call	 logToFile
-
-; 69   :         status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
-
-  000ba	bb 01 00 00 c0	 mov	 ebx, -1073741823	; ffffffffc0000001H
-  000bf	89 5c 24 30	 mov	 DWORD PTR status$[rsp], ebx
-$LN11@VirtualPro:
-
-; 70   :     }
-; 71   : 
-; 72   :     return status;
-
-  000c3	8b c3		 mov	 eax, ebx
-$LN1@VirtualPro:
-
-; 73   : }
-
-  000c5	48 83 c4 70	 add	 rsp, 112		; 00000070H
-  000c9	5b		 pop	 rbx
-  000ca	c3		 ret	 0
+  000ac	8b d3		 mov	 edx, ebx
+  000ae	e8 00 00 00 00	 call	 logToFile
+$LN8@VirtualPro:
+  000b3	48 8b 7c 24 60	 mov	 rdi, QWORD PTR [rsp+96]
+  000b8	8b c3		 mov	 eax, ebx
+  000ba	48 8b 5c 24 50	 mov	 rbx, QWORD PTR [rsp+80]
+  000bf	48 83 c4 40	 add	 rsp, 64			; 00000040H
+  000c3	5d		 pop	 rbp
+  000c4	c3		 ret	 0
 VirtualProtectMem ENDP
 _TEXT	ENDS
 ; Function compile flags: /Ogsp
@@ -546,20 +580,20 @@ targetAddress$ = 120
 size$ = 128
 KCopyProcessMemory PROC					; COMDAT
 
-; 92   : NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID sourceAddress, PVOID targetAddress, SIZE_T size) {
+; 83   : NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID sourceAddress, PVOID targetAddress, SIZE_T size) {
 
 $LN10:
   00000	40 53		 push	 rbx
   00002	48 83 ec 50	 sub	 rsp, 80			; 00000050H
   00006	4d 8b d0	 mov	 r10, r8
 
-; 93   :     PEPROCESS sourceProcess = srcProcess;
-; 94   :     PEPROCESS targetProcess = trgtProcess;
-; 95   :     SIZE_T Result;
-; 96   :     NTSTATUS status;
-; 97   :     try {
-; 98   : 
-; 99   :     status = MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, size, KernelMode, &Result);
+; 84   :     PEPROCESS sourceProcess = srcProcess;
+; 85   :     PEPROCESS targetProcess = trgtProcess;
+; 86   :     SIZE_T Result;
+; 87   :     NTSTATUS status;
+; 88   :     try {
+; 89   : 
+; 90   :     status = MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, size, KernelMode, &Result);
 
   00009	48 8d 44 24 60	 lea	 rax, QWORD PTR Result$[rsp]
   0000e	48 89 44 24 30	 mov	 QWORD PTR [rsp+48], rax
@@ -574,7 +608,7 @@ $LN10:
   00031	8b d8		 mov	 ebx, eax
   00033	89 44 24 40	 mov	 DWORD PTR status$[rsp], eax
 
-; 100  :     logToFile(L"MmCopyVirtualMemory", status);
+; 91   :     logToFile(L"MmCopyVirtualMemory", status);
 
   00037	8b d0		 mov	 edx, eax
   00039	48 8d 0d 00 00
@@ -583,28 +617,28 @@ $LN10:
   00045	eb 17		 jmp	 SHORT $LN8@KCopyProce
 $LN6@KCopyProce:
 
-; 101  : 
-; 102  :     } except(EXCEPTION_EXECUTE_HANDLER) {
-; 103  :         // Save exception using writeFailFile
-; 104  :         logToFile(L"MmCopyVirtualMemory Exception", GetExceptionCode());
+; 92   : 
+; 93   :     } except(EXCEPTION_EXECUTE_HANDLER) {
+; 94   :         // Save exception using writeFailFile
+; 95   :         logToFile(L"MmCopyVirtualMemory Exception", GetExceptionCode());
 
   00047	8b d0		 mov	 edx, eax
   00049	48 8d 0d 00 00
 	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1DM@OOBLILGP@?$AAM?$AAm?$AAC?$AAo?$AAp?$AAy?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAM?$AAe@FNODOBFM@
   00050	e8 00 00 00 00	 call	 logToFile
 
-; 105  :         status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
+; 96   :         status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
 
   00055	bb 01 00 00 c0	 mov	 ebx, -1073741823	; ffffffffc0000001H
   0005a	89 5c 24 40	 mov	 DWORD PTR status$[rsp], ebx
 $LN8@KCopyProce:
 
-; 106  :     }
-; 107  :     return status;
+; 97   :     }
+; 98   :     return status;
 
   0005e	8b c3		 mov	 eax, ebx
 
-; 108  : }
+; 99   : }
 
   00060	48 83 c4 50	 add	 rsp, 80			; 00000050H
   00064	5b		 pop	 rbx
@@ -625,9 +659,9 @@ hFile$ = 464
 li$2 = 472
 logToFile PROC						; COMDAT
 
-; 111  : {
+; 101  : {
 
-$LN10:
+$LN22:
   00000	48 89 5c 24 08	 mov	 QWORD PTR [rsp+8], rbx
   00005	48 89 7c 24 10	 mov	 QWORD PTR [rsp+16], rdi
   0000a	55		 push	 rbp
@@ -638,8 +672,8 @@ $LN10:
   0001a	8b da		 mov	 ebx, edx
   0001c	48 8b f9	 mov	 rdi, rcx
 
-; 112  :     UNICODE_STRING wsFinalPath;
-; 113  :     RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\dummy_logs.txt");
+; 102  :     UNICODE_STRING wsFinalPath;
+; 103  :     RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\dummy_logs.txt");
 
   0001f	48 8d 15 00 00
 	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1DM@EEKDGDDE@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@
@@ -647,14 +681,14 @@ $LN10:
   0002b	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_RtlInitUnicodeString
 
-; 114  : 
-; 115  :     OBJECT_ATTRIBUTES oa;
-; 116  :     InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
-; 117  : 
-; 118  :     IO_STATUS_BLOCK io;
-; 119  :     HANDLE hFile;
-; 120  : 
-; 121  :     auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
+; 104  : 
+; 105  :     OBJECT_ATTRIBUTES oa;
+; 106  :     InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
+; 107  : 
+; 108  :     IO_STATUS_BLOCK io;
+; 109  :     HANDLE hFile;
+; 110  : 
+; 111  :     auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
 
   00031	83 64 24 50 00	 and	 DWORD PTR [rsp+80], 0
   00036	48 8d 44 24 70	 lea	 rax, QWORD PTR wsFinalPath$[rsp]
@@ -685,22 +719,22 @@ $LN10:
   00098	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_ZwCreateFile
 
-; 122  :         FILE_ATTRIBUTE_NORMAL,
-; 123  :         0,
-; 124  :         FILE_OPEN_IF,
-; 125  :         FILE_SYNCHRONOUS_IO_NONALERT,
-; 126  :         NULL, 0);
-; 127  : 
-; 128  :     if (NT_SUCCESS(res)) {
+; 112  :         FILE_ATTRIBUTE_NORMAL,
+; 113  :         0,
+; 114  :         FILE_OPEN_IF,
+; 115  :         FILE_SYNCHRONOUS_IO_NONALERT,
+; 116  :         NULL, 0);
+; 117  : 
+; 118  :     if (NT_SUCCESS(res)) {
 
   0009e	85 c0		 test	 eax, eax
-  000a0	0f 88 a6 00 00
-	00		 js	 $LN2@logToFile
+  000a0	0f 88 4f 01 00
+	00		 js	 $LN4@logToFile
 
-; 129  :         // Move file pointer to the end of the file
-; 130  :         LARGE_INTEGER li;
-; 131  :         li.QuadPart = 0;
-; 132  :         res = ZwSetInformationFile(hFile, &io, &li, sizeof(LARGE_INTEGER), FileEndOfFileInformation);
+; 119  :         // Move file pointer to the end of the file
+; 120  :         LARGE_INTEGER li;
+; 121  :         li.QuadPart = 0;
+; 122  :         res = ZwSetInformationFile(hFile, &io, &li, sizeof(LARGE_INTEGER), FileEndOfFileInformation);
 
   000a6	48 8b 8d d0 00
 	00 00		 mov	 rcx, QWORD PTR hFile$[rbp-256]
@@ -716,83 +750,219 @@ $LN10:
   000cf	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_ZwSetInformationFile
 
-; 133  : 
-; 134  :         if (NT_SUCCESS(res)) {
+; 123  : 
+; 124  :         if (NT_SUCCESS(res)) {
 
   000d5	85 c0		 test	 eax, eax
-  000d7	78 66		 js	 SHORT $LN6@logToFile
+  000d7	0f 88 0b 01 00
+	00		 js	 $LN18@logToFile
 
-; 135  :             // Construct log content with operation and status information
-; 136  :             CHAR logContent[256]; // Adjust size according to your needs
-; 137  :             sprintf_s(logContent, sizeof(logContent), "Operation: %S Status: 0x%08X\n", operation, status);
+; 125  :             // Construct log content with operation and status information
+; 126  :             CHAR logContent[256]; // Adjust size according to your needs
+; 127  : 
+; 128  :             // Match the status code with its description
+; 129  :             const char* statusDescription;
+; 130  :             switch (status) {
 
-  000d9	4c 8b cf	 mov	 r9, rdi
-  000dc	89 5c 24 20	 mov	 DWORD PTR [rsp+32], ebx
-  000e0	4c 8d 05 00 00
-	00 00		 lea	 r8, OFFSET FLAT:??_C@_0BO@JELHCNNB@Operation?3?5?$CFS?5Status?3?50x?$CF08X?6@FNODOBFM@
-  000e7	ba 00 01 00 00	 mov	 edx, 256		; 00000100H
-  000ec	48 8d 4d b0	 lea	 rcx, QWORD PTR logContent$1[rbp-256]
-  000f0	ff 15 00 00 00
-	00		 call	 QWORD PTR __imp_sprintf_s
+  000dd	81 fb 0d 00 00
+	c0		 cmp	 ebx, -1073741811	; ffffffffc000000dH
+  000e3	0f 84 8d 00 00
+	00		 je	 $LN9@logToFile
+  000e9	81 fb 17 00 00
+	c0		 cmp	 ebx, -1073741801	; ffffffffc0000017H
+  000ef	74 7c		 je	 SHORT $LN13@logToFile
+  000f1	81 fb 22 00 00
+	c0		 cmp	 ebx, -1073741790	; ffffffffc0000022H
+  000f7	74 6b		 je	 SHORT $LN10@logToFile
+  000f9	81 fb 34 00 00
+	c0		 cmp	 ebx, -1073741772	; ffffffffc0000034H
+  000ff	74 5a		 je	 SHORT $LN14@logToFile
+  00101	81 fb 35 00 00
+	c0		 cmp	 ebx, -1073741771	; ffffffffc0000035H
+  00107	74 49		 je	 SHORT $LN15@logToFile
+  00109	81 fb 9a 00 00
+	c0		 cmp	 ebx, -1073741670	; ffffffffc000009aH
+  0010f	74 38		 je	 SHORT $LN12@logToFile
+  00111	81 fb 25 02 00
+	c0		 cmp	 ebx, -1073741275	; ffffffffc0000225H
+  00117	74 27		 je	 SHORT $LN11@logToFile
+  00119	85 db		 test	 ebx, ebx
+  0011b	74 1a		 je	 SHORT $LN8@logToFile
+  0011d	81 fb 02 01 00
+	00		 cmp	 ebx, 258		; 00000102H
+  00123	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0BE@FNCGEAEF@Unknown?5status?5code@FNODOBFM@
+  0012a	48 8d 0d 00 00
+	00 00		 lea	 rcx, OFFSET FLAT:??_C@_0P@HENFOCHP@STATUS_TIMEOUT@FNODOBFM@
+  00131	48 0f 44 c1	 cmove	 rax, rcx
 
-; 138  : 
-; 139  :             // Now you can write the log content to the file
-; 140  :             ULONG bytesWritten;
-; 141  :             res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
+; 155  :             case STATUS_TIMEOUT:
+; 156  :                 statusDescription = "STATUS_TIMEOUT";
+; 157  :                 break;
 
-  000f6	48 8d 4d b0	 lea	 rcx, QWORD PTR logContent$1[rbp-256]
-  000fa	48 83 c8 ff	 or	 rax, -1
-$LL8@logToFile:
-  000fe	48 ff c0	 inc	 rax
-  00101	80 3c 01 00	 cmp	 BYTE PTR [rcx+rax], 0
-  00105	75 f7		 jne	 SHORT $LL8@logToFile
-  00107	48 83 64 24 40
-	00		 and	 QWORD PTR [rsp+64], 0
-  0010d	45 33 c9	 xor	 r9d, r9d
-  00110	48 83 64 24 38
-	00		 and	 QWORD PTR [rsp+56], 0
-  00116	45 33 c0	 xor	 r8d, r8d
-  00119	48 8b 8d d0 00
-	00 00		 mov	 rcx, QWORD PTR hFile$[rbp-256]
-  00120	33 d2		 xor	 edx, edx
-  00122	89 44 24 30	 mov	 DWORD PTR [rsp+48], eax
-  00126	48 8d 45 b0	 lea	 rax, QWORD PTR logContent$1[rbp-256]
-  0012a	48 89 44 24 28	 mov	 QWORD PTR [rsp+40], rax
-  0012f	48 8d 44 24 60	 lea	 rax, QWORD PTR io$[rsp]
-  00134	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
-  00139	ff 15 00 00 00
-	00		 call	 QWORD PTR __imp_ZwWriteFile
-$LN6@logToFile:
+  00135	eb 46		 jmp	 SHORT $LN2@logToFile
+$LN8@logToFile:
 
-; 142  :             if (!NT_SUCCESS(res)) {
-; 143  :                 // Handle write failure
-; 144  :             }
-; 145  :         }
-; 146  :         else {
-; 147  :             // Handle file pointer positioning failure
-; 148  :         }
-; 149  : 
-; 150  :         ZwClose(hFile);
+; 131  :             case STATUS_SUCCESS:
+; 132  :                 statusDescription = "STATUS_SUCCESS";
 
-  0013f	48 8b 8d d0 00
-	00 00		 mov	 rcx, QWORD PTR hFile$[rbp-256]
-  00146	ff 15 00 00 00
-	00		 call	 QWORD PTR __imp_ZwClose
+  00137	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0P@EPFFIDBN@STATUS_SUCCESS@FNODOBFM@
+
+; 133  :                 break;
+
+  0013e	eb 3d		 jmp	 SHORT $LN2@logToFile
+$LN11@logToFile:
+
+; 140  :             case STATUS_NOT_FOUND:
+; 141  :                 statusDescription = "STATUS_NOT_FOUND";
+
+  00140	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0BB@FOJNIANG@STATUS_NOT_FOUND@FNODOBFM@
+
+; 142  :                 break;
+
+  00147	eb 34		 jmp	 SHORT $LN2@logToFile
+$LN12@logToFile:
+
+; 143  :             case STATUS_INSUFFICIENT_RESOURCES:
+; 144  :                 statusDescription = "STATUS_INSUFFICIENT_RESOURCES";
+
+  00149	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0BO@GKEDLFHB@STATUS_INSUFFICIENT_RESOURCES@FNODOBFM@
+
+; 145  :                 break;
+
+  00150	eb 2b		 jmp	 SHORT $LN2@logToFile
+$LN15@logToFile:
+
+; 152  :             case STATUS_OBJECT_NAME_COLLISION:
+; 153  :                 statusDescription = "STATUS_OBJECT_NAME_COLLISION";
+
+  00152	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0BN@MANINPDD@STATUS_OBJECT_NAME_COLLISION@FNODOBFM@
+
+; 154  :                 break;
+
+  00159	eb 22		 jmp	 SHORT $LN2@logToFile
+$LN14@logToFile:
+
+; 149  :             case STATUS_OBJECT_NAME_NOT_FOUND:
+; 150  :                 statusDescription = "STATUS_OBJECT_NAME_NOT_FOUND";
+
+  0015b	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0BN@HJOKFKIC@STATUS_OBJECT_NAME_NOT_FOUND@FNODOBFM@
+
+; 151  :                 break;
+
+  00162	eb 19		 jmp	 SHORT $LN2@logToFile
+$LN10@logToFile:
+
+; 136  :                 break;
+; 137  :             case STATUS_ACCESS_DENIED:
+; 138  :                 statusDescription = "STATUS_ACCESS_DENIED";
+
+  00164	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0BF@MEMFLPAP@STATUS_ACCESS_DENIED@FNODOBFM@
+
+; 139  :                 break;
+
+  0016b	eb 10		 jmp	 SHORT $LN2@logToFile
+$LN13@logToFile:
+
+; 146  :             case STATUS_NO_MEMORY:
+; 147  :                 statusDescription = "STATUS_NO_MEMORY";
+
+  0016d	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0BB@NKBGLBFK@STATUS_NO_MEMORY@FNODOBFM@
+
+; 148  :                 break;
+
+  00174	eb 07		 jmp	 SHORT $LN2@logToFile
+$LN9@logToFile:
+
+; 134  :             case STATUS_INVALID_PARAMETER:
+; 135  :                 statusDescription = "STATUS_INVALID_PARAMETER";
+
+  00176	48 8d 05 00 00
+	00 00		 lea	 rax, OFFSET FLAT:??_C@_0BJ@CHCEKHNN@STATUS_INVALID_PARAMETER@FNODOBFM@
 $LN2@logToFile:
 
-; 151  :     }
-; 152  :     else {
-; 153  :         // Handle file creation failure
-; 154  :     }
-; 155  : }
+; 158  :             default:
+; 159  :                 statusDescription = "Unknown status code";
+; 160  :                 break;
+; 161  :             }
+; 162  : 
+; 163  :             sprintf_s(logContent, sizeof(logContent), "Operation: %S Status: 0x%08X (%s)\n", operation, status, statusDescription);
 
-  0014c	4c 8d 9c 24 b0
+  0017d	48 89 44 24 28	 mov	 QWORD PTR [rsp+40], rax
+  00182	4c 8d 05 00 00
+	00 00		 lea	 r8, OFFSET FLAT:??_C@_0CD@OBLFNOL@Operation?3?5?$CFS?5Status?3?50x?$CF08X?5?$CI?$CF@FNODOBFM@
+  00189	4c 8b cf	 mov	 r9, rdi
+  0018c	89 5c 24 20	 mov	 DWORD PTR [rsp+32], ebx
+  00190	ba 00 01 00 00	 mov	 edx, 256		; 00000100H
+  00195	48 8d 4d b0	 lea	 rcx, QWORD PTR logContent$1[rbp-256]
+  00199	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_sprintf_s
+
+; 164  : 
+; 165  :             // Now you can write the log content to the file
+; 166  :             ULONG bytesWritten;
+; 167  :             res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
+
+  0019f	48 8d 4d b0	 lea	 rcx, QWORD PTR logContent$1[rbp-256]
+  001a3	48 83 c8 ff	 or	 rax, -1
+$LL20@logToFile:
+  001a7	48 ff c0	 inc	 rax
+  001aa	80 3c 01 00	 cmp	 BYTE PTR [rcx+rax], 0
+  001ae	75 f7		 jne	 SHORT $LL20@logToFile
+  001b0	48 83 64 24 40
+	00		 and	 QWORD PTR [rsp+64], 0
+  001b6	45 33 c9	 xor	 r9d, r9d
+  001b9	48 83 64 24 38
+	00		 and	 QWORD PTR [rsp+56], 0
+  001bf	45 33 c0	 xor	 r8d, r8d
+  001c2	48 8b 8d d0 00
+	00 00		 mov	 rcx, QWORD PTR hFile$[rbp-256]
+  001c9	33 d2		 xor	 edx, edx
+  001cb	89 44 24 30	 mov	 DWORD PTR [rsp+48], eax
+  001cf	48 8d 45 b0	 lea	 rax, QWORD PTR logContent$1[rbp-256]
+  001d3	48 89 44 24 28	 mov	 QWORD PTR [rsp+40], rax
+  001d8	48 8d 44 24 60	 lea	 rax, QWORD PTR io$[rsp]
+  001dd	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
+  001e2	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwWriteFile
+$LN18@logToFile:
+
+; 168  :             if (!NT_SUCCESS(res)) {
+; 169  :                 // Handle write failure
+; 170  :             }
+; 171  :         }
+; 172  :         else {
+; 173  :             // Handle file pointer positioning failure
+; 174  :         }
+; 175  : 
+; 176  :         ZwClose(hFile);
+
+  001e8	48 8b 8d d0 00
+	00 00		 mov	 rcx, QWORD PTR hFile$[rbp-256]
+  001ef	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwClose
+$LN4@logToFile:
+
+; 177  :     }
+; 178  :     else {
+; 179  :         // Handle file creation failure
+; 180  :     }
+; 181  : }
+
+  001f5	4c 8d 9c 24 b0
 	01 00 00	 lea	 r11, QWORD PTR [rsp+432]
-  00154	49 8b 5b 10	 mov	 rbx, QWORD PTR [r11+16]
-  00158	49 8b 7b 18	 mov	 rdi, QWORD PTR [r11+24]
-  0015c	49 8b e3	 mov	 rsp, r11
-  0015f	5d		 pop	 rbp
-  00160	c3		 ret	 0
+  001fd	49 8b 5b 10	 mov	 rbx, QWORD PTR [r11+16]
+  00201	49 8b 7b 18	 mov	 rdi, QWORD PTR [r11+24]
+  00205	49 8b e3	 mov	 rsp, r11
+  00208	5d		 pop	 rbp
+  00209	c3		 ret	 0
 logToFile ENDP
 _TEXT	ENDS
 ; Function compile flags: /Ogsp
@@ -808,7 +978,7 @@ putToAddress$ = 104
 size$ = 112
 copy	PROC						; COMDAT
 
-; 157  : VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
+; 183  : VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
 
 $LN5:
   00000	48 8b c4	 mov	 rax, rsp
@@ -820,16 +990,16 @@ $LN5:
   00014	48 8b fa	 mov	 rdi, rdx
   00017	49 8b f1	 mov	 rsi, r9
 
-; 158  :     PEPROCESS processSource, processTarget;
-; 159  :     
-; 160  :     NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
+; 184  :     PEPROCESS processSource, processTarget;
+; 185  :     
+; 186  :     NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
 
   0001a	48 8d 50 f0	 lea	 rdx, QWORD PTR [rax-16]
   0001e	49 8b e8	 mov	 rbp, r8
   00021	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_PsLookupProcessByProcessId
 
-; 161  :     NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
+; 187  :     NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
 
   00027	48 8d 54 24 30	 lea	 rdx, QWORD PTR processTarget$[rsp]
   0002c	48 8b cf	 mov	 rcx, rdi
@@ -837,15 +1007,15 @@ $LN5:
   00031	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_PsLookupProcessByProcessId
 
-; 162  :     
-; 163  :     if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
+; 188  :     
+; 189  :     if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
 
   00037	85 db		 test	 ebx, ebx
   00039	75 23		 jne	 SHORT $LN2@copy
   0003b	85 c0		 test	 eax, eax
   0003d	75 1f		 jne	 SHORT $LN2@copy
 
-; 164  :         KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
+; 190  :         KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
 
   0003f	48 8b 44 24 70	 mov	 rax, QWORD PTR size$[rsp]
   00044	4c 8b ce	 mov	 r9, rsi
@@ -856,8 +1026,8 @@ $LN5:
   00059	e8 00 00 00 00	 call	 KCopyProcessMemory
 $LN2@copy:
 
-; 165  :     }
-; 166  : }
+; 191  :     }
+; 192  : }
 
   0005e	48 8b 5c 24 50	 mov	 rbx, QWORD PTR [rsp+80]
   00063	48 8b 6c 24 58	 mov	 rbp, QWORD PTR [rsp+88]
@@ -871,15 +1041,20 @@ _TEXT	ENDS
 ; File D:\workspace\readDriver\dummy\main.c
 ;	COMDAT DevioctlDispatch
 _TEXT	SEGMENT
-DeviceObject$ = 144
-processTarget$1 = 152
-Irp$ = 152
-processSource$2 = 160
+size$1 = 80
+DeviceObject$ = 160
+getFromAddress$1$ = 168
+curProtection$2 = 168
+Irp$ = 168
+hProcess$3 = 176
+processTarget$4 = 176
+address$ = 184
+processSource$5 = 184
 DevioctlDispatch PROC					; COMDAT
 
-; 177  : {
+; 203  : {
 
-$LN26:
+$LN34:
   00000	48 89 5c 24 08	 mov	 QWORD PTR [rsp+8], rbx
   00005	55		 push	 rbp
   00006	56		 push	 rsi
@@ -888,309 +1063,450 @@ $LN26:
   0000a	41 55		 push	 r13
   0000c	41 56		 push	 r14
   0000e	41 57		 push	 r15
-  00010	48 83 ec 50	 sub	 rsp, 80			; 00000050H
+  00010	48 8b ec	 mov	 rbp, rsp
+  00013	48 83 ec 60	 sub	 rsp, 96			; 00000060H
 
-; 178  :     ULONG					bytesIO = 0;
-; 179  :     PIO_STACK_LOCATION		stack;
-; 180  :     NTSTATUS				status = STATUS_SUCCESS;
-; 181  :     BOOLEAN					condition = FALSE;
-; 182  :     PINOUTPARAM             rp;
-; 183  : 
-; 184  :     UNREFERENCED_PARAMETER(DeviceObject);
-; 185  : 
-; 186  :     stack = IoGetCurrentIrpStackLocation(Irp);
+; 204  :     ULONG					bytesIO = 0;
+; 205  :     PIO_STACK_LOCATION		stack;
+; 206  :     NTSTATUS				status = STATUS_SUCCESS;
+; 207  :     BOOLEAN					condition = FALSE;
+; 208  :     PINOUTPARAM             rp;
+; 209  : 
+; 210  :     UNREFERENCED_PARAMETER(DeviceObject);
+; 211  : 
+; 212  :     stack = IoGetCurrentIrpStackLocation(Irp);
 
-  00014	48 8b 82 b8 00
+  00017	48 8b 82 b8 00
 	00 00		 mov	 rax, QWORD PTR [rdx+184]
 
-; 187  : 
-; 188  :     do {
-; 189  :         if (stack == NULL) {
+; 213  : 
+; 214  :     do {
+; 215  :         if (stack == NULL) {
 
-  0001b	33 f6		 xor	 esi, esi
-  0001d	48 8b ea	 mov	 rbp, rdx
-  00020	48 85 c0	 test	 rax, rax
-  00023	0f 84 52 01 00
-	00		 je	 $LN19@DevioctlDi
+  0001e	33 f6		 xor	 esi, esi
+  00020	4c 8b fa	 mov	 r15, rdx
+  00023	48 85 c0	 test	 rax, rax
+  00026	0f 84 dc 01 00
+	00		 je	 $LN25@DevioctlDi
 
-; 191  :             break;
-; 192  :         }
-; 193  : 
-; 194  :         rp = (PINOUTPARAM)Irp->AssociatedIrp.SystemBuffer;
+; 217  :             break;
+; 218  :         }
+; 219  : 
+; 220  :         rp = (PINOUTPARAM)Irp->AssociatedIrp.SystemBuffer;
 
-  00029	4c 8b 72 18	 mov	 r14, QWORD PTR [rdx+24]
+  0002c	4c 8b 72 18	 mov	 r14, QWORD PTR [rdx+24]
 
-; 195  :         
-; 196  :         if (rp == NULL) {
+; 221  :         
+; 222  :         if (rp == NULL) {
 
-  0002d	4d 85 f6	 test	 r14, r14
-  00030	74 23		 je	 SHORT $LN24@DevioctlDi
+  00030	4d 85 f6	 test	 r14, r14
+  00033	74 23		 je	 SHORT $LN32@DevioctlDi
 
-; 197  :             status = STATUS_INVALID_PARAMETER;
-; 198  :             break;
-; 199  :         }
-; 200  : 
-; 201  :         switch (stack->Parameters.DeviceIoControl.IoControlCode) {
+; 223  :             status = STATUS_INVALID_PARAMETER;
+; 224  :             break;
+; 225  :         }
+; 226  : 
+; 227  :         switch (stack->Parameters.DeviceIoControl.IoControlCode) {
 
-  00032	81 78 18 04 1c
+  00035	81 78 18 04 1c
 	22 00		 cmp	 DWORD PTR [rax+24], 2235396 ; 00221c04H
-  00039	74 24		 je	 SHORT $LN9@DevioctlDi
+  0003c	74 24		 je	 SHORT $LN9@DevioctlDi
 
-; 275  :             break;
-; 276  :         default:
-; 277  :             DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 301  :             break;
+; 302  :         default:
+; 303  :             DbgPrintEx(DPFLTR_DEFAULT_ID,
 
-  0003b	4c 8d 0d 00 00
+  0003e	4c 8d 0d 00 00
 	00 00		 lea	 r9, OFFSET FLAT:??_C@_0BB@JDMGMFMP@DevioctlDispatch@FNODOBFM@
-  00042	4c 8d 05 00 00
+  00045	4c 8d 05 00 00
 	00 00		 lea	 r8, OFFSET FLAT:??_C@_0CC@IMHNEKID@?$CFs?5hit?5with?5invalid?5IoControlCo@FNODOBFM@
-  00049	8d 56 03	 lea	 edx, QWORD PTR [rsi+3]
-  0004c	8d 4e 65	 lea	 ecx, QWORD PTR [rsi+101]
-  0004f	ff 15 00 00 00
+  0004c	8d 56 03	 lea	 edx, QWORD PTR [rsi+3]
+  0004f	8d 4e 65	 lea	 ecx, QWORD PTR [rsi+101]
+  00052	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
-$LN24@DevioctlDi:
+$LN32@DevioctlDi:
 
-; 287  : 
-; 288  :     Irp->IoStatus.Status = status;
+; 313  : 
+; 314  :     Irp->IoStatus.Status = status;
 
-  00055	bb 0d 00 00 c0	 mov	 ebx, -1073741811	; ffffffffc000000dH
-  0005a	e9 21 01 00 00	 jmp	 $LN3@DevioctlDi
+  00058	bb 0d 00 00 c0	 mov	 ebx, -1073741811	; ffffffffc000000dH
+  0005d	e9 ab 01 00 00	 jmp	 $LN3@DevioctlDi
 $LN9@DevioctlDi:
 
-; 202  :         case DUMMYDRV_REQUEST1:
-; 203  : 
-; 204  :             if (stack->Parameters.DeviceIoControl.InputBufferLength != sizeof(INOUT_PARAM)) {
+; 228  :         case DUMMYDRV_REQUEST1:
+; 229  : 
+; 230  :             if (stack->Parameters.DeviceIoControl.InputBufferLength != sizeof(INOUT_PARAM)) {
 
-  0005f	83 78 10 58	 cmp	 DWORD PTR [rax+16], 88	; 00000058H
-  00063	75 f0		 jne	 SHORT $LN24@DevioctlDi
+  00062	83 78 10 58	 cmp	 DWORD PTR [rax+16], 88	; 00000058H
+  00066	75 f0		 jne	 SHORT $LN32@DevioctlDi
 
-; 205  :                 status = STATUS_INVALID_PARAMETER;
-; 206  :                 break;
-; 207  :             }
-; 208  : 
-; 209  :             //copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
-; 210  :             /* 0 - copy specific part 
-; 211  :                1 - dump all the memory
-; 212  :                2 - change page access lvl
-; 213  :             */
-; 214  :             if (rp->Param6 == 0) {
+; 231  :                 status = STATUS_INVALID_PARAMETER;
+; 232  :                 break;
+; 233  :             }
+; 234  : 
+; 235  :             //copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
+; 236  :             /* 0 - copy specific part 
+; 237  :                1 - dump all the memory
+; 238  :                2 - change page access lvl
+; 239  :             */
+; 240  :             if (rp->Param6 == 0) {
 
-  00065	49 39 76 28	 cmp	 QWORD PTR [r14+40], rsi
-  00069	0f 85 ad 00 00
-	00		 jne	 $LN23@DevioctlDi
+  00068	49 39 76 28	 cmp	 QWORD PTR [r14+40], rsi
+  0006c	0f 85 a2 00 00
+	00		 jne	 $LN29@DevioctlDi
 
-; 215  :                 copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
+; 241  :                 copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
 
-  0006f	49 8b 0e	 mov	 rcx, QWORD PTR [r14]
+  00072	49 8b 46 08	 mov	 rax, QWORD PTR [r14+8]
 
-; 160  :     NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
+; 186  :     NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
 
-  00072	48 8d 94 24 a0
-	00 00 00	 lea	 rdx, QWORD PTR processSource$2[rsp]
+  00076	48 8d 55 58	 lea	 rdx, QWORD PTR processSource$5[rbp-96]
 
-; 215  :                 copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
+; 241  :                 copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
 
-  0007a	4d 8b 7e 20	 mov	 r15, QWORD PTR [r14+32]
-  0007e	4d 8b 66 18	 mov	 r12, QWORD PTR [r14+24]
-  00082	4d 8b 6e 08	 mov	 r13, QWORD PTR [r14+8]
-  00086	49 8b 7e 10	 mov	 rdi, QWORD PTR [r14+16]
+  0007a	49 8b 0e	 mov	 rcx, QWORD PTR [r14]
+  0007d	4d 8b 66 20	 mov	 r12, QWORD PTR [r14+32]
+  00081	4d 8b 6e 18	 mov	 r13, QWORD PTR [r14+24]
+  00085	49 8b 7e 10	 mov	 rdi, QWORD PTR [r14+16]
+  00089	48 89 45 48	 mov	 QWORD PTR getFromAddress$1$[rbp-96], rax
 
-; 160  :     NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
+; 186  :     NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
 
-  0008a	ff 15 00 00 00
+  0008d	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_PsLookupProcessByProcessId
 
-; 161  :     NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
+; 187  :     NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
 
-  00090	48 8d 94 24 98
-	00 00 00	 lea	 rdx, QWORD PTR processTarget$1[rsp]
-  00098	48 8b cf	 mov	 rcx, rdi
-  0009b	8b d8		 mov	 ebx, eax
-  0009d	ff 15 00 00 00
+  00093	48 8d 55 50	 lea	 rdx, QWORD PTR processTarget$4[rbp-96]
+  00097	48 8b cf	 mov	 rcx, rdi
+  0009a	8b d8		 mov	 ebx, eax
+  0009c	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_PsLookupProcessByProcessId
 
-; 162  :     
-; 163  :     if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
+; 188  :     
+; 189  :     if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
 
-  000a3	85 db		 test	 ebx, ebx
-  000a5	75 24		 jne	 SHORT $LN16@DevioctlDi
-  000a7	85 c0		 test	 eax, eax
-  000a9	75 20		 jne	 SHORT $LN16@DevioctlDi
+  000a2	85 db		 test	 ebx, ebx
+  000a4	75 1d		 jne	 SHORT $LN16@DevioctlDi
+  000a6	85 c0		 test	 eax, eax
+  000a8	75 19		 jne	 SHORT $LN16@DevioctlDi
 
-; 164  :         KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
+; 190  :         KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
 
-  000ab	48 8b 94 24 98
-	00 00 00	 mov	 rdx, QWORD PTR processTarget$1[rsp]
-  000b3	4d 8b cc	 mov	 r9, r12
-  000b6	48 8b 8c 24 a0
-	00 00 00	 mov	 rcx, QWORD PTR processSource$2[rsp]
-  000be	4d 8b c5	 mov	 r8, r13
-  000c1	4c 89 7c 24 20	 mov	 QWORD PTR [rsp+32], r15
-  000c6	e8 00 00 00 00	 call	 KCopyProcessMemory
+  000aa	4c 8b 45 48	 mov	 r8, QWORD PTR getFromAddress$1$[rbp-96]
+  000ae	4d 8b cd	 mov	 r9, r13
+  000b1	48 8b 55 50	 mov	 rdx, QWORD PTR processTarget$4[rbp-96]
+  000b5	48 8b 4d 58	 mov	 rcx, QWORD PTR processSource$5[rbp-96]
+  000b9	4c 89 64 24 20	 mov	 QWORD PTR [rsp+32], r12
+  000be	e8 00 00 00 00	 call	 KCopyProcessMemory
 $LN16@DevioctlDi:
 
-; 216  : 
-; 217  :                 DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 242  : 
+; 243  :                 DbgPrintEx(DPFLTR_DEFAULT_ID,
 
-  000cb	49 8b 46 28	 mov	 rax, QWORD PTR [r14+40]
-  000cf	4c 8d 0d 00 00
+  000c3	49 8b 46 28	 mov	 rax, QWORD PTR [r14+40]
+  000c7	4c 8d 0d 00 00
 	00 00		 lea	 r9, OFFSET FLAT:??_C@_0BB@JDMGMFMP@DevioctlDispatch@FNODOBFM@
-  000d6	48 89 44 24 48	 mov	 QWORD PTR [rsp+72], rax
-  000db	4c 8d 05 00 00
+  000ce	48 89 44 24 48	 mov	 QWORD PTR [rsp+72], rax
+  000d3	4c 8d 05 00 00
 	00 00		 lea	 r8, OFFSET FLAT:??_C@_0FH@OJCOJELF@?$CFs?5WRITE?5REQUEST?3?5from?5pid?9?5?$CFd?5@FNODOBFM@
-  000e2	49 8b 46 20	 mov	 rax, QWORD PTR [r14+32]
-  000e6	ba 03 00 00 00	 mov	 edx, 3
-  000eb	48 89 44 24 40	 mov	 QWORD PTR [rsp+64], rax
-  000f0	49 8b 46 18	 mov	 rax, QWORD PTR [r14+24]
-  000f4	48 89 44 24 38	 mov	 QWORD PTR [rsp+56], rax
-  000f9	49 8b 46 10	 mov	 rax, QWORD PTR [r14+16]
-  000fd	8d 4a 62	 lea	 ecx, QWORD PTR [rdx+98]
-  00100	48 89 44 24 30	 mov	 QWORD PTR [rsp+48], rax
-  00105	49 8b 46 08	 mov	 rax, QWORD PTR [r14+8]
-  00109	48 89 44 24 28	 mov	 QWORD PTR [rsp+40], rax
-  0010e	49 8b 06	 mov	 rax, QWORD PTR [r14]
-  00111	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
-  00116	ff 15 00 00 00
+  000da	49 8b 46 20	 mov	 rax, QWORD PTR [r14+32]
+  000de	ba 03 00 00 00	 mov	 edx, 3
+  000e3	48 89 44 24 40	 mov	 QWORD PTR [rsp+64], rax
+  000e8	49 8b 46 18	 mov	 rax, QWORD PTR [r14+24]
+  000ec	48 89 44 24 38	 mov	 QWORD PTR [rsp+56], rax
+  000f1	49 8b 46 10	 mov	 rax, QWORD PTR [r14+16]
+  000f5	8d 4a 62	 lea	 ecx, QWORD PTR [rdx+98]
+  000f8	48 89 44 24 30	 mov	 QWORD PTR [rsp+48], rax
+  000fd	49 8b 46 08	 mov	 rax, QWORD PTR [r14+8]
+  00101	48 89 44 24 28	 mov	 QWORD PTR [rsp+40], rax
+  00106	49 8b 06	 mov	 rax, QWORD PTR [r14]
+  00109	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
+  0010e	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
-$LN23@DevioctlDi:
+$LN29@DevioctlDi:
 
-; 218  :                     DPFLTR_INFO_LEVEL,
-; 219  :                     "%s WRITE REQUEST: from pid- %d from - %p, to pid - %d to - %p, size - %d, isReady - %d",
-; 220  :                     __FUNCTION__,
-; 221  :                     rp->Param1,
-; 222  :                     rp->Param2,
-; 223  :                     rp->Param3,
-; 224  :                     rp->Param4,
-; 225  :                     rp->Param5,
-; 226  :                     rp->Param6);
-; 227  :             }
-; 228  :             if (rp->Param6 == 3) {
+; 244  :                     DPFLTR_INFO_LEVEL,
+; 245  :                     "%s WRITE REQUEST: from pid- %d from - %p, to pid - %d to - %p, size - %d, isReady - %d",
+; 246  :                     __FUNCTION__,
+; 247  :                     rp->Param1,
+; 248  :                     rp->Param2,
+; 249  :                     rp->Param3,
+; 250  :                     rp->Param4,
+; 251  :                     rp->Param5,
+; 252  :                     rp->Param6);
+; 253  :             }
+; 254  :             if (rp->Param6 == 3) {
 
-  0011c	49 83 7e 28 03	 cmp	 QWORD PTR [r14+40], 3
-  00121	75 4f		 jne	 SHORT $LN12@DevioctlDi
+  00114	49 83 7e 28 03	 cmp	 QWORD PTR [r14+40], 3
+  00119	0f 85 e0 00 00
+	00		 jne	 $LN22@DevioctlDi
 
-; 229  :                 DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 255  :                 DbgPrintEx(DPFLTR_DEFAULT_ID,
 
-  00123	49 8b 46 10	 mov	 rax, QWORD PTR [r14+16]
-  00127	4c 8d 0d 00 00
+  0011f	49 8b 46 10	 mov	 rax, QWORD PTR [r14+16]
+  00123	4c 8d 0d 00 00
 	00 00		 lea	 r9, OFFSET FLAT:??_C@_0BB@JDMGMFMP@DevioctlDispatch@FNODOBFM@
-  0012e	48 c7 44 24 38
+  0012a	48 c7 44 24 38
 	03 00 00 00	 mov	 QWORD PTR [rsp+56], 3
-  00137	4c 8d 05 00 00
+  00133	4c 8d 05 00 00
 	00 00		 lea	 r8, OFFSET FLAT:??_C@_0EF@CFEKPEKL@?$CFs?5PAGEPROT?5REQUEST?3?5pid?5?9?5?$CFd?0?5@FNODOBFM@
-  0013e	48 89 44 24 30	 mov	 QWORD PTR [rsp+48], rax
-  00143	ba 03 00 00 00	 mov	 edx, 3
-  00148	49 8b 46 08	 mov	 rax, QWORD PTR [r14+8]
-  0014c	48 89 44 24 28	 mov	 QWORD PTR [rsp+40], rax
-  00151	49 8b 06	 mov	 rax, QWORD PTR [r14]
-  00154	8d 4a 62	 lea	 ecx, QWORD PTR [rdx+98]
-  00157	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
-  0015c	ff 15 00 00 00
+  0013a	48 89 44 24 30	 mov	 QWORD PTR [rsp+48], rax
+  0013f	ba 03 00 00 00	 mov	 edx, 3
+  00144	49 8b 46 08	 mov	 rax, QWORD PTR [r14+8]
+  00148	48 89 44 24 28	 mov	 QWORD PTR [rsp+40], rax
+  0014d	49 8b 06	 mov	 rax, QWORD PTR [r14]
+  00150	8d 4a 62	 lea	 ecx, QWORD PTR [rdx+98]
+  00153	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
+  00158	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
 
-; 230  :                     DPFLTR_INFO_LEVEL,
-; 231  :                     "%s PAGEPROT REQUEST: pid - %d, address - %p, size - %d, isReady - %d",
-; 232  :                     __FUNCTION__,
-; 233  :                     rp->Param1,
-; 234  :                     rp->Param2,
-; 235  :                     rp->Param3,
-; 236  :                     rp->Param6);
-; 237  : 
-; 238  :                 VirtualProtectMem((HANDLE)rp->Param1, (PVOID)rp->Param2, rp->Param3);
+; 256  :                     DPFLTR_INFO_LEVEL,
+; 257  :                     "%s PAGEPROT REQUEST: pid - %d, address - %p, size - %d, isReady - %d",
+; 258  :                     __FUNCTION__,
+; 259  :                     rp->Param1,
+; 260  :                     rp->Param2,
+; 261  :                     rp->Param3,
+; 262  :                     rp->Param6);
+; 263  : 
+; 264  :                 VirtualProtectMem((HANDLE)rp->Param1, (PVOID)rp->Param2, rp->Param3);
 
-  00162	45 8b 46 10	 mov	 r8d, DWORD PTR [r14+16]
-  00166	49 8b 56 08	 mov	 rdx, QWORD PTR [r14+8]
-  0016a	49 8b 0e	 mov	 rcx, QWORD PTR [r14]
-  0016d	e8 00 00 00 00	 call	 VirtualProtectMem
-$LN12@DevioctlDi:
+  0015e	49 8b 46 08	 mov	 rax, QWORD PTR [r14+8]
 
-; 239  :             }
-; 240  :             /*
-; 241  :             if (rp->Param6 == 1) {
-; 242  :                 DbgPrintEx(DPFLTR_DEFAULT_ID,
-; 243  :                     DPFLTR_INFO_LEVEL,
-; 244  :                     "%s READ REQUEST: from pid- %d from - %p, to pid - %d to - %p, size - %d, isReady - %d",
-; 245  :                     __FUNCTION__,
-; 246  :                     rp->Param1,
-; 247  :                     rp->Param2,
-; 248  :                     rp->Param3,
-; 249  :                     rp->Param4,
-; 250  :                     rp->Param5,
-; 251  :                     rp->Param6);
-; 252  : 
-; 253  :                 HANDLE processSrcId = (HANDLE)rp->Param1;
-; 254  :                 HANDLE processTrgtId = (HANDLE)rp->Param3;
-; 255  : 
-; 256  :                 PEPROCESS processSource, processTarget;
-; 257  :                 NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
-; 258  :                 NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
-; 259  : 
-; 260  :                 if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
-; 261  :                     //~10mb = 18709120ULL
-; 262  :                     //using size as number of megabytes to read 
-; 263  :                     ULONGLONG step = 256ULL;
-; 264  :                     ULONGLONG numberOfBytesToCopy = (rp->Param5 * 1024ULL) * 1024ULL;
-; 265  :                     for (ULONGLONG i = 0ULL, address = 33554432ULL; i < numberOfBytesToCopy; i += step, address += step) {
-; 266  :                         read(processSource, processTarget, (PVOID) address, (PVOID) (rp->Param4 + i) , step);
-; 267  :                     }
-; 268  :                 }
-; 269  : 
-; 270  :             }
-; 271  :             */ 
-; 272  : 
-; 273  :             status = STATUS_SUCCESS;
+; 35   :     status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, NULL, ProcessId);
 
-  00172	8b de		 mov	 ebx, esi
+  00162	48 8d 4d 50	 lea	 rcx, QWORD PTR hProcess$3[rbp-96]
 
-; 274  :             bytesIO = sizeof(INOUT_PARAM);
+; 256  :                     DPFLTR_INFO_LEVEL,
+; 257  :                     "%s PAGEPROT REQUEST: pid - %d, address - %p, size - %d, isReady - %d",
+; 258  :                     __FUNCTION__,
+; 259  :                     rp->Param1,
+; 260  :                     rp->Param2,
+; 261  :                     rp->Param3,
+; 262  :                     rp->Param6);
+; 263  : 
+; 264  :                 VirtualProtectMem((HANDLE)rp->Param1, (PVOID)rp->Param2, rp->Param3);
 
-  00174	be 58 00 00 00	 mov	 esi, 88			; 00000058H
+  00166	4d 8b 0e	 mov	 r9, QWORD PTR [r14]
 
-; 278  :                 DPFLTR_INFO_LEVEL,
-; 279  :                 "%s hit with invalid IoControlCode",
-; 280  :                 __FUNCTION__);
-; 281  : 
-; 282  :             status = STATUS_INVALID_PARAMETER;
-; 283  :             break;
-; 284  :         };
-; 285  : 
-; 286  :     } while (condition);
+; 35   :     status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, NULL, ProcessId);
 
-  00179	eb 05		 jmp	 SHORT $LN3@DevioctlDi
+  00169	45 33 c0	 xor	 r8d, r8d
+
+; 256  :                     DPFLTR_INFO_LEVEL,
+; 257  :                     "%s PAGEPROT REQUEST: pid - %d, address - %p, size - %d, isReady - %d",
+; 258  :                     __FUNCTION__,
+; 259  :                     rp->Param1,
+; 260  :                     rp->Param2,
+; 261  :                     rp->Param3,
+; 262  :                     rp->Param6);
+; 263  : 
+; 264  :                 VirtualProtectMem((HANDLE)rp->Param1, (PVOID)rp->Param2, rp->Param3);
+
+  0016c	41 8b 5e 10	 mov	 ebx, DWORD PTR [r14+16]
+
+; 35   :     status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, NULL, ProcessId);
+
+  00170	ba ff ff 1f 00	 mov	 edx, 2097151		; 001fffffH
+
+; 256  :                     DPFLTR_INFO_LEVEL,
+; 257  :                     "%s PAGEPROT REQUEST: pid - %d, address - %p, size - %d, isReady - %d",
+; 258  :                     __FUNCTION__,
+; 259  :                     rp->Param1,
+; 260  :                     rp->Param2,
+; 261  :                     rp->Param3,
+; 262  :                     rp->Param6);
+; 263  : 
+; 264  :                 VirtualProtectMem((HANDLE)rp->Param1, (PVOID)rp->Param2, rp->Param3);
+
+  00175	48 89 45 58	 mov	 QWORD PTR address$[rbp-96], rax
+
+; 32   :     HANDLE hProcess = NULL;
+
+  00179	48 89 75 50	 mov	 QWORD PTR hProcess$3[rbp-96], rsi
+
+; 33   : 
+; 34   :     // Open a handle to the target process
+; 35   :     status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, NULL, ProcessId);
+
+  0017d	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwOpenProcess
+
+; 36   :     if (!NT_SUCCESS(status)) {
+
+  00183	85 c0		 test	 eax, eax
+  00185	79 0b		 jns	 SHORT $LN19@DevioctlDi
+
+; 37   :         logToFile(L"ZwOpenProcess", status);
+
+  00187	8b d0		 mov	 edx, eax
+  00189	48 8d 0d 00 00
+	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1BM@CFALCGDO@?$AAZ?$AAw?$AAO?$AAp?$AAe?$AAn?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@
+
+; 38   :         return status;
+
+  00190	eb 68		 jmp	 SHORT $LN31@DevioctlDi
 $LN19@DevioctlDi:
 
-; 190  :             status = STATUS_INTERNAL_ERROR;
+; 39   :     }
+; 40   : 
+; 41   :     // Validate address within process address space
+; 42   :     if (!MmIsAddressValid(address)) {
 
-  0017b	bb e5 00 00 c0	 mov	 ebx, -1073741595	; ffffffffc00000e5H
+  00192	48 8b 4d 58	 mov	 rcx, QWORD PTR address$[rbp-96]
+  00196	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_MmIsAddressValid
+  0019c	84 c0		 test	 al, al
+  0019e	75 1d		 jne	 SHORT $LN20@DevioctlDi
+
+; 43   :         logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
+
+  001a0	ba 0d 00 00 c0	 mov	 edx, -1073741811	; ffffffffc000000dH
+  001a5	48 8d 0d 00 00
+	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1CA@DDOOPNNI@?$AAI?$AAn?$AAv?$AAa?$AAl?$AAi?$AAd?$AA?5?$AAA?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs@FNODOBFM@
+  001ac	e8 00 00 00 00	 call	 logToFile
+
+; 44   :         ZwClose(hProcess);
+
+  001b1	48 8b 4d 50	 mov	 rcx, QWORD PTR hProcess$3[rbp-96]
+  001b5	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwClose
+
+; 45   :         return STATUS_INVALID_PARAMETER;
+
+  001bb	eb 42		 jmp	 SHORT $LN22@DevioctlDi
+$LN20@DevioctlDi:
+
+; 46   :     }
+; 47   : 
+; 48   :     ULONG curProtection = NULL; // variable to store the previous page protection
+; 49   :     SIZE_T size = pageSize;
+; 50   : 
+; 51   :     // Attempting to change the page protection
+; 52   :     status = ZwProtectVirtualMemory(hProcess, &address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
+
+  001bd	48 8b 4d 50	 mov	 rcx, QWORD PTR hProcess$3[rbp-96]
+  001c1	48 8d 45 48	 lea	 rax, QWORD PTR curProtection$2[rbp-96]
+  001c5	41 b9 40 00 00
+	00		 mov	 r9d, 64			; 00000040H
+  001cb	48 89 44 24 20	 mov	 QWORD PTR [rsp+32], rax
+  001d0	4c 8d 45 f0	 lea	 r8, QWORD PTR size$1[rbp-96]
+  001d4	89 75 48	 mov	 DWORD PTR curProtection$2[rbp-96], esi
+  001d7	48 8d 55 58	 lea	 rdx, QWORD PTR address$[rbp-96]
+  001db	48 89 5d f0	 mov	 QWORD PTR size$1[rbp-96], rbx
+  001df	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwProtectVirtualMemory
+
+; 53   : 
+; 54   :     ZwClose(hProcess);
+
+  001e5	48 8b 4d 50	 mov	 rcx, QWORD PTR hProcess$3[rbp-96]
+  001e9	8b d8		 mov	 ebx, eax
+  001eb	ff 15 00 00 00
+	00		 call	 QWORD PTR __imp_ZwClose
+
+; 55   : 
+; 56   :     if (!NT_SUCCESS(status)) {
+; 57   :         logToFile(L"ZwProtectVirtualMemory", status);
+; 58   :     }
+; 59   :     else {
+; 60   :         logToFile(L"ZwProtectVirtualMemory", status);
+
+  001f1	8b d3		 mov	 edx, ebx
+  001f3	48 8d 0d 00 00
+	00 00		 lea	 rcx, OFFSET FLAT:??_C@_1CO@JLIIMPMA@?$AAZ?$AAw?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa@FNODOBFM@
+$LN31@DevioctlDi:
+
+; 265  :             }
+; 266  :             /*
+; 267  :             if (rp->Param6 == 1) {
+; 268  :                 DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 269  :                     DPFLTR_INFO_LEVEL,
+; 270  :                     "%s READ REQUEST: from pid- %d from - %p, to pid - %d to - %p, size - %d, isReady - %d",
+; 271  :                     __FUNCTION__,
+; 272  :                     rp->Param1,
+; 273  :                     rp->Param2,
+; 274  :                     rp->Param3,
+; 275  :                     rp->Param4,
+; 276  :                     rp->Param5,
+; 277  :                     rp->Param6);
+; 278  : 
+; 279  :                 HANDLE processSrcId = (HANDLE)rp->Param1;
+; 280  :                 HANDLE processTrgtId = (HANDLE)rp->Param3;
+; 281  : 
+; 282  :                 PEPROCESS processSource, processTarget;
+; 283  :                 NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
+; 284  :                 NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
+; 285  : 
+; 286  :                 if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
+; 287  :                     //~10mb = 18709120ULL
+; 288  :                     //using size as number of megabytes to read 
+; 289  :                     ULONGLONG step = 256ULL;
+; 290  :                     ULONGLONG numberOfBytesToCopy = (rp->Param5 * 1024ULL) * 1024ULL;
+; 291  :                     for (ULONGLONG i = 0ULL, address = 33554432ULL; i < numberOfBytesToCopy; i += step, address += step) {
+; 292  :                         read(processSource, processTarget, (PVOID) address, (PVOID) (rp->Param4 + i) , step);
+; 293  :                     }
+; 294  :                 }
+; 295  : 
+; 296  :             }
+; 297  :             */ 
+; 298  : 
+; 299  :             status = STATUS_SUCCESS;
+
+  001fa	e8 00 00 00 00	 call	 logToFile
+$LN22@DevioctlDi:
+  001ff	8b de		 mov	 ebx, esi
+
+; 300  :             bytesIO = sizeof(INOUT_PARAM);
+
+  00201	be 58 00 00 00	 mov	 esi, 88			; 00000058H
+
+; 304  :                 DPFLTR_INFO_LEVEL,
+; 305  :                 "%s hit with invalid IoControlCode",
+; 306  :                 __FUNCTION__);
+; 307  : 
+; 308  :             status = STATUS_INVALID_PARAMETER;
+; 309  :             break;
+; 310  :         };
+; 311  : 
+; 312  :     } while (condition);
+
+  00206	eb 05		 jmp	 SHORT $LN3@DevioctlDi
+$LN25@DevioctlDi:
+
+; 216  :             status = STATUS_INTERNAL_ERROR;
+
+  00208	bb e5 00 00 c0	 mov	 ebx, -1073741595	; ffffffffc00000e5H
 $LN3@DevioctlDi:
 
-; 289  :     Irp->IoStatus.Information = bytesIO;
-; 290  :     IoCompleteRequest(Irp, IO_NO_INCREMENT);
+; 315  :     Irp->IoStatus.Information = bytesIO;
+; 316  :     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-  00180	33 d2		 xor	 edx, edx
-  00182	89 5d 30	 mov	 DWORD PTR [rbp+48], ebx
-  00185	48 8b cd	 mov	 rcx, rbp
-  00188	48 89 75 38	 mov	 QWORD PTR [rbp+56], rsi
-  0018c	ff 15 00 00 00
+  0020d	33 d2		 xor	 edx, edx
+  0020f	41 89 5f 30	 mov	 DWORD PTR [r15+48], ebx
+  00213	49 8b cf	 mov	 rcx, r15
+  00216	49 89 77 38	 mov	 QWORD PTR [r15+56], rsi
+  0021a	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_IofCompleteRequest
 
-; 291  :     return status;
+; 317  :     return status;
 
-  00192	8b c3		 mov	 eax, ebx
+  00220	8b c3		 mov	 eax, ebx
 
-; 292  : }
+; 318  : }
 
-  00194	48 8b 9c 24 90
-	00 00 00	 mov	 rbx, QWORD PTR [rsp+144]
-  0019c	48 83 c4 50	 add	 rsp, 80			; 00000050H
-  001a0	41 5f		 pop	 r15
-  001a2	41 5e		 pop	 r14
-  001a4	41 5d		 pop	 r13
-  001a6	41 5c		 pop	 r12
-  001a8	5f		 pop	 rdi
-  001a9	5e		 pop	 rsi
-  001aa	5d		 pop	 rbp
-  001ab	c3		 ret	 0
+  00222	48 8b 9c 24 a0
+	00 00 00	 mov	 rbx, QWORD PTR [rsp+160]
+  0022a	48 83 c4 60	 add	 rsp, 96			; 00000060H
+  0022e	41 5f		 pop	 r15
+  00230	41 5e		 pop	 r14
+  00232	41 5d		 pop	 r13
+  00234	41 5c		 pop	 r12
+  00236	5f		 pop	 rdi
+  00237	5e		 pop	 rsi
+  00238	5d		 pop	 rbp
+  00239	c3		 ret	 0
 DevioctlDispatch ENDP
 _TEXT	ENDS
 ; Function compile flags: /Ogsp
@@ -1201,15 +1517,15 @@ DeviceObject$ = 48
 Irp$ = 56
 UnsupportedDispatch PROC				; COMDAT
 
-; 298  : {
+; 324  : {
 
 $LN4:
   00000	48 83 ec 28	 sub	 rsp, 40			; 00000028H
 
-; 299  :     UNREFERENCED_PARAMETER(DeviceObject);
-; 300  : 
-; 301  :     Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
-; 302  :     IoCompleteRequest(Irp, IO_NO_INCREMENT);
+; 325  :     UNREFERENCED_PARAMETER(DeviceObject);
+; 326  : 
+; 327  :     Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
+; 328  :     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
   00004	48 8b ca	 mov	 rcx, rdx
   00007	c7 42 30 bb 00
@@ -1218,11 +1534,11 @@ $LN4:
   00010	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_IofCompleteRequest
 
-; 303  :     return STATUS_NOT_SUPPORTED;
+; 329  :     return STATUS_NOT_SUPPORTED;
 
   00016	b8 bb 00 00 c0	 mov	 eax, -1073741637	; ffffffffc00000bbH
 
-; 304  : }
+; 330  : }
 
   0001b	48 83 c4 28	 add	 rsp, 40			; 00000028H
   0001f	c3		 ret	 0
@@ -1236,20 +1552,20 @@ DeviceObject$ = 48
 Irp$ = 56
 CreateDispatch PROC					; COMDAT
 
-; 310  : {
+; 336  : {
 
 $LN4:
   00000	48 89 5c 24 08	 mov	 QWORD PTR [rsp+8], rbx
   00005	57		 push	 rdi
   00006	48 83 ec 20	 sub	 rsp, 32			; 00000020H
 
-; 311  :     NTSTATUS status = Irp->IoStatus.Status;
+; 337  :     NTSTATUS status = Irp->IoStatus.Status;
 
   0000a	8b 5a 30	 mov	 ebx, DWORD PTR [rdx+48]
 
-; 312  :     UNREFERENCED_PARAMETER(DeviceObject);
-; 313  : 
-; 314  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 338  :     UNREFERENCED_PARAMETER(DeviceObject);
+; 339  : 
+; 340  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
 
   0000d	4c 8d 0d 00 00
 	00 00		 lea	 r9, OFFSET FLAT:??_C@_0P@BMHHOOJH@CreateDispatch@FNODOBFM@
@@ -1261,22 +1577,22 @@ $LN4:
   00026	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
 
-; 315  :         DPFLTR_INFO_LEVEL,
-; 316  :         "%s Create",
-; 317  :         __FUNCTION__);
-; 318  : 
-; 319  :     IoCompleteRequest(Irp, IO_NO_INCREMENT);
+; 341  :         DPFLTR_INFO_LEVEL,
+; 342  :         "%s Create",
+; 343  :         __FUNCTION__);
+; 344  : 
+; 345  :     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
   0002c	33 d2		 xor	 edx, edx
   0002e	48 8b cf	 mov	 rcx, rdi
   00031	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_IofCompleteRequest
 
-; 320  :     return status;
+; 346  :     return status;
 
   00037	8b c3		 mov	 eax, ebx
 
-; 321  : }
+; 347  : }
 
   00039	48 8b 5c 24 30	 mov	 rbx, QWORD PTR [rsp+48]
   0003e	48 83 c4 20	 add	 rsp, 32			; 00000020H
@@ -1292,20 +1608,20 @@ DeviceObject$ = 48
 Irp$ = 56
 CloseDispatch PROC					; COMDAT
 
-; 327  : {
+; 353  : {
 
 $LN4:
   00000	48 89 5c 24 08	 mov	 QWORD PTR [rsp+8], rbx
   00005	57		 push	 rdi
   00006	48 83 ec 20	 sub	 rsp, 32			; 00000020H
 
-; 328  :     NTSTATUS status = Irp->IoStatus.Status;
+; 354  :     NTSTATUS status = Irp->IoStatus.Status;
 
   0000a	8b 5a 30	 mov	 ebx, DWORD PTR [rdx+48]
 
-; 329  :     UNREFERENCED_PARAMETER(DeviceObject);
-; 330  : 
-; 331  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 355  :     UNREFERENCED_PARAMETER(DeviceObject);
+; 356  : 
+; 357  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
 
   0000d	4c 8d 0d 00 00
 	00 00		 lea	 r9, OFFSET FLAT:??_C@_0O@LANPOMAE@CloseDispatch@FNODOBFM@
@@ -1317,22 +1633,22 @@ $LN4:
   00026	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
 
-; 332  :         DPFLTR_INFO_LEVEL,
-; 333  :         "%s Close",
-; 334  :         __FUNCTION__);
-; 335  : 
-; 336  :     IoCompleteRequest(Irp, IO_NO_INCREMENT);
+; 358  :         DPFLTR_INFO_LEVEL,
+; 359  :         "%s Close",
+; 360  :         __FUNCTION__);
+; 361  : 
+; 362  :     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
   0002c	33 d2		 xor	 edx, edx
   0002e	48 8b cf	 mov	 rcx, rdi
   00031	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_IofCompleteRequest
 
-; 337  :     return status;
+; 363  :     return status;
 
   00037	8b c3		 mov	 eax, ebx
 
-; 338  : }
+; 364  : }
 
   00039	48 8b 5c 24 30	 mov	 rbx, QWORD PTR [rsp+48]
   0003e	48 83 c4 20	 add	 rsp, 32			; 00000020H
@@ -1353,7 +1669,7 @@ RegistryPath$ = 136
 devobj$ = 144
 DriverInitialize PROC					; COMDAT
 
-; 344  : {
+; 370  : {
 
 $LN12:
   00000	48 89 5c 24 08	 mov	 QWORD PTR [rsp+8], rbx
@@ -1363,14 +1679,14 @@ $LN12:
   00010	48 8b ec	 mov	 rbp, rsp
   00013	48 83 ec 70	 sub	 rsp, 112		; 00000070H
 
-; 345  :     NTSTATUS        status;
-; 346  :     UNICODE_STRING  SymLink, DevName;
-; 347  :     PDEVICE_OBJECT  devobj;
-; 348  :     ULONG           t;
-; 349  : 
-; 350  :     UNREFERENCED_PARAMETER(RegistryPath);
-; 351  : 
-; 352  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 371  :     NTSTATUS        status;
+; 372  :     UNICODE_STRING  SymLink, DevName;
+; 373  :     PDEVICE_OBJECT  devobj;
+; 374  :     ULONG           t;
+; 375  : 
+; 376  :     UNREFERENCED_PARAMETER(RegistryPath);
+; 377  : 
+; 378  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
 
   00017	ba 03 00 00 00	 mov	 edx, 3
   0001c	4c 8d 0d 00 00
@@ -1382,19 +1698,19 @@ $LN12:
   00030	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
 
-; 353  :         DPFLTR_INFO_LEVEL,
-; 354  :         "%s\n",
-; 355  :         __FUNCTION__);
-; 356  : 
-; 357  :     RtlInitUnicodeString(&DevName, L"\\Device\\PWN11");
+; 379  :         DPFLTR_INFO_LEVEL,
+; 380  :         "%s\n",
+; 381  :         __FUNCTION__);
+; 382  : 
+; 383  :     RtlInitUnicodeString(&DevName, L"\\Device\\PWN12");
 
   00036	48 8d 15 00 00
-	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1BM@NGBPDEB@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@FNODOBFM@
+	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@
   0003d	48 8d 4d d0	 lea	 rcx, QWORD PTR DevName$[rbp-112]
   00041	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_RtlInitUnicodeString
 
-; 358  :     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
+; 384  :     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
   00047	48 8d 45 20	 lea	 rax, QWORD PTR devobj$[rbp-112]
   0004b	41 b9 22 00 00
@@ -1409,8 +1725,8 @@ $LN12:
   0006c	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_IoCreateDevice
 
-; 359  : 
-; 360  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 385  : 
+; 386  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
 
   00072	0f 28 45 d0	 movaps	 xmm0, XMMWORD PTR DevName$[rbp-112]
   00076	4c 8d 0d 00 00
@@ -1427,42 +1743,42 @@ $LN12:
   000a0	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
 
-; 361  :         DPFLTR_INFO_LEVEL,
-; 362  :         "%s IoCreateDevice(%wZ) = %lx\n",
-; 363  :         __FUNCTION__,
-; 364  :         DevName,
-; 365  :         status);
-; 366  : 
-; 367  :     if (!NT_SUCCESS(status)) {
+; 387  :         DPFLTR_INFO_LEVEL,
+; 388  :         "%s IoCreateDevice(%wZ) = %lx\n",
+; 389  :         __FUNCTION__,
+; 390  :         DevName,
+; 391  :         status);
+; 392  : 
+; 393  :     if (!NT_SUCCESS(status)) {
 
   000a6	85 ff		 test	 edi, edi
   000a8	79 07		 jns	 SHORT $LN5@DriverInit
 
-; 368  :         return status;
+; 394  :         return status;
 
   000aa	8b c7		 mov	 eax, edi
   000ac	e9 a5 00 00 00	 jmp	 $LN1@DriverInit
 $LN5@DriverInit:
 
-; 369  :     }
-; 370  : 
-; 371  :     RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN11");
+; 395  :     }
+; 396  : 
+; 397  :     RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN12");
 
   000b1	48 8d 15 00 00
-	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1CE@GANNCNBF@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@
+	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@
   000b8	48 8d 4d e0	 lea	 rcx, QWORD PTR SymLink$[rbp-112]
   000bc	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_RtlInitUnicodeString
 
-; 372  :     status = IoCreateSymbolicLink(&SymLink, &DevName);
+; 398  :     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
   000c2	48 8d 55 d0	 lea	 rdx, QWORD PTR DevName$[rbp-112]
   000c6	48 8d 4d e0	 lea	 rcx, QWORD PTR SymLink$[rbp-112]
   000ca	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_IoCreateSymbolicLink
 
-; 373  : 
-; 374  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 399  : 
+; 400  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
 
   000d0	0f 28 45 e0	 movaps	 xmm0, XMMWORD PTR SymLink$[rbp-112]
   000d4	4c 8d 0d 00 00
@@ -1479,13 +1795,13 @@ $LN5@DriverInit:
   000fe	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
 
-; 375  :         DPFLTR_INFO_LEVEL,
-; 376  :         "%s IoCreateSymbolicLink(%wZ) = %lx\n",
-; 377  :         __FUNCTION__,
-; 378  :         SymLink,
-; 379  :         status);
-; 380  : 
-; 381  :     devobj->Flags |= DO_BUFFERED_IO;
+; 401  :         DPFLTR_INFO_LEVEL,
+; 402  :         "%s IoCreateSymbolicLink(%wZ) = %lx\n",
+; 403  :         __FUNCTION__,
+; 404  :         SymLink,
+; 405  :         status);
+; 406  : 
+; 407  :     devobj->Flags |= DO_BUFFERED_IO;
 
   00104	48 8b 4d 20	 mov	 rcx, QWORD PTR devobj$[rbp-112]
   00108	48 8d 05 00 00
@@ -1495,14 +1811,14 @@ $LN5@DriverInit:
   00117	b9 1c 00 00 00	 mov	 ecx, 28
   0011c	f3 48 ab	 rep stosq
 
-; 382  : 
-; 383  :     for (t = 0; t <= IRP_MJ_MAXIMUM_FUNCTION; t++)
-; 384  :         DriverObject->MajorFunction[t] = &UnsupportedDispatch;
-; 385  : 
-; 386  :     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = &DevioctlDispatch;
-; 387  :     DriverObject->MajorFunction[IRP_MJ_CREATE] = &CreateDispatch;
-; 388  :     DriverObject->MajorFunction[IRP_MJ_CLOSE] = &CloseDispatch;
-; 389  :     DriverObject->DriverUnload = NULL;
+; 408  : 
+; 409  :     for (t = 0; t <= IRP_MJ_MAXIMUM_FUNCTION; t++)
+; 410  :         DriverObject->MajorFunction[t] = &UnsupportedDispatch;
+; 411  : 
+; 412  :     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = &DevioctlDispatch;
+; 413  :     DriverObject->MajorFunction[IRP_MJ_CREATE] = &CreateDispatch;
+; 414  :     DriverObject->MajorFunction[IRP_MJ_CLOSE] = &CloseDispatch;
+; 415  :     DriverObject->DriverUnload = NULL;
 
   0011f	48 83 66 68 00	 and	 QWORD PTR [rsi+104], 0
   00124	48 8d 05 00 00
@@ -1517,18 +1833,18 @@ $LN5@DriverInit:
   00144	48 89 86 80 00
 	00 00		 mov	 QWORD PTR [rsi+128], rax
 
-; 390  : 
-; 391  :     devobj->Flags &= ~DO_DEVICE_INITIALIZING;
+; 416  : 
+; 417  :     devobj->Flags &= ~DO_DEVICE_INITIALIZING;
 
   0014b	48 8b 45 20	 mov	 rax, QWORD PTR devobj$[rbp-112]
   0014f	0f ba 70 30 07	 btr	 DWORD PTR [rax+48], 7
 
-; 392  :     return status;
+; 418  :     return status;
 
   00154	8b c3		 mov	 eax, ebx
 $LN1@DriverInit:
 
-; 393  : }
+; 419  : }
 
   00156	4c 8d 5c 24 70	 lea	 r11, QWORD PTR [rsp+112]
   0015b	49 8b 5b 10	 mov	 rbx, QWORD PTR [r11+16]
@@ -1549,19 +1865,19 @@ DriverObject$ = 96
 RegistryPath$ = 104
 DriverEntry PROC					; COMDAT
 
-; 399  : {
+; 425  : {
 
 $LN4:
   00000	40 53		 push	 rbx
   00002	48 83 ec 50	 sub	 rsp, 80			; 00000050H
 
-; 400  :     NTSTATUS        status;
-; 401  :     UNICODE_STRING  drvName;
-; 402  : 
-; 403  :     UNREFERENCED_PARAMETER(DriverObject);
-; 404  :     UNREFERENCED_PARAMETER(RegistryPath);
-; 405  : 
-; 406  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 426  :     NTSTATUS        status;
+; 427  :     UNICODE_STRING  drvName;
+; 428  : 
+; 429  :     UNREFERENCED_PARAMETER(DriverObject);
+; 430  :     UNREFERENCED_PARAMETER(RegistryPath);
+; 431  : 
+; 432  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
 
   00006	ba 03 00 00 00	 mov	 edx, 3
   0000b	4c 8d 0d 00 00
@@ -1572,19 +1888,19 @@ $LN4:
   0001c	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
 
-; 407  :         DPFLTR_INFO_LEVEL,
-; 408  :         "%s\n",
-; 409  :         __FUNCTION__);
-; 410  : 
-; 411  :     RtlInitUnicodeString(&drvName, L"\\Driver\\PWN11");
+; 433  :         DPFLTR_INFO_LEVEL,
+; 434  :         "%s\n",
+; 435  :         __FUNCTION__);
+; 436  : 
+; 437  :     RtlInitUnicodeString(&drvName, L"\\Driver\\PWN12");
 
   00022	48 8d 15 00 00
-	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1BM@LPIEEIGA@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@PBOPGDP@
+	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@
   00029	48 8d 4c 24 30	 lea	 rcx, QWORD PTR drvName$[rsp]
   0002e	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_RtlInitUnicodeString
 
-; 412  :     status = IoCreateDriver(&drvName, &DriverInitialize);
+; 438  :     status = IoCreateDriver(&drvName, &DriverInitialize);
 
   00034	48 8d 15 00 00
 	00 00		 lea	 rdx, OFFSET FLAT:DriverInitialize
@@ -1592,8 +1908,8 @@ $LN4:
   00040	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_IoCreateDriver
 
-; 413  : 
-; 414  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
+; 439  : 
+; 440  :     DbgPrintEx(DPFLTR_DEFAULT_ID,
 
   00046	0f 28 44 24 30	 movaps	 xmm0, XMMWORD PTR drvName$[rsp]
   0004b	4c 8d 0d 00 00
@@ -1611,17 +1927,17 @@ $LN4:
   00077	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_DbgPrintEx
 
-; 415  :         DPFLTR_INFO_LEVEL,
-; 416  :         "%s IoCreateDriver(%wZ) = %lx\n",
-; 417  :         __FUNCTION__,
-; 418  :         drvName,
-; 419  :         status);
-; 420  : 
-; 421  :     return status;
+; 441  :         DPFLTR_INFO_LEVEL,
+; 442  :         "%s IoCreateDriver(%wZ) = %lx\n",
+; 443  :         __FUNCTION__,
+; 444  :         drvName,
+; 445  :         status);
+; 446  : 
+; 447  :     return status;
 
   0007d	8b c3		 mov	 eax, ebx
 
-; 422  : }
+; 448  : }
 
   0007f	48 83 c4 50	 add	 rsp, 80			; 00000050H
   00083	5b		 pop	 rbx
