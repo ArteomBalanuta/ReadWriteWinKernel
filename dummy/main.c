@@ -31,14 +31,23 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
     NTSTATUS status = STATUS_SUCCESS;
     HANDLE hProcess = NULL;
 
-    // Open a handle to the target process
-    status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, NULL, ProcessId);
-    if (!NT_SUCCESS(status)) {
-        logToFile(L"ZwOpenProcess", status);
-        return status;
-    }
-
     __try {
+        // Initialize the OBJECT_ATTRIBUTES structure
+        OBJECT_ATTRIBUTES objAttr;
+        InitializeObjectAttributes(&objAttr, NULL, OBJ_KERNEL_HANDLE, NULL, NULL);
+
+        // Initialize the CLIENT_ID structure
+        CLIENT_ID clientId;
+        clientId.UniqueProcess = ProcessId;
+        clientId.UniqueThread = NULL;
+
+        // Open a handle to the target process
+        status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, &objAttr, &clientId);
+        if (!NT_SUCCESS(status)) {
+            logToFile(L"ZwOpenProcess", status);
+            return status;
+        }
+
         // Validate address within process address space
         if (!MmIsAddressValid(address)) {
             logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
@@ -64,7 +73,7 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
     __except (EXCEPTION_EXECUTE_HANDLER) {
         // Log exception using logToFile
         logToFile(L"Exception in VirtualProtectMem", GetExceptionCode());
-        status = GetExceptionCode(); // Set a suitable status to indicate exception handling
+        status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
     }
 
     return status;
