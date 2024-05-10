@@ -22,7 +22,39 @@ NTSYSAPI NTSTATUS NTAPI ZwProtectVirtualMemory(
     OUT PULONG OldProtect
 );
 
-void logToFile(const WCHAR* operation, NTSTATUS status);
+NTSTATUS GetProcessValidAddressSpace(HANDLE ProcessId, PVOID* StartAddress, PVOID* EndAddress);
+
+VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRange);
+
+NTSTATUS GetProcessValidAddressSpace(HANDLE ProcessId, PVOID* StartAddress, PVOID* EndAddress)
+{
+    PEPROCESS Process = NULL;
+    NTSTATUS Status = PsLookupProcessByProcessId(ProcessId, &Process);
+    if (!NT_SUCCESS(Status))
+    {
+        // Failed to lookup process
+        return Status;
+    }
+
+    // Get the process address space
+    KAPC_STATE ApcState;
+    KeStackAttachProcess(Process, &ApcState);
+
+    // Use MmGetVirtualForPhysical to get the start and end valid addresses
+    PHYSICAL_ADDRESS physicalStart = MmGetPhysicalAddress((PVOID)0);
+    PHYSICAL_ADDRESS physicalEnd = MmGetPhysicalAddress((PVOID)~(0ULL));
+
+    *StartAddress = MmGetVirtualForPhysical(physicalStart);
+    *EndAddress = MmGetVirtualForPhysical(physicalEnd);
+
+    // Restore APC state
+    KeUnstackDetachProcess(&ApcState);
+
+    // Dereference the process
+    ObDereferenceObject(Process);
+
+    return STATUS_SUCCESS;
+}
 
 NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize);
 
@@ -44,13 +76,17 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
         // Open a handle to the target process
         status = ZwOpenProcess(&hProcess, PROCESS_ALL_ACCESS, &objAttr, &clientId);
         if (!NT_SUCCESS(status)) {
-            logToFile(L"ZwOpenProcess", status);
+            logToFile(L"ZwOpenProcess", status, NULL);
             return status;
         }
 
         // Validate address within process address space
-        if (!MmIsAddressValid(address)) {
-            logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
+        PVOID StartAddress, EndAddress;
+        GetProcessValidAddressSpace(ProcessId, &StartAddress, &EndAddress);
+        if (address < StartAddress || address > EndAddress) {
+            WCHAR addressRange[85];
+            swprintf(addressRange, L"%p - %p, requested: %p", StartAddress, EndAddress, address);
+            logToFile(L"Invalid Address ", STATUS_INVALID_PARAMETER, addressRange);
             ZwClose(hProcess);
             return STATUS_INVALID_PARAMETER;
         }
@@ -59,25 +95,26 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
         SIZE_T size = pageSize;
 
         // Attempting to change the page protection
-        status = ZwProtectVirtualMemory(hProcess, &address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
+        status = ZwProtectVirtualMemory(hProcess, address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
 
         ZwClose(hProcess);
 
         if (!NT_SUCCESS(status)) {
-            logToFile(L"ZwProtectVirtualMemory", status);
+            logToFile(L"ZwProtectVirtualMemory", status, NULL);
         }
         else {
-            logToFile(L"ZwProtectVirtualMemory", status);
+            logToFile(L"ZwProtectVirtualMemory", status, NULL);
         }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
         // Log exception using logToFile
-        logToFile(L"Exception in VirtualProtectMem", GetExceptionCode());
+        logToFile(L"Exception in VirtualProtectMem", GetExceptionCode(), NULL);
         status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
     }
 
     return status;
 }
+
 
 
 NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory(
@@ -105,97 +142,121 @@ NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID s
     try {
 
     status = MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, size, KernelMode, &Result);
-    logToFile(L"MmCopyVirtualMemory", status);
+    logToFile(L"MmCopyVirtualMemory", status, NULL);
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         // Save exception using writeFailFile
-        logToFile(L"MmCopyVirtualMemory Exception", GetExceptionCode());
+        logToFile(L"MmCopyVirtualMemory Exception", GetExceptionCode(), NULL);
         status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
     }
     return status;
 }
-void logToFile(const WCHAR* operation, NTSTATUS status)
+VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRange)
 {
-    UNICODE_STRING wsFinalPath;
-    RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\dummy_logs.txt");
+    try {
+        UNICODE_STRING wsFinalPath;
+        RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\dummy_logs.txt");
 
-    OBJECT_ATTRIBUTES oa;
-    InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
+        OBJECT_ATTRIBUTES oa;
+        InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
 
-    IO_STATUS_BLOCK io;
-    HANDLE hFile;
+        IO_STATUS_BLOCK io;
+        HANDLE hFile;
 
-    auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
-        FILE_ATTRIBUTE_NORMAL,
-        0,
-        FILE_OPEN_IF,
-        FILE_SYNCHRONOUS_IO_NONALERT,
-        NULL, 0);
-
-    if (NT_SUCCESS(res)) {
-        // Move file pointer to the end of the file
-        LARGE_INTEGER li;
-        li.QuadPart = 0;
-        res = ZwSetInformationFile(hFile, &io, &li, sizeof(LARGE_INTEGER), FileEndOfFileInformation);
+        auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
+            FILE_ATTRIBUTE_NORMAL,
+            0,
+            FILE_OPEN_IF,
+            FILE_SYNCHRONOUS_IO_NONALERT,
+            NULL, 0);
 
         if (NT_SUCCESS(res)) {
-            // Construct log content with operation and status information
-            CHAR logContent[256]; // Adjust size according to your needs
+            // Move file pointer to the end of the file
+            LARGE_INTEGER li;
+            li.QuadPart = 0;
+            res = ZwSetInformationFile(hFile, &io, &li, sizeof(LARGE_INTEGER), FileEndOfFileInformation);
 
-            // Match the status code with its description
-            const char* statusDescription;
-            switch (status) {
-            case STATUS_SUCCESS:
-                statusDescription = "STATUS_SUCCESS";
-                break;
-            case STATUS_INVALID_PARAMETER:
-                statusDescription = "STATUS_INVALID_PARAMETER";
-                break;
-            case STATUS_ACCESS_DENIED:
-                statusDescription = "STATUS_ACCESS_DENIED";
-                break;
-            case STATUS_NOT_FOUND:
-                statusDescription = "STATUS_NOT_FOUND";
-                break;
-            case STATUS_INSUFFICIENT_RESOURCES:
-                statusDescription = "STATUS_INSUFFICIENT_RESOURCES";
-                break;
-            case STATUS_NO_MEMORY:
-                statusDescription = "STATUS_NO_MEMORY";
-                break;
-            case STATUS_OBJECT_NAME_NOT_FOUND:
-                statusDescription = "STATUS_OBJECT_NAME_NOT_FOUND";
-                break;
-            case STATUS_OBJECT_NAME_COLLISION:
-                statusDescription = "STATUS_OBJECT_NAME_COLLISION";
-                break;
-            case STATUS_TIMEOUT:
-                statusDescription = "STATUS_TIMEOUT";
-                break;
-            default:
-                statusDescription = "Unknown status code";
-                break;
+            if (NT_SUCCESS(res)) {
+                // Construct log content with operation and status information
+                CHAR logContent[256]; // Adjust size according to your needs
+
+                // Get current system time
+                LARGE_INTEGER systemTime;
+                KeQuerySystemTime(&systemTime);
+
+                // Format system time as a string
+                WCHAR timeString[70];
+                UNICODE_STRING usTimeString;
+                RtlTimeToTimeFields(&systemTime, (PTIME_FIELDS)&timeString);
+                RtlInitUnicodeString(&usTimeString, timeString);
+
+                // Match the status code with its description
+                const char* statusDescription;
+                switch (status) {
+                case STATUS_SUCCESS:
+                    statusDescription = "STATUS_SUCCESS";
+                    break;
+                case STATUS_INVALID_PARAMETER:
+                    statusDescription = "STATUS_INVALID_PARAMETER";
+                    break;
+                case STATUS_ACCESS_DENIED:
+                    statusDescription = "STATUS_ACCESS_DENIED";
+                    break;
+                case STATUS_NOT_FOUND:
+                    statusDescription = "STATUS_NOT_FOUND";
+                    break;
+                case STATUS_INSUFFICIENT_RESOURCES:
+                    statusDescription = "STATUS_INSUFFICIENT_RESOURCES";
+                    break;
+                case STATUS_NO_MEMORY:
+                    statusDescription = "STATUS_NO_MEMORY";
+                    break;
+                case STATUS_OBJECT_NAME_NOT_FOUND:
+                    statusDescription = "STATUS_OBJECT_NAME_NOT_FOUND";
+                    break;
+                case STATUS_OBJECT_NAME_COLLISION:
+                    statusDescription = "STATUS_OBJECT_NAME_COLLISION";
+                    break;
+                case STATUS_TIMEOUT:
+                    statusDescription = "STATUS_TIMEOUT";
+                    break;
+                default:
+                    statusDescription = "Unknown status code";
+                    break;
+                }
+
+                // Construct the log content with datetime, operation, status, and address range
+                if (addressRange != NULL) {
+                    sprintf_s(logContent, sizeof(logContent), "[%S] - Operation: %S Status: 0x%08X (%s) AddressRange: %S\n", timeString, operation, status, statusDescription, addressRange);
+                }
+                else {
+                    sprintf_s(logContent, sizeof(logContent), "[%S] - Operation: %S Status: 0x%08X (%s)\n", timeString, operation, status, statusDescription);
+                }
+
+                // Now you can write the log content to the file
+                ULONG bytesWritten;
+                res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
+                if (!NT_SUCCESS(res)) {
+                    // Handle write failure
+                }
+            }
+            else {
+                // Handle file pointer positioning failure
             }
 
-            sprintf_s(logContent, sizeof(logContent), "Operation: %S Status: 0x%08X (%s)\n", operation, status, statusDescription);
-
-            // Now you can write the log content to the file
-            ULONG bytesWritten;
-            res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
-            if (!NT_SUCCESS(res)) {
-                // Handle write failure
-            }
+            ZwClose(hFile);
         }
         else {
-            // Handle file pointer positioning failure
+            // Handle file creation failure
         }
-
-        ZwClose(hFile);
     }
-    else {
-        // Handle file creation failure
+    except(EXCEPTION_EXECUTE_HANDLER) {
+
     }
 }
+
+
+
 
 VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
     PEPROCESS processSource, processTarget;
@@ -397,7 +458,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN13");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN17");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -411,7 +472,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN13");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN17");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -451,7 +512,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN13");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN17");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
