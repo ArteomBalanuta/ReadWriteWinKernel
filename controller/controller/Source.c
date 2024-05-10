@@ -26,7 +26,7 @@ VOID sendRequest(ULONGLONG srcPid, ULONGLONG srcAddress, ULONGLONG targetPid, UL
     INOUT_PARAM     tmp;
     DWORD           bytesIO;
 
-    handle = CreateFile(TEXT("\\\\.\\PWN4"), GENERIC_READ | GENERIC_WRITE,
+    handle = CreateFile(TEXT("\\\\.\\PWN5"), GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
     if (handle != INVALID_HANDLE_VALUE) {
 
@@ -61,6 +61,8 @@ int main(int argc, char * argv[]) {
         printf("Going to copy 512mb \n");
         printf("Use: srcPid srcAddress(ignored) targetPid bufferAddress size isRead\n");
         printf("Example: controller.exe 5412 0x0000 6512 0x0203B3F94940 1 1\n");
+        printf("Mem prot change: pid srcAddress size isRead\n");
+        printf("Example: controller.exe 5412 0x0203B3F94940 40000 3\n");
         return 0;
     }
 

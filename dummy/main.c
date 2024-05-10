@@ -14,6 +14,49 @@ PVOID ExAllocatePoolWithTag(
 NTSYSAPI NTSTATUS NTAPI ZwSuspendThread(IN HANDLE ThreadHandle, OUT PULONG
     PreviousSuspendCount OPTIONAL);
 
+NTSYSAPI NTSTATUS NTAPI ZwProtectVirtualMemory(
+    IN HANDLE ProcessHandle,
+    IN OUT PVOID* BaseAddress,
+    IN OUT PSIZE_T RegionSize,
+    IN ULONG NewProtect,
+    OUT PULONG OldProtect
+);
+
+NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize);
+
+
+NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize)
+{
+    //some basic checking for invalid values
+    if (!pid || !address || !pageSize)
+        return STATUS_INVALID_PARAMETER;
+
+    NTSTATUS status = STATUS_SUCCESS;
+    PEPROCESS process;
+
+    NTSTATUS isOk = PsLookupProcessByProcessId(pid, &process);
+
+    //Fetch the eprocess structure from the process id
+    if (!isOk) {
+        return STATUS_NOT_FOUND;
+    }
+
+    //attach our thread to the usermode process adress space
+    KAPC_STATE state;
+    KeStackAttachProcess(process, &state);
+
+    ULONG curProtection = NULL;//variable to store the previous page protection   
+
+    //Attempting to change the page protection
+    status = ZwProtectVirtualMemory(ZwCurrentProcess(), &address, &pageSize, PAGE_EXECUTE_READWRITE, &curProtection);
+
+    //Detach our thread from the user space
+    KeUnstackDetachProcess(&state);
+
+    //Free the pointer to the EPROCESS structure
+    ObDereferenceObject(process);
+    return status;
+}
 
 NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory(
     IN PEPROCESS FromProcess,
@@ -123,7 +166,8 @@ NTSTATUS DevioctlDispatch(
 
             //copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
             /* 0 - copy specific part 
-               1 - dump all the memory 
+               1 - dump all the memory
+               2 - change page access lvl
             */
             if (rp->Param6 == 0) {
                 copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
@@ -138,6 +182,22 @@ NTSTATUS DevioctlDispatch(
                     rp->Param4,
                     rp->Param5,
                     rp->Param6);
+            }
+            if (rp->Param6 == 3) {
+                DbgPrintEx(DPFLTR_DEFAULT_ID,
+                    DPFLTR_INFO_LEVEL,
+                    "%s PAGEPROT REQUEST: from pid- %d from - %p, to pid - %d to - %p, size - %d, isReady - %d",
+                    __FUNCTION__,
+                    rp->Param1,
+                    rp->Param2,
+                    rp->Param3,
+                    rp->Param4,
+                    rp->Param5,
+                    rp->Param6);
+
+                HANDLE processSrcId = (HANDLE)rp->Param1;
+
+                VirtualProtectMem(processSrcId, (PVOID)rp->Param2, rp->Param3);
             }
             /*
             if (rp->Param6 == 1) {
@@ -256,7 +316,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN4");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN5");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -270,7 +330,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN4");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN5");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -310,7 +370,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN4");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN5");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
