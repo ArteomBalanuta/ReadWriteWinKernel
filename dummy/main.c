@@ -22,7 +22,7 @@ NTSYSAPI NTSTATUS NTAPI ZwProtectVirtualMemory(
     OUT PULONG OldProtect
 );
 
-VOID logToFile(INT status);
+void logToFile(const WCHAR* operation, NTSTATUS status);
 
 NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize);
 
@@ -39,6 +39,13 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
             return STATUS_NOT_FOUND;
         }
 
+        // Validate address within process address space
+        if (!MmIsAddressValid(address)) {
+            logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
+            ObDereferenceObject(process);
+            return STATUS_INVALID_PARAMETER;
+        }
+
         //attach our thread to the usermode process address space
         KAPC_STATE state;
         KeStackAttachProcess(process, &state);
@@ -48,7 +55,7 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
         SIZE_T size = pageSize;
 
         //Attempting to change the page protection
-        status = ZwProtectVirtualMemory(ZwCurrentProcess(), &address, &pageSize, PAGE_EXECUTE_READWRITE, &curProtection);
+        status = ZwProtectVirtualMemory(ZwCurrentProcess(), address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
 
         //Detach our thread from the user space
         KeUnstackDetachProcess(&state);
@@ -106,7 +113,6 @@ NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID s
     }
     return status;
 }
-
 void logToFile(const WCHAR* operation, NTSTATUS status)
 {
     UNICODE_STRING wsFinalPath;
@@ -134,7 +140,45 @@ void logToFile(const WCHAR* operation, NTSTATUS status)
         if (NT_SUCCESS(res)) {
             // Construct log content with operation and status information
             CHAR logContent[256]; // Adjust size according to your needs
-            sprintf_s(logContent, sizeof(logContent), "Operation: %S Status: 0x%08X\n", operation, status);
+
+            // Match the status code with its description
+            const char* statusDescription;
+            // Match the status code with its description
+            const char* statusDescription;
+            switch (status) {
+            case STATUS_SUCCESS:
+                statusDescription = "STATUS_SUCCESS";
+                break;
+            case STATUS_INVALID_PARAMETER:
+                statusDescription = "STATUS_INVALID_PARAMETER";
+                break;
+            case STATUS_ACCESS_DENIED:
+                statusDescription = "STATUS_ACCESS_DENIED";
+                break;
+            case STATUS_NOT_FOUND:
+                statusDescription = "STATUS_NOT_FOUND";
+                break;
+            case STATUS_INSUFFICIENT_RESOURCES:
+                statusDescription = "STATUS_INSUFFICIENT_RESOURCES";
+                break;
+            case STATUS_NO_MEMORY:
+                statusDescription = "STATUS_NO_MEMORY";
+                break;
+            case STATUS_OBJECT_NAME_NOT_FOUND:
+                statusDescription = "STATUS_OBJECT_NAME_NOT_FOUND";
+                break;
+            case STATUS_OBJECT_NAME_COLLISION:
+                statusDescription = "STATUS_OBJECT_NAME_COLLISION";
+                break;
+            case STATUS_TIMEOUT:
+                statusDescription = "STATUS_TIMEOUT";
+                break;
+            default:
+                statusDescription = "Unknown status code";
+                break;
+            }
+
+            sprintf_s(logContent, sizeof(logContent), "Operation: %S Status: 0x%08X (%s)\n", operation, status, statusDescription);
 
             // Now you can write the log content to the file
             ULONG bytesWritten;
@@ -354,7 +398,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN10");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN11");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -368,7 +412,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN10");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN11");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -408,7 +452,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN10");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN11");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,

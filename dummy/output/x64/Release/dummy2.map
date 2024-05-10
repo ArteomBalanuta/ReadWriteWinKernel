@@ -1,14 +1,13 @@
  dummy2
 
- Timestamp is 663e27e5 (Fri May 10 16:57:57 2024)
+ Timestamp is 663e3cd1 (Fri May 10 18:27:13 2024)
 
  Preferred load address is 0000000140000000
 
  Start         Length     Name                   Class
- 0001:00000000 00000720H .text$mn                CODE
- 0001:00000720 00000040H .text$mn$00             CODE
- 0001:00000760 000003e4H .text$s                 CODE
- 0001:00000b44 00000019H .text$x                 CODE
+ 0001:00000000 000006a0H .text$mn                CODE
+ 0001:000006a0 00000040H .text$mn$00             CODE
+ 0001:000006e0 00000384H .text$s                 CODE
  0002:00000000 00000098H .idata$5                DATA
  0002:00000098 00000030H .00cfg                  DATA
  0002:000000c8 00000028H .gfids                  DATA
@@ -16,7 +15,7 @@
  0002:000000f0 00000190H .rdata                  DATA
  0002:00000280 00000000H .rdata$CastGuardVftablesA DATA
  0002:00000280 00000000H .rdata$CastGuardVftablesC DATA
- 0002:00000280 000000acH .xdata                  DATA
+ 0002:00000280 000000ccH .xdata                  DATA
  0003:00000000 00000010H .data                   DATA
  0003:00000010 00000000H .bss                    DATA
  0004:00000000 00000084H .pdata                  DATA
@@ -59,37 +58,38 @@
  0000:00000009       __guard_fids_count         0000000000000009     <absolute>
  0000:00014500       __guard_flags              0000000000014500     <absolute>
  0001:00000000       VirtualProtectMem          0000000140001000 f   main.obj
- 0001:00000228       writeFailFile              0000000140001228 f   main.obj
- 0001:00000300       DevioctlDispatch           0000000140001300 f   main.obj
- 0001:000004d0       UnsupportedDispatch        00000001400014d0 f   main.obj
- 0001:000004f0       CreateDispatch             00000001400014f0 f   main.obj
- 0001:00000540       CloseDispatch              0000000140001540 f   main.obj
- 0001:00000590       DriverInitialize           0000000140001590 f   main.obj
- 0001:000006fc       __C_specific_handler       00000001400016fc f   ntoskrnl:ntoskrnl.exe
- 0001:00000710       _guard_check_icall_nop     0000000140001710 f i BufferOverflowFastFailK:guard_check.obj
- 0001:00000730       _guard_dispatch_icall_nop  0000000140001730 f   BufferOverflowFastFailK:guard_dispatch.obj
- 0001:00000750       _guard_xfg_dispatch_icall_nop 0000000140001750 f   BufferOverflowFastFailK:guard_xfg_dispatch.obj
- 0001:00000760       ??_C@_1DK@CKJBEFAI@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@ 0000000140001760     main.obj
- 0001:000007a0       ??_C@_0DC@CPEAOLKM@Exception?5Code?3?50x?$CF08X?6Exceptio@FNODOBFM@ 00000001400017a0     main.obj
- 0001:000007e0       ??_C@_1DM@OBNJNIGD@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@ 00000001400017e0     main.obj
- 0001:00000820       ??_C@_1DM@LJDFNCGP@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@ 0000000140001820     main.obj
- 0001:00000860       ??_C@_1EM@KLIKNACN@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@ 0000000140001860     main.obj
- 0001:000008b0       ??_C@_1EM@ICPLCOEF@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@ 00000001400018b0     main.obj
- 0001:00000900       ??_C@_1EA@MNLHADHI@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@ 0000000140001900     main.obj
- 0001:00000940       ??_C@_0BB@JDMGMFMP@DevioctlDispatch@FNODOBFM@ 0000000140001940     main.obj
- 0001:00000960       ??_C@_0FH@OJCOJELF@?$CFs?5WRITE?5REQUEST?3?5from?5pid?9?5?$CFd?5@FNODOBFM@ 0000000140001960     main.obj
- 0001:000009c0       ??_C@_0EF@CFEKPEKL@?$CFs?5PAGEPROT?5REQUEST?3?5pid?5?9?5?$CFd?0?5@FNODOBFM@ 00000001400019c0     main.obj
- 0001:00000a10       ??_C@_0CC@IMHNEKID@?$CFs?5hit?5with?5invalid?5IoControlCo@FNODOBFM@ 0000000140001a10     main.obj
- 0001:00000a40       ??_C@_0P@BMHHOOJH@CreateDispatch@FNODOBFM@ 0000000140001a40     main.obj
- 0001:00000a50       ??_C@_09CPGKDGEA@?$CFs?5Create@FNODOBFM@ 0000000140001a50     main.obj
- 0001:00000a60       ??_C@_0O@LANPOMAE@CloseDispatch@FNODOBFM@ 0000000140001a60     main.obj
- 0001:00000a70       ??_C@_08MEIEMPGC@?$CFs?5Close@FNODOBFM@ 0000000140001a70     main.obj
- 0001:00000a80       ??_C@_0BB@IBKDDIAO@DriverInitialize@FNODOBFM@ 0000000140001a80     main.obj
- 0001:00000aa0       ??_C@_03OFAPEBGM@?$CFs?6@FNODOBFM@ 0000000140001aa0     main.obj
- 0001:00000ab0       ??_C@_1BM@LFNNJECE@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA0@FNODOBFM@ 0000000140001ab0     main.obj
- 0001:00000ad0       ??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@ 0000000140001ad0     main.obj
- 0001:00000af0       ??_C@_1CE@NIGBEKHA@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ 0000000140001af0     main.obj
- 0001:00000b20       ??_C@_0CE@OGEKHAKP@?$CFs?5IoCreateSymbolicLink?$CI?$CFwZ?$CJ?5?$DN?5@FNODOBFM@ 0000000140001b20     main.obj
+ 0001:000000cc       KCopyProcessMemory         00000001400010cc f   main.obj
+ 0001:00000134       logToFile                  0000000140001134 f   main.obj
+ 0001:000002a0       DevioctlDispatch           00000001400012a0 f   main.obj
+ 0001:00000450       UnsupportedDispatch        0000000140001450 f   main.obj
+ 0001:00000470       CreateDispatch             0000000140001470 f   main.obj
+ 0001:000004c0       CloseDispatch              00000001400014c0 f   main.obj
+ 0001:00000510       DriverInitialize           0000000140001510 f   main.obj
+ 0001:0000067c       __C_specific_handler       000000014000167c f   ntoskrnl:ntoskrnl.exe
+ 0001:00000690       _guard_check_icall_nop     0000000140001690 f i BufferOverflowFastFailK:guard_check.obj
+ 0001:000006b0       _guard_dispatch_icall_nop  00000001400016b0 f   BufferOverflowFastFailK:guard_dispatch.obj
+ 0001:000006d0       _guard_xfg_dispatch_icall_nop 00000001400016d0 f   BufferOverflowFastFailK:guard_xfg_dispatch.obj
+ 0001:000006e0       ??_C@_1DG@LDCJCMOF@?$AAP?$AAs?$AAL?$AAo?$AAo?$AAk?$AAu?$AAp?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs@FNODOBFM@ 00000001400016e0     main.obj
+ 0001:00000720       ??_C@_1CO@JLIIMPMA@?$AAZ?$AAw?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa@FNODOBFM@ 0000000140001720     main.obj
+ 0001:00000750       ??_C@_1DI@LEAIAOJ@?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAP?$AAr?$AAo?$AAt?$AAe?$AAc?$AAt?$AAM@FNODOBFM@ 0000000140001750     main.obj
+ 0001:00000790       ??_C@_1CI@EDIJMKFD@?$AAM?$AAm?$AAC?$AAo?$AAp?$AAy?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAM?$AAe@FNODOBFM@ 0000000140001790     main.obj
+ 0001:000007c0       ??_C@_1DM@OOBLILGP@?$AAM?$AAm?$AAC?$AAo?$AAp?$AAy?$AAV?$AAi?$AAr?$AAt?$AAu?$AAa?$AAl?$AAM?$AAe@FNODOBFM@ 00000001400017c0     main.obj
+ 0001:00000800       ??_C@_1DM@EEKDGDDE@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAD?$AA?3?$AA?2@FNODOBFM@ 0000000140001800     main.obj
+ 0001:00000840       ??_C@_0BO@JELHCNNB@Operation?3?5?$CFS?5Status?3?50x?$CF08X?6@FNODOBFM@ 0000000140001840     main.obj
+ 0001:00000860       ??_C@_0BB@JDMGMFMP@DevioctlDispatch@FNODOBFM@ 0000000140001860     main.obj
+ 0001:00000880       ??_C@_0FH@OJCOJELF@?$CFs?5WRITE?5REQUEST?3?5from?5pid?9?5?$CFd?5@FNODOBFM@ 0000000140001880     main.obj
+ 0001:000008e0       ??_C@_0EF@CFEKPEKL@?$CFs?5PAGEPROT?5REQUEST?3?5pid?5?9?5?$CFd?0?5@FNODOBFM@ 00000001400018e0     main.obj
+ 0001:00000930       ??_C@_0CC@IMHNEKID@?$CFs?5hit?5with?5invalid?5IoControlCo@FNODOBFM@ 0000000140001930     main.obj
+ 0001:00000960       ??_C@_0P@BMHHOOJH@CreateDispatch@FNODOBFM@ 0000000140001960     main.obj
+ 0001:00000970       ??_C@_09CPGKDGEA@?$CFs?5Create@FNODOBFM@ 0000000140001970     main.obj
+ 0001:00000980       ??_C@_0O@LANPOMAE@CloseDispatch@FNODOBFM@ 0000000140001980     main.obj
+ 0001:00000990       ??_C@_08MEIEMPGC@?$CFs?5Close@FNODOBFM@ 0000000140001990     main.obj
+ 0001:000009a0       ??_C@_0BB@IBKDDIAO@DriverInitialize@FNODOBFM@ 00000001400019a0     main.obj
+ 0001:000009c0       ??_C@_03OFAPEBGM@?$CFs?6@FNODOBFM@ 00000001400019c0     main.obj
+ 0001:000009d0       ??_C@_1BM@NGBPDEB@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@FNODOBFM@ 00000001400019d0     main.obj
+ 0001:000009f0       ??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@ 00000001400019f0     main.obj
+ 0001:00000a10       ??_C@_1CE@GANNCNBF@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ 0000000140001a10     main.obj
+ 0001:00000a40       ??_C@_0CE@OGEKHAKP@?$CFs?5IoCreateSymbolicLink?$CI?$CFwZ?$CJ?5?$DN?5@FNODOBFM@ 0000000140001a40     main.obj
  0002:00000000       __imp___C_specific_handler 0000000140002000     ntoskrnl:ntoskrnl.exe
  0002:00000008       __imp_DbgPrintEx           0000000140002008     ntoskrnl:ntoskrnl.exe
  0002:00000010       __imp_ZwCreateFile         0000000140002010     ntoskrnl:ntoskrnl.exe
@@ -121,7 +121,7 @@
  0005:00000000       DriverEntry                0000000140005000 f   main.obj
  0005:00000090       ??_C@_0M@GIPELPKM@DriverEntry@PBOPGDP@ 0000000140005090     main.obj
  0005:000000a0       ??_C@_03OFAPEBGM@?$CFs?6@PBOPGDP@ 00000001400050a0     main.obj
- 0005:000000b0       ??_C@_1BM@HDICPAF@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA0@PBOPGDP@ 00000001400050b0     main.obj
+ 0005:000000b0       ??_C@_1BM@LPIEEIGA@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA1@PBOPGDP@ 00000001400050b0     main.obj
  0005:000000d0       ??_C@_0BO@PEJPEJGM@?$CFs?5IoCreateDriver?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@PBOPGDP@ 00000001400050d0     main.obj
  0005:000000f0       __IMPORT_DESCRIPTOR_ntoskrnl 00000001400050f0     ntoskrnl:ntoskrnl.exe
  0005:00000104       __NULL_IMPORT_DESCRIPTOR   0000000140005104     ntoskrnl:ntoskrnl.exe
@@ -135,20 +135,19 @@
  0002:ffffe000       __guard_fids__             0000000140000000     BufferOverflowFastFailK:guard_support.obj
  0002:ffffe000       __guard_fids__             0000000140000000     BufferOverflowFastFailK:guard_support.obj
  0002:ffffe000       __guard_fids__guard_icall_checks_enforced 0000000140000000     BufferOverflowFastFailK:guard_support.obj
- 0001:00000720       $$000000                   0000000140001720     BufferOverflowFastFailK:guard_dispatch.obj
- 0001:00000740       $$000000                   0000000140001740     BufferOverflowFastFailK:guard_xfg_dispatch.obj
- 0001:00000b44       VirtualProtectMem$filt$0   0000000140001b44 f   main.obj
+ 0001:000006a0       $$000000                   00000001400016a0     BufferOverflowFastFailK:guard_dispatch.obj
+ 0001:000006c0       $$000000                   00000001400016c0     BufferOverflowFastFailK:guard_xfg_dispatch.obj
  0002:00000280       $unwind$VirtualProtectMem  0000000140002280     main.obj
- 0002:000002a8       $unwind$VirtualProtectMem$filt$0 00000001400022a8     main.obj
- 0002:000002b4       $unwind$writeFailFile      00000001400022b4     main.obj
- 0002:000002c4       $unwind$DevioctlDispatch   00000001400022c4     main.obj
- 0002:000002e0       $unwind$UnsupportedDispatch 00000001400022e0     main.obj
- 0002:000002ec       $unwind$CloseDispatch      00000001400022ec     main.obj
- 0002:000002ec       $unwind$CreateDispatch     00000001400022ec     main.obj
- 0002:000002fc       $unwind$DriverInitialize   00000001400022fc     main.obj
- 0002:00000314       $unwind$DriverEntry        0000000140002314     main.obj
- 0002:00000320       $xdatasym                  0000000140002320     BufferOverflowFastFailK:guard_dispatch.obj
- 0002:00000328       $xdatasym                  0000000140002328     BufferOverflowFastFailK:guard_xfg_dispatch.obj
+ 0002:000002a4       $unwind$KCopyProcessMemory 00000001400022a4     main.obj
+ 0002:000002c8       $unwind$logToFile          00000001400022c8     main.obj
+ 0002:000002e0       $unwind$DevioctlDispatch   00000001400022e0     main.obj
+ 0002:000002fc       $unwind$UnsupportedDispatch 00000001400022fc     main.obj
+ 0002:00000308       $unwind$CloseDispatch      0000000140002308     main.obj
+ 0002:00000308       $unwind$CreateDispatch     0000000140002308     main.obj
+ 0002:00000318       $unwind$DriverInitialize   0000000140002318     main.obj
+ 0002:00000330       $unwind$DriverEntry        0000000140002330     main.obj
+ 0002:00000340       $xdatasym                  0000000140002340     BufferOverflowFastFailK:guard_dispatch.obj
+ 0002:00000348       $xdatasym                  0000000140002348     BufferOverflowFastFailK:guard_xfg_dispatch.obj
  0005:00000324       .idata$6                   0000000140005324     ntoskrnl:ntoskrnl.exe
 
  Exports

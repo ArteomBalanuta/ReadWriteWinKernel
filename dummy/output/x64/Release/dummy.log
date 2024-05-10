@@ -7,15 +7,11 @@ D:\workspace\readDriver\dummy\main.c(7,7): warning C4273: 'ExAllocatePoolWithTag
   D:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\km\wdm.h(24292,1):
   see previous definition of 'ExAllocatePoolWithTag'
   
-D:\workspace\readDriver\dummy\main.c(53,67): warning C4133: 'function': incompatible types - from 'ULONG *' to 'PSIZE_T'
-D:\workspace\readDriver\dummy\main.c(94,59): warning C4477: 'sprintf_s' : format string '%s' requires an argument of type 'char *', but variadic argument 2 has type 'int'
-D:\workspace\readDriver\dummy\main.c(94,59): warning C4313: 'sprintf_s': '%s' in format string conflicts with argument 2 of type 'int'
-D:\workspace\readDriver\dummy\main.c(48,11): warning C4047: 'initializing': 'ULONG' differs in levels of indirection from 'void *'
-D:\workspace\readDriver\dummy\main.c(93,22): warning C4047: 'initializing': 'int' differs in levels of indirection from '_EXCEPTION_POINTERS *'
-D:\workspace\readDriver\dummy\main.c(50,12): warning C4189: 'size': local variable is initialized but not referenced
-D:\workspace\readDriver\dummy\main.c(97,23): warning C4101: 'bytesWritten': unreferenced local variable
-D:\workspace\readDriver\dummy\main.c(170,14): warning C4189: 'res': local variable is initialized but not referenced
-D:\workspace\readDriver\dummy\main.c(261,76): warning C4242: 'function': conversion from 'ULONGLONG' to 'ULONG', possible loss of data
+D:\workspace\readDriver\dummy\main.c(51,71): warning C4133: 'function': incompatible types - from 'ULONG *' to 'PSIZE_T'
+D:\workspace\readDriver\dummy\main.c(46,15): warning C4047: 'initializing': 'ULONG' differs in levels of indirection from 'void *'
+D:\workspace\readDriver\dummy\main.c(48,16): warning C4189: 'size': local variable is initialized but not referenced
+D:\workspace\readDriver\dummy\main.c(140,19): warning C4101: 'bytesWritten': unreferenced local variable
+D:\workspace\readDriver\dummy\main.c(238,76): warning C4242: 'function': conversion from 'ULONGLONG' to 'ULONG', possible loss of data
   Microsoft (R) Incremental Linker Version 14.39.33523.0
   Copyright (C) Microsoft Corporation.  All rights reserved.
   "/OUT:.\output\x64\Release\dummy2.sys" "/VERSION:10.0" /INCREMENTAL:NO /WX "/SECTION:INIT,d" "D:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\km\x64\BufferOverflowFastFailK.lib" "D:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\km\x64\ntoskrnl.lib" "D:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\km\x64\hal.lib" "D:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\km\x64\wmilib.lib" "D:\Program Files (x86)\Windows Kits\10\lib\wdf\kmdf\x64\1.15\WdfLdr.lib" "D:\Program Files (x86)\Windows Kits\10\lib\wdf\kmdf\x64\1.15\WdfDriverEntry.lib" /NODEFAULTLIB /MANIFEST:NO "/PDB:.\output\x64\Release\dummy2.pdb" /MAP /MAPINFO:EXPORTS "/SUBSYSTEM:NATIVE,10.00" /LARGEADDRESSAWARE /Driver /OPT:REF /OPT:ICF /LTCG:incremental "/LTCGOUT:.\output\x64\Release\dummy2.iobj" "/ENTRY:DriverEntry" /RELEASE /DYNAMICBASE /NXCOMPAT "/IMPLIB:.\output\x64\Release\dummy2.lib" "/MERGE:_TEXT=.text;_PAGE=PAGE" /MACHINE:X64 /guard:cf /NOCOFFGRPINFO /kernel /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221,4108,4088,4218,4218,4235 /osversion:10.0 /pdbcompress /debugtype:pdata .\output\x64\Release\main.obj 
