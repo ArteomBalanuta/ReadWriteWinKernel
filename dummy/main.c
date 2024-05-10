@@ -22,39 +22,53 @@ NTSYSAPI NTSTATUS NTAPI ZwProtectVirtualMemory(
     OUT PULONG OldProtect
 );
 
+VOID logToFile(INT status);
+
 NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize);
 
-
-NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize)
+NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
 {
-    //some basic checking for invalid values
-    if (!pid || !address || !pageSize)
-        return STATUS_INVALID_PARAMETER;
-
     NTSTATUS status = STATUS_SUCCESS;
-    PEPROCESS process;
+    try {
+        PEPROCESS process = NULL;
+        NTSTATUS isOk = PsLookupProcessByProcessId(ProcessId, &process);
 
-    NTSTATUS isOk = PsLookupProcessByProcessId(pid, &process);
+        //Fetch the eprocess structure from the process id
+        if (STATUS_SUCCESS != isOk) {
+            logToFile(L"PsLookupProcessByProcessId", isOk);
+            return STATUS_NOT_FOUND;
+        }
 
-    //Fetch the eprocess structure from the process id
-    if (!isOk) {
-        return STATUS_NOT_FOUND;
+        //attach our thread to the usermode process address space
+        KAPC_STATE state;
+        KeStackAttachProcess(process, &state);
+
+        ULONG curProtection = NULL;//variable to store the previous page protection   
+
+        SIZE_T size = pageSize;
+
+        //Attempting to change the page protection
+        status = ZwProtectVirtualMemory(ZwCurrentProcess(), &address, &pageSize, PAGE_EXECUTE_READWRITE, &curProtection);
+
+        //Detach our thread from the user space
+        KeUnstackDetachProcess(&state);
+
+        //Free the pointer to the EPROCESS structure
+        ObDereferenceObject(process);
+
+        if (status != STATUS_SUCCESS) {
+            logToFile(L"ZwProtectVirtualMemory", status);
+        }
+        else {
+            logToFile(L"ZwProtectVirtualMemory", status);
+        }
+    }
+    except(EXCEPTION_EXECUTE_HANDLER) {
+        // Save exception using writeFailFile
+        logToFile(L"VirtualProtectMem Exception", GetExceptionCode());
+        status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
     }
 
-    //attach our thread to the usermode process adress space
-    KAPC_STATE state;
-    KeStackAttachProcess(process, &state);
-
-    ULONG curProtection = NULL;//variable to store the previous page protection   
-
-    //Attempting to change the page protection
-    status = ZwProtectVirtualMemory(ZwCurrentProcess(), &address, &pageSize, PAGE_EXECUTE_READWRITE, &curProtection);
-
-    //Detach our thread from the user space
-    KeUnstackDetachProcess(&state);
-
-    //Free the pointer to the EPROCESS structure
-    ObDereferenceObject(process);
     return status;
 }
 
@@ -73,43 +87,71 @@ NTKERNELAPI NTSTATUS PsLookupProcessByProcessId(
     _Outptr_ PEPROCESS* Process
 );
 
-VOID writeFailFile(BOOLEAN status);
+
 
 NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID sourceAddress, PVOID targetAddress, SIZE_T size) {
     PEPROCESS sourceProcess = srcProcess;
     PEPROCESS targetProcess = trgtProcess;
     SIZE_T Result;
-    if (NT_SUCCESS(MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, size, KernelMode, &Result))) {
-        writeFailFile(TRUE);
-        return STATUS_SUCCESS;
-    } else {
-        writeFailFile(FALSE);
-        return STATUS_ACCESS_DENIED;
+    NTSTATUS status;
+    try {
+
+    status = MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, size, KernelMode, &Result);
+    logToFile(L"MmCopyVirtualMemory", status);
+
+    } except(EXCEPTION_EXECUTE_HANDLER) {
+        // Save exception using writeFailFile
+        logToFile(L"MmCopyVirtualMemory Exception", GetExceptionCode());
+        status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
     }
+    return status;
 }
 
-VOID writeFailFile(BOOLEAN status) {
-        UNICODE_STRING wsFinalPath;
-        if (status == TRUE) {
-            RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\true.txt"); //L"\\SystemRoot\\drvhinf.txt");  // or L"\\SystemRoot\\example.txt" \\DosDevices\\C:\\WINDOWS\\example.txt
-        } else {
-            RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\fail.txt"); //L"\\SystemRoot\\drvhinf.txt");  // or L"\\SystemRoot\\example.txt" \\DosDevices\\C:\\WINDOWS\\example.txt
-        }
+void logToFile(const WCHAR* operation, NTSTATUS status)
+{
+    UNICODE_STRING wsFinalPath;
+    RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\dummy_logs.txt");
 
-        OBJECT_ATTRIBUTES oa;
-        InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
+    OBJECT_ATTRIBUTES oa;
+    InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
 
-        IO_STATUS_BLOCK io;
-        HANDLE hFile;
+    IO_STATUS_BLOCK io;
+    HANDLE hFile;
 
-        auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
+    auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
         FILE_ATTRIBUTE_NORMAL,
         0,
-        FILE_OVERWRITE_IF,
+        FILE_OPEN_IF,
         FILE_SYNCHRONOUS_IO_NONALERT,
         NULL, 0);
 
+    if (NT_SUCCESS(res)) {
+        // Move file pointer to the end of the file
+        LARGE_INTEGER li;
+        li.QuadPart = 0;
+        res = ZwSetInformationFile(hFile, &io, &li, sizeof(LARGE_INTEGER), FileEndOfFileInformation);
+
+        if (NT_SUCCESS(res)) {
+            // Construct log content with operation and status information
+            CHAR logContent[256]; // Adjust size according to your needs
+            sprintf_s(logContent, sizeof(logContent), "Operation: %S Status: 0x%08X\n", operation, status);
+
+            // Now you can write the log content to the file
+            ULONG bytesWritten;
+            res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
+            if (!NT_SUCCESS(res)) {
+                // Handle write failure
+            }
+        }
+        else {
+            // Handle file pointer positioning failure
+        }
+
         ZwClose(hFile);
+    }
+    else {
+        // Handle file creation failure
+    }
 }
 
 VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
@@ -186,18 +228,14 @@ NTSTATUS DevioctlDispatch(
             if (rp->Param6 == 3) {
                 DbgPrintEx(DPFLTR_DEFAULT_ID,
                     DPFLTR_INFO_LEVEL,
-                    "%s PAGEPROT REQUEST: from pid- %d from - %p, to pid - %d to - %p, size - %d, isReady - %d",
+                    "%s PAGEPROT REQUEST: pid - %d, address - %p, size - %d, isReady - %d",
                     __FUNCTION__,
                     rp->Param1,
                     rp->Param2,
                     rp->Param3,
-                    rp->Param4,
-                    rp->Param5,
                     rp->Param6);
 
-                HANDLE processSrcId = (HANDLE)rp->Param1;
-
-                VirtualProtectMem(processSrcId, (PVOID)rp->Param2, rp->Param3);
+                VirtualProtectMem((HANDLE)rp->Param1, (PVOID)rp->Param2, rp->Param3);
             }
             /*
             if (rp->Param6 == 1) {
@@ -316,7 +354,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN5");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN10");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -330,7 +368,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN5");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN10");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -370,7 +408,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN5");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN10");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
