@@ -31,13 +31,13 @@ PUBLIC	??_C@_0O@LANPOMAE@CloseDispatch@FNODOBFM@	;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_08MEIEMPGC@?$CFs?5Close@FNODOBFM@		;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0BB@IBKDDIAO@DriverInitialize@FNODOBFM@	;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_03OFAPEBGM@?$CFs?6@FNODOBFM@		;  ?? ::FNODOBFM::`string'
-PUBLIC	??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_1BM@KHGIDLMK@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
-PUBLIC	??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
+PUBLIC	??_C@_1CE@MKNEOFJO@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0CE@OGEKHAKP@?$CFs?5IoCreateSymbolicLink?$CI?$CFwZ?$CJ?5?$DN?5@FNODOBFM@ ;  ?? ::FNODOBFM::`string'
 PUBLIC	??_C@_0M@GIPELPKM@DriverEntry@PBOPGDP@		;  ?? ::PBOPGDP::`string'
 PUBLIC	??_C@_03OFAPEBGM@?$CFs?6@PBOPGDP@		;  ?? ::PBOPGDP::`string'
-PUBLIC	??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@ ;  ?? ::PBOPGDP::`string'
+PUBLIC	??_C@_1BM@BFINIAOL@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@PBOPGDP@ ;  ?? ::PBOPGDP::`string'
 PUBLIC	??_C@_0BO@PEJPEJGM@?$CFs?5IoCreateDriver?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@PBOPGDP@ ;  ?? ::PBOPGDP::`string'
 EXTRN	__imp_sprintf_s:PROC
 EXTRN	__imp_ZwOpenProcess:PROC
@@ -61,11 +61,11 @@ INIT$s	SEGMENT
 ??_C@_0BO@PEJPEJGM@?$CFs?5IoCreateDriver?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@PBOPGDP@ DB '%'
 	DB	's IoCreateDriver(%wZ) = %lx', 0aH, 00H	;  ?? ::PBOPGDP::`string'
 INIT$s	ENDS
-;	COMDAT ??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@
+;	COMDAT ??_C@_1BM@BFINIAOL@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@PBOPGDP@
 INIT$s	SEGMENT
-??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@ DB '\'
+??_C@_1BM@BFINIAOL@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@PBOPGDP@ DB '\'
 	DB	00H, 'D', 00H, 'r', 00H, 'i', 00H, 'v', 00H, 'e', 00H, 'r', 00H
-	DB	'\', 00H, 'P', 00H, 'W', 00H, 'N', 00H, '1', 00H, '2', 00H, 00H
+	DB	'\', 00H, 'P', 00H, 'W', 00H, 'N', 00H, '1', 00H, '3', 00H, 00H
 	DB	00H						;  ?? ::PBOPGDP::`string'
 INIT$s	ENDS
 ;	COMDAT ??_C@_03OFAPEBGM@?$CFs?6@PBOPGDP@
@@ -81,23 +81,23 @@ text$s	SEGMENT
 ??_C@_0CE@OGEKHAKP@?$CFs?5IoCreateSymbolicLink?$CI?$CFwZ?$CJ?5?$DN?5@FNODOBFM@ DB '%'
 	DB	's IoCreateSymbolicLink(%wZ) = %lx', 0aH, 00H ;  ?? ::FNODOBFM::`string'
 text$s	ENDS
-;	COMDAT ??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@
+;	COMDAT ??_C@_1CE@MKNEOFJO@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@
 text$s	SEGMENT
-??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ DB '\'
+??_C@_1CE@MKNEOFJO@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ DB '\'
 	DB	00H, 'D', 00H, 'o', 00H, 's', 00H, 'D', 00H, 'e', 00H, 'v', 00H
 	DB	'i', 00H, 'c', 00H, 'e', 00H, 's', 00H, '\', 00H, 'P', 00H, 'W'
-	DB	00H, 'N', 00H, '1', 00H, '2', 00H, 00H, 00H	;  ?? ::FNODOBFM::`string'
+	DB	00H, 'N', 00H, '1', 00H, '3', 00H, 00H, 00H	;  ?? ::FNODOBFM::`string'
 text$s	ENDS
 ;	COMDAT ??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@
 text$s	SEGMENT
 ??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@ DB '%'
 	DB	's IoCreateDevice(%wZ) = %lx', 0aH, 00H	;  ?? ::FNODOBFM::`string'
 text$s	ENDS
-;	COMDAT ??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@
+;	COMDAT ??_C@_1BM@KHGIDLMK@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@FNODOBFM@
 text$s	SEGMENT
-??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@ DB '\'
+??_C@_1BM@KHGIDLMK@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@FNODOBFM@ DB '\'
 	DB	00H, 'D', 00H, 'e', 00H, 'v', 00H, 'i', 00H, 'c', 00H, 'e', 00H
-	DB	'\', 00H, 'P', 00H, 'W', 00H, 'N', 00H, '1', 00H, '2', 00H, 00H
+	DB	'\', 00H, 'P', 00H, 'W', 00H, 'N', 00H, '1', 00H, '3', 00H, 00H
 	DB	00H						;  ?? ::FNODOBFM::`string'
 text$s	ENDS
 ;	COMDAT ??_C@_03OFAPEBGM@?$CFs?6@FNODOBFM@
@@ -1702,10 +1702,10 @@ $LN12:
 ; 380  :         "%s\n",
 ; 381  :         __FUNCTION__);
 ; 382  : 
-; 383  :     RtlInitUnicodeString(&DevName, L"\\Device\\PWN12");
+; 383  :     RtlInitUnicodeString(&DevName, L"\\Device\\PWN13");
 
   00036	48 8d 15 00 00
-	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@
+	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1BM@KHGIDLMK@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@FNODOBFM@
   0003d	48 8d 4d d0	 lea	 rcx, QWORD PTR DevName$[rbp-112]
   00041	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_RtlInitUnicodeString
@@ -1762,10 +1762,10 @@ $LN5@DriverInit:
 
 ; 395  :     }
 ; 396  : 
-; 397  :     RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN12");
+; 397  :     RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN13");
 
   000b1	48 8d 15 00 00
-	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@
+	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1CE@MKNEOFJO@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@
   000b8	48 8d 4d e0	 lea	 rcx, QWORD PTR SymLink$[rbp-112]
   000bc	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_RtlInitUnicodeString
@@ -1892,10 +1892,10 @@ $LN4:
 ; 434  :         "%s\n",
 ; 435  :         __FUNCTION__);
 ; 436  : 
-; 437  :     RtlInitUnicodeString(&drvName, L"\\Driver\\PWN12");
+; 437  :     RtlInitUnicodeString(&drvName, L"\\Driver\\PWN13");
 
   00022	48 8d 15 00 00
-	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@
+	00 00		 lea	 rdx, OFFSET FLAT:??_C@_1BM@BFINIAOL@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@PBOPGDP@
   00029	48 8d 4c 24 30	 lea	 rcx, QWORD PTR drvName$[rsp]
   0002e	ff 15 00 00 00
 	00		 call	 QWORD PTR __imp_RtlInitUnicodeString

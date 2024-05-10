@@ -1,6 +1,6 @@
  dummy2
 
- Timestamp is 663e4aea (Fri May 10 19:27:22 2024)
+ Timestamp is 663e4b70 (Fri May 10 19:29:36 2024)
 
  Preferred load address is 0000000140000000
 
@@ -95,9 +95,9 @@
  0001:00000af0       ??_C@_08MEIEMPGC@?$CFs?5Close@FNODOBFM@ 0000000140001af0     main.obj
  0001:00000b00       ??_C@_0BB@IBKDDIAO@DriverInitialize@FNODOBFM@ 0000000140001b00     main.obj
  0001:00000b20       ??_C@_03OFAPEBGM@?$CFs?6@FNODOBFM@ 0000000140001b20     main.obj
- 0001:00000b30       ??_C@_1BM@BPNEFMKP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@FNODOBFM@ 0000000140001b30     main.obj
+ 0001:00000b30       ??_C@_1BM@KHGIDLMK@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@FNODOBFM@ 0000000140001b30     main.obj
  0001:00000b50       ??_C@_0BO@KDIJKOEC@?$CFs?5IoCreateDevice?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@FNODOBFM@ 0000000140001b50     main.obj
- 0001:00000b70       ??_C@_1CE@HCGIICPL@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ 0000000140001b70     main.obj
+ 0001:00000b70       ??_C@_1CE@MKNEOFJO@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAP?$AAW?$AAN@FNODOBFM@ 0000000140001b70     main.obj
  0001:00000ba0       ??_C@_0CE@OGEKHAKP@?$CFs?5IoCreateSymbolicLink?$CI?$CFwZ?$CJ?5?$DN?5@FNODOBFM@ 0000000140001ba0     main.obj
  0002:00000000       __imp___C_specific_handler 0000000140002000     ntoskrnl:ntoskrnl.exe
  0002:00000008       __imp_MmIsAddressValid     0000000140002008     ntoskrnl:ntoskrnl.exe
@@ -129,7 +129,7 @@
  0005:00000000       DriverEntry                0000000140005000 f   main.obj
  0005:00000090       ??_C@_0M@GIPELPKM@DriverEntry@PBOPGDP@ 0000000140005090     main.obj
  0005:000000a0       ??_C@_03OFAPEBGM@?$CFs?6@PBOPGDP@ 00000001400050a0     main.obj
- 0005:000000b0       ??_C@_1BM@KNDBOHIO@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA2@PBOPGDP@ 00000001400050b0     main.obj
+ 0005:000000b0       ??_C@_1BM@BFINIAOL@?$AA?2?$AAD?$AAr?$AAi?$AAv?$AAe?$AAr?$AA?2?$AAP?$AAW?$AAN?$AA1?$AA3@PBOPGDP@ 00000001400050b0     main.obj
  0005:000000d0       ??_C@_0BO@PEJPEJGM@?$CFs?5IoCreateDriver?$CI?$CFwZ?$CJ?5?$DN?5?$CFlx?6@PBOPGDP@ 00000001400050d0     main.obj
  0005:000000f0       __IMPORT_DESCRIPTOR_ntoskrnl 00000001400050f0     ntoskrnl:ntoskrnl.exe
  0005:00000104       __NULL_IMPORT_DESCRIPTOR   0000000140005104     ntoskrnl:ntoskrnl.exe

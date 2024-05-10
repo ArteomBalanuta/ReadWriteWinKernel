@@ -38,30 +38,38 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
         return status;
     }
 
-    // Validate address within process address space
-    if (!MmIsAddressValid(address)) {
-        logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
+    __try {
+        // Validate address within process address space
+        if (!MmIsAddressValid(address)) {
+            logToFile(L"Invalid Address", STATUS_INVALID_PARAMETER);
+            ZwClose(hProcess);
+            return STATUS_INVALID_PARAMETER;
+        }
+
+        ULONG curProtection = NULL; // variable to store the previous page protection
+        SIZE_T size = pageSize;
+
+        // Attempting to change the page protection
+        status = ZwProtectVirtualMemory(hProcess, &address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
+
         ZwClose(hProcess);
-        return STATUS_INVALID_PARAMETER;
+
+        if (!NT_SUCCESS(status)) {
+            logToFile(L"ZwProtectVirtualMemory", status);
+        }
+        else {
+            logToFile(L"ZwProtectVirtualMemory", status);
+        }
     }
-
-    ULONG curProtection = NULL; // variable to store the previous page protection
-    SIZE_T size = pageSize;
-
-    // Attempting to change the page protection
-    status = ZwProtectVirtualMemory(hProcess, &address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
-
-    ZwClose(hProcess);
-
-    if (!NT_SUCCESS(status)) {
-        logToFile(L"ZwProtectVirtualMemory", status);
-    }
-    else {
-        logToFile(L"ZwProtectVirtualMemory", status);
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        // Log exception using logToFile
+        logToFile(L"Exception in VirtualProtectMem", GetExceptionCode());
+        status = GetExceptionCode(); // Set a suitable status to indicate exception handling
     }
 
     return status;
 }
+
 
 NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory(
     IN PEPROCESS FromProcess,
@@ -380,7 +388,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN12");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN13");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -394,7 +402,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN12");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN13");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -434,7 +442,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN12");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN13");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
