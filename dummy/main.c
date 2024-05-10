@@ -10,6 +10,11 @@ PVOID ExAllocatePoolWithTag(
     ULONG                                          Tag
 );
 
+
+NTSYSAPI NTSTATUS NTAPI ZwSuspendThread(IN HANDLE ThreadHandle, OUT PULONG
+    PreviousSuspendCount OPTIONAL);
+
+
 NTKERNELAPI NTSTATUS NTAPI MmCopyVirtualMemory(
     IN PEPROCESS FromProcess,
     IN PVOID FromAddress,
@@ -25,14 +30,43 @@ NTKERNELAPI NTSTATUS PsLookupProcessByProcessId(
     _Outptr_ PEPROCESS* Process
 );
 
+VOID writeFailFile(BOOLEAN status);
+
 NTSTATUS KCopyProcessMemory(PEPROCESS srcProcess, PEPROCESS trgtProcess, PVOID sourceAddress, PVOID targetAddress, SIZE_T size) {
     PEPROCESS sourceProcess = srcProcess;
     PEPROCESS targetProcess = trgtProcess;
     SIZE_T Result;
-    if (NT_SUCCESS(MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, size, KernelMode, &Result)))
+    if (NT_SUCCESS(MmCopyVirtualMemory(sourceProcess, sourceAddress, targetProcess, targetAddress, size, KernelMode, &Result))) {
+        writeFailFile(TRUE);
         return STATUS_SUCCESS;
-    else
+    } else {
+        writeFailFile(FALSE);
         return STATUS_ACCESS_DENIED;
+    }
+}
+
+VOID writeFailFile(BOOLEAN status) {
+        UNICODE_STRING wsFinalPath;
+        if (status == TRUE) {
+            RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\true.txt"); //L"\\SystemRoot\\drvhinf.txt");  // or L"\\SystemRoot\\example.txt" \\DosDevices\\C:\\WINDOWS\\example.txt
+        } else {
+            RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\fail.txt"); //L"\\SystemRoot\\drvhinf.txt");  // or L"\\SystemRoot\\example.txt" \\DosDevices\\C:\\WINDOWS\\example.txt
+        }
+
+        OBJECT_ATTRIBUTES oa;
+        InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
+
+        IO_STATUS_BLOCK io;
+        HANDLE hFile;
+
+        auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
+        FILE_ATTRIBUTE_NORMAL,
+        0,
+        FILE_OVERWRITE_IF,
+        FILE_SYNCHRONOUS_IO_NONALERT,
+        NULL, 0);
+
+        ZwClose(hFile);
 }
 
 VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
@@ -222,7 +256,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN3");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN4");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -236,7 +270,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN3");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN4");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -276,7 +310,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN3");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN4");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,

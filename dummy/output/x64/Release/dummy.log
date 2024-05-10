@@ -7,12 +7,13 @@ D:\workspace\readDriver\dummy\main.c(7,7): warning C4273: 'ExAllocatePoolWithTag
   D:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\km\wdm.h(24292,1):
   see previous definition of 'ExAllocatePoolWithTag'
   
+D:\workspace\readDriver\dummy\main.c(62,14): warning C4189: 'res': local variable is initialized but not referenced
   Microsoft (R) Incremental Linker Version 14.39.33523.0
   Copyright (C) Microsoft Corporation.  All rights reserved.
   "/OUT:.\output\x64\Release\dummy2.sys" "/VERSION:10.0" /INCREMENTAL:NO /WX "/SECTION:INIT,d" "D:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\km\x64\BufferOverflowFastFailK.lib" "D:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\km\x64\ntoskrnl.lib" "D:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\km\x64\hal.lib" "D:\Program Files (x86)\Windows Kits\10\lib\10.0.22621.0\km\x64\wmilib.lib" "D:\Program Files (x86)\Windows Kits\10\lib\wdf\kmdf\x64\1.15\WdfLdr.lib" "D:\Program Files (x86)\Windows Kits\10\lib\wdf\kmdf\x64\1.15\WdfDriverEntry.lib" /NODEFAULTLIB /MANIFEST:NO "/PDB:.\output\x64\Release\dummy2.pdb" /MAP /MAPINFO:EXPORTS "/SUBSYSTEM:NATIVE,10.00" /LARGEADDRESSAWARE /Driver /OPT:REF /OPT:ICF /LTCG:incremental "/LTCGOUT:.\output\x64\Release\dummy2.iobj" "/ENTRY:DriverEntry" /RELEASE /DYNAMICBASE /NXCOMPAT "/IMPLIB:.\output\x64\Release\dummy2.lib" "/MERGE:_TEXT=.text;_PAGE=PAGE" /MACHINE:X64 /guard:cf /NOCOFFGRPINFO /kernel /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221,4108,4088,4218,4218,4235 /osversion:10.0 /pdbcompress /debugtype:pdata .\output\x64\Release\main.obj 
   Generating code
   Previous IPDB not found, fall back to full compilation.
-  All 9 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 10 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   dummy.vcxproj -> D:\workspace\readDriver\dummy\output\x64\Release\dummy2.sys
 D:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\km\wdm.h(44531): warning BK4504: file contains too many references; ignoring further references from this source
