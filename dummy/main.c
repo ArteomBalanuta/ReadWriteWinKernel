@@ -24,6 +24,8 @@ NTSYSAPI NTSTATUS NTAPI ZwProtectVirtualMemory(
 
 NTSTATUS GetProcessValidAddressSpace(HANDLE ProcessId, PVOID* StartAddress, PVOID* EndAddress);
 
+VOID logValues(const WCHAR* operation, const WCHAR* value1, const WCHAR* value2);
+
 VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRange);
 
 NTSTATUS GetProcessValidAddressSpace(HANDLE ProcessId, PVOID* StartAddress, PVOID* EndAddress)
@@ -44,8 +46,8 @@ NTSTATUS GetProcessValidAddressSpace(HANDLE ProcessId, PVOID* StartAddress, PVOI
     PHYSICAL_ADDRESS physicalStart = MmGetPhysicalAddress((PVOID)0);
     PHYSICAL_ADDRESS physicalEnd = MmGetPhysicalAddress((PVOID)~(0ULL));
 
-    *StartAddress = MmGetVirtualForPhysical(physicalStart);
-    *EndAddress = MmGetVirtualForPhysical(physicalEnd);
+    PVOID VirtualStartAddress = MmGetVirtualForPhysical(physicalStart);
+    PVOID VirtualEndAddress = MmGetVirtualForPhysical(physicalEnd);
 
     // Restore APC state
     KeUnstackDetachProcess(&ApcState);
@@ -53,8 +55,30 @@ NTSTATUS GetProcessValidAddressSpace(HANDLE ProcessId, PVOID* StartAddress, PVOI
     // Dereference the process
     ObDereferenceObject(Process);
 
+    WCHAR startPhysicalStr[40];
+    WCHAR endPhysicalStr[40];
+    WCHAR startVirtualStr[40];
+    WCHAR endVirtualStr[40];
+    swprintf(startPhysicalStr, L"%p", physicalStart);
+    swprintf(endPhysicalStr, L"%p", physicalEnd);
+    swprintf(startVirtualStr, L"%p", VirtualStartAddress);
+    swprintf(endVirtualStr, L"%p", VirtualEndAddress);
+
+    // Log the addresses
+        // Log the addresses
+    logValues(L"GetProcessValidAddressSpace_PhysicalStart", startPhysicalStr, endPhysicalStr);
+
+    // Ensure separation
+    logValues(L"Separator1", L"\n", L"\n");
+
+    logValues(L"GetProcessValidAddressSpace_VirtualStart", startVirtualStr, endVirtualStr);
+
+    // Ensure separation
+    logValues(L"Separator2", L"\n", L"\n");
+
     return STATUS_SUCCESS;
 }
+
 
 NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize);
 
@@ -85,7 +109,7 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
         GetProcessValidAddressSpace(ProcessId, &StartAddress, &EndAddress);
         if (address < StartAddress || address > EndAddress) {
             WCHAR addressRange[85];
-            swprintf(addressRange, L"%p - %p, requested: %p", StartAddress, EndAddress, address);
+            swprintf(addressRange, L"\n %p - %p, requested: %p", StartAddress, EndAddress, address);
             logToFile(L"Invalid Address ", STATUS_INVALID_PARAMETER, addressRange);
             ZwClose(hProcess);
             return STATUS_INVALID_PARAMETER;
@@ -186,9 +210,14 @@ VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRang
 
                 // Format system time as a string
                 WCHAR timeString[70];
-                UNICODE_STRING usTimeString;
-                RtlTimeToTimeFields(&systemTime, (PTIME_FIELDS)&timeString);
-                RtlInitUnicodeString(&usTimeString, timeString);
+                swprintf_s(timeString, 70, L"%04d-%02d-%02d %02d:%02d:%02d.%03d",
+                    (int)systemTime.HighPart, (int)systemTime.LowPart,
+                    (int)systemTime.HighPart, (int)systemTime.LowPart,
+                    (int)systemTime.HighPart, (int)systemTime.LowPart,
+                    (int)systemTime.HighPart, (int)systemTime.LowPart);
+
+                // Ensure the string is properly terminated
+                timeString[69] = L'\0';
 
                 // Match the status code with its description
                 const char* statusDescription;
@@ -255,7 +284,57 @@ VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRang
     }
 }
 
+VOID logValues(const WCHAR* operation, const WCHAR* value1, const WCHAR* value2)
+{
+    try {
+        UNICODE_STRING wsFinalPath;
+        RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\dummy_conversion_logs.txt");
 
+        OBJECT_ATTRIBUTES oa;
+        InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
+
+        IO_STATUS_BLOCK io;
+        HANDLE hFile;
+
+        auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
+            FILE_ATTRIBUTE_NORMAL,
+            0,
+            FILE_OPEN_IF,
+            FILE_SYNCHRONOUS_IO_NONALERT,
+            NULL, 0);
+
+        if (NT_SUCCESS(res)) {
+            // Move file pointer to the end of the file
+            LARGE_INTEGER li;
+            li.QuadPart = 0;
+            res = ZwSetInformationFile(hFile, &io, &li, sizeof(LARGE_INTEGER), FileEndOfFileInformation);
+
+            if (NT_SUCCESS(res)) {
+                // Construct log content with operation and values
+                CHAR logContent[256]; // Adjust size according to your needs
+                sprintf_s(logContent, sizeof(logContent), "Operation: %S Value1: %S Value2: %S \n", operation, value1, value2);
+
+                // Now you can write the log content to the file
+                ULONG bytesWritten;
+                res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
+                if (!NT_SUCCESS(res)) {
+                    // Handle write failure
+                }
+            }
+            else {
+                // Handle file pointer positioning failure
+            }
+
+            ZwClose(hFile);
+        }
+        else {
+            // Handle file creation failure
+        }
+    }
+    except(EXCEPTION_EXECUTE_HANDLER) {
+
+    }
+}
 
 
 VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID putToAddress, SIZE_T size) {
@@ -458,7 +537,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN17");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN22");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -472,7 +551,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN17");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN22");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -512,7 +591,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN17");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN22");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
