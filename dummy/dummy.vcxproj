@@ -89,6 +89,9 @@
       <Profile>false</Profile>
       <AdditionalOptions>/NOCOFFGRPINFO %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <PostBuildEvent>
+      <Command>copy D:\workspace\readDriver\dummy\output\x64\Release\dummy2.sys C:\Users\arteo\Desktop\matrix /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

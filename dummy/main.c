@@ -4,12 +4,7 @@
 #include "main.h"
 
 
-PVOID ExAllocatePoolWithTag(
-    __drv_strictTypeMatch(__drv_typeExpr)POOL_TYPE PoolType,
-    SIZE_T                                         NumberOfBytes,
-    ULONG                                          Tag
-);
-
+NTSTATUS RtlTimeToTimeString(const LARGE_INTEGER* SystemTime, WCHAR* Buffer, ULONG* ReturnLength);
 
 NTSYSAPI NTSTATUS NTAPI ZwSuspendThread(IN HANDLE ThreadHandle, OUT PULONG
     PreviousSuspendCount OPTIONAL);
@@ -24,67 +19,90 @@ NTSYSAPI NTSTATUS NTAPI ZwProtectVirtualMemory(
 
 NTSTATUS GetProcessValidAddressSpace(HANDLE ProcessId, PVOID* StartAddress, PVOID* EndAddress);
 
-VOID logValues(const WCHAR* operation, const WCHAR* value1, const WCHAR* value2);
+VOID logValues(const WCHAR* operation, const WCHAR* value);
 
-VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRange);
 
-NTSTATUS GetProcessValidAddressSpace(HANDLE ProcessId, PVOID* StartAddress, PVOID* EndAddress)
+
+/*
+Here are some Windows kernel functions commonly used to obtain valid memory ranges for a given process:
+
+    ZwQueryVirtualMemory / NtQueryVirtualMemory:
+        These functions can be used to query information about the virtual memory layout of a specified process. By iterating through the memory regions returned by these functions, you can obtain valid memory ranges.
+    MmGetVirtualForPhysical:
+        While this function converts a physical address to a virtual address in the current process context, it can indirectly provide information about valid memory ranges when used in conjunction with other methods.
+    PsGetProcessSectionBaseAddress:
+        This function returns the base address of the executable image mapped into the virtual address space of a specified process. It can provide information about valid memory ranges within the executable image.
+    MmCopyVirtualMemory:
+        This function allows for the copying of memory from one process to another. While its primary purpose is memory manipulation, it indirectly provides information about valid memory ranges in both the source and destination processes.
+    ZwMapViewOfSection / NtMapViewOfSection:
+        These functions are used to map a view of a section of a file into the virtual address space of a specified process. By mapping specific sections, you can obtain valid memory ranges within the process.
+    ZwQuerySystemInformation / NtQuerySystemInformation:
+        These functions can be used to query system information, including information about the virtual memory layout of processes. The SystemProcessInformation class provides details about each process, including memory ranges.
+    ZwReadVirtualMemory / NtReadVirtualMemory:
+        While primarily used for reading memory from a specified process, these functions can indirectly provide information about valid memory ranges within the target process.
+
+These are some of the commonly used functions for obtaining information about valid memory ranges within a process in the Windows kernel. 
+However, it's important to note that accessing process memory from kernel mode requires appropriate permissions and should be done carefully to avoid system instability or security vulnerabilities.
+
+*/
+NTSTATUS GetProcessValidAddressSpace(HANDLE processHandle, PVOID* StartAddress, PVOID* EndAddress)
 {
-    PEPROCESS Process = NULL;
-    NTSTATUS Status = PsLookupProcessByProcessId(ProcessId, &Process);
-    if (!NT_SUCCESS(Status))
+    // Define variables for ZwQueryVirtualMemory
+    MEMORY_BASIC_INFORMATION MemoryInfo;
+    SIZE_T ReturnLength;
+
+    NTSTATUS Status = STATUS_UNSUCCESSFUL;
+
+    // Initialize the start and end addresses to NULL
+    *StartAddress = NULL;
+    *EndAddress = NULL;
+
+    // Define a variable to store the current address
+    PVOID CurrentAddress = NULL;
+
+    // Loop through the process's address space regions
+    while (NT_SUCCESS(Status = ZwQueryVirtualMemory(processHandle, CurrentAddress, MemoryBasicInformation, &MemoryInfo, sizeof(MemoryInfo), &ReturnLength)))
     {
-        // Failed to lookup process
-        return Status;
+        // Check if the region is valid and committed
+        if (MemoryInfo.State == MEM_COMMIT && MemoryInfo.Type != MEM_MAPPED && MemoryInfo.Type != MEM_PRIVATE)
+        {
+            // If StartAddress is not set, set it to the base address of the region
+            if (*StartAddress == NULL)
+            {
+                *StartAddress = MemoryInfo.BaseAddress;
+            }
+
+            // Set EndAddress to the end address of the current region
+            *EndAddress = (PVOID)((ULONG_PTR)MemoryInfo.BaseAddress + MemoryInfo.RegionSize);
+        }
+
+        // Move to the next region
+        CurrentAddress = (PVOID)((ULONG_PTR)MemoryInfo.BaseAddress + MemoryInfo.RegionSize);
+
+        // Check if we've reached the end of the process's address space
+        if (CurrentAddress >= MM_HIGHEST_USER_ADDRESS)
+        {
+            break;
+        }
     }
 
-    // Get the process address space
-    KAPC_STATE ApcState;
-    KeStackAttachProcess(Process, &ApcState);
-
-    // Use MmGetVirtualForPhysical to get the start and end valid addresses
-    PHYSICAL_ADDRESS physicalStart = MmGetPhysicalAddress((PVOID)0);
-    PHYSICAL_ADDRESS physicalEnd = MmGetPhysicalAddress((PVOID)~(0ULL));
-
-    PVOID VirtualStartAddress = MmGetVirtualForPhysical(physicalStart);
-    PVOID VirtualEndAddress = MmGetVirtualForPhysical(physicalEnd);
-
-    // Restore APC state
-    KeUnstackDetachProcess(&ApcState);
-
     // Dereference the process
-    ObDereferenceObject(Process);
-
-    WCHAR startPhysicalStr[40];
-    WCHAR endPhysicalStr[40];
-    WCHAR startVirtualStr[40];
-    WCHAR endVirtualStr[40];
-    swprintf(startPhysicalStr, L"%p", physicalStart);
-    swprintf(endPhysicalStr, L"%p", physicalEnd);
-    swprintf(startVirtualStr, L"%p", VirtualStartAddress);
-    swprintf(endVirtualStr, L"%p", VirtualEndAddress);
 
     // Log the addresses
-        // Log the addresses
-    logValues(L"GetProcessValidAddressSpace_PhysicalStart", startPhysicalStr, endPhysicalStr);
+    WCHAR str[256];
+    swprintf(str, L"Start Address: %p, End Address: %p", *StartAddress, *EndAddress);
+    logValues(L"GetProcessValidAddressSpace", str);
 
-    // Ensure separation
-    logValues(L"Separator1", L"\n", L"\n");
-
-    logValues(L"GetProcessValidAddressSpace_VirtualStart", startVirtualStr, endVirtualStr);
-
-    // Ensure separation
-    logValues(L"Separator2", L"\n", L"\n");
-
-    return STATUS_SUCCESS;
+    return Status;
 }
+
 
 
 NTSTATUS VirtualProtectMem(HANDLE pid, PVOID address, ULONG pageSize);
 
 NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
 {
-    NTSTATUS status = STATUS_SUCCESS;
+    NTSTATUS status = STATUS_UNSUCCESSFUL;
     HANDLE hProcess = NULL;
 
     __try {
@@ -105,10 +123,17 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
         }
 
         // Validate address within process address space
-        PVOID StartAddress, EndAddress;
-        GetProcessValidAddressSpace(ProcessId, &StartAddress, &EndAddress);
+        PVOID StartAddress = 0, EndAddress = 0;
+        status = GetProcessValidAddressSpace(hProcess, &StartAddress, &EndAddress);
+        if (!NT_SUCCESS(status)) {
+            // Handle error from GetProcessValidAddressSpace
+            logToFile(L"GetProcessValidAddressSpace ", status, NULL);
+            ZwClose(hProcess);
+            return status;
+        }
+
         if (address < StartAddress || address > EndAddress) {
-            WCHAR addressRange[85];
+            WCHAR addressRange[150];
             swprintf(addressRange, L"\n %p - %p, requested: %p", StartAddress, EndAddress, address);
             logToFile(L"Invalid Address ", STATUS_INVALID_PARAMETER, addressRange);
             ZwClose(hProcess);
@@ -118,10 +143,12 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
         ULONG curProtection = NULL; // variable to store the previous page protection
         SIZE_T size = pageSize;
 
+        WCHAR str[256];
+        swprintf(str, L"Args - address: %p, size: %d", address, pageSize);
+        logValues(L"Calling ZwProtectVirtualMemory", str);
+
         // Attempting to change the page protection
         status = ZwProtectVirtualMemory(hProcess, address, &size, PAGE_EXECUTE_READWRITE, &curProtection);
-
-        ZwClose(hProcess);
 
         if (!NT_SUCCESS(status)) {
             logToFile(L"ZwProtectVirtualMemory", status, NULL);
@@ -129,13 +156,13 @@ NTSTATUS VirtualProtectMem(HANDLE ProcessId, PVOID address, ULONG pageSize)
         else {
             logToFile(L"ZwProtectVirtualMemory", status, NULL);
         }
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER) {
+
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
         // Log exception using logToFile
         logToFile(L"Exception in VirtualProtectMem", GetExceptionCode(), NULL);
         status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
     }
-
+    ZwClose(hProcess);
     return status;
 }
 
@@ -179,7 +206,7 @@ VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRang
 {
     try {
         UNICODE_STRING wsFinalPath;
-        RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\dummy_logs.txt");
+        RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\C:\\dummy_logs.txt");
 
         OBJECT_ATTRIBUTES oa;
         InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
@@ -187,96 +214,79 @@ VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRang
         IO_STATUS_BLOCK io;
         HANDLE hFile;
 
-        auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
+        auto res = ZwCreateFile(&hFile, FILE_APPEND_DATA, &oa, &io, NULL,
             FILE_ATTRIBUTE_NORMAL,
             0,
-            FILE_OPEN_IF,
+            FILE_OPEN, // Open the file only if it exists, don't create it
             FILE_SYNCHRONOUS_IO_NONALERT,
             NULL, 0);
 
         if (NT_SUCCESS(res)) {
-            // Move file pointer to the end of the file
-            LARGE_INTEGER li;
-            li.QuadPart = 0;
-            res = ZwSetInformationFile(hFile, &io, &li, sizeof(LARGE_INTEGER), FileEndOfFileInformation);
+            // Construct log content with operation and status information
+            CHAR logContent[256]; // Adjust size according to your needs
 
-            if (NT_SUCCESS(res)) {
-                // Construct log content with operation and status information
-                CHAR logContent[256]; // Adjust size according to your needs
+            LARGE_INTEGER systemTime;
+            KeQuerySystemTime(&systemTime);
 
-                // Get current system time
-                LARGE_INTEGER systemTime;
-                KeQuerySystemTime(&systemTime);
+            // Format system time as a human-readable string
+            WCHAR timeString[500];
+            ULONG returnLength = 0;
+            RtlTimeToTimeString(&systemTime, timeString, &returnLength);
+            timeString[returnLength / sizeof(WCHAR)] = L'\0'; // Ensure null termination
 
-                // Format system time as a string
-                WCHAR timeString[70];
-                swprintf_s(timeString, 70, L"%04d-%02d-%02d %02d:%02d:%02d.%03d",
-                    (int)systemTime.HighPart, (int)systemTime.LowPart,
-                    (int)systemTime.HighPart, (int)systemTime.LowPart,
-                    (int)systemTime.HighPart, (int)systemTime.LowPart,
-                    (int)systemTime.HighPart, (int)systemTime.LowPart);
+            // Match the status code with its description
+            const char* statusDescription;
+            switch (status) {
+            case STATUS_SUCCESS:
+                statusDescription = "STATUS_SUCCESS";
+                break;
+            case STATUS_INVALID_PARAMETER:
+                statusDescription = "STATUS_INVALID_PARAMETER";
+                break;
+            case STATUS_ACCESS_DENIED:
+                statusDescription = "STATUS_ACCESS_DENIED";
+                break;
+            case STATUS_NOT_FOUND:
+                statusDescription = "STATUS_NOT_FOUND";
+                break;
+            case STATUS_INSUFFICIENT_RESOURCES:
+                statusDescription = "STATUS_INSUFFICIENT_RESOURCES";
+                break;
+            case STATUS_NO_MEMORY:
+                statusDescription = "STATUS_NO_MEMORY";
+                break;
+            case STATUS_OBJECT_NAME_NOT_FOUND:
+                statusDescription = "STATUS_OBJECT_NAME_NOT_FOUND";
+                break;
+            case STATUS_OBJECT_NAME_COLLISION:
+                statusDescription = "STATUS_OBJECT_NAME_COLLISION";
+                break;
+            case STATUS_TIMEOUT:
+                statusDescription = "STATUS_TIMEOUT";
+                break;
+            default:
+                statusDescription = "Unknown status code";
+                break;
+            }
 
-                // Ensure the string is properly terminated
-                timeString[69] = L'\0';
-
-                // Match the status code with its description
-                const char* statusDescription;
-                switch (status) {
-                case STATUS_SUCCESS:
-                    statusDescription = "STATUS_SUCCESS";
-                    break;
-                case STATUS_INVALID_PARAMETER:
-                    statusDescription = "STATUS_INVALID_PARAMETER";
-                    break;
-                case STATUS_ACCESS_DENIED:
-                    statusDescription = "STATUS_ACCESS_DENIED";
-                    break;
-                case STATUS_NOT_FOUND:
-                    statusDescription = "STATUS_NOT_FOUND";
-                    break;
-                case STATUS_INSUFFICIENT_RESOURCES:
-                    statusDescription = "STATUS_INSUFFICIENT_RESOURCES";
-                    break;
-                case STATUS_NO_MEMORY:
-                    statusDescription = "STATUS_NO_MEMORY";
-                    break;
-                case STATUS_OBJECT_NAME_NOT_FOUND:
-                    statusDescription = "STATUS_OBJECT_NAME_NOT_FOUND";
-                    break;
-                case STATUS_OBJECT_NAME_COLLISION:
-                    statusDescription = "STATUS_OBJECT_NAME_COLLISION";
-                    break;
-                case STATUS_TIMEOUT:
-                    statusDescription = "STATUS_TIMEOUT";
-                    break;
-                default:
-                    statusDescription = "Unknown status code";
-                    break;
-                }
-
-                // Construct the log content with datetime, operation, status, and address range
-                if (addressRange != NULL) {
-                    sprintf_s(logContent, sizeof(logContent), "[%S] - Operation: %S Status: 0x%08X (%s) AddressRange: %S\n", timeString, operation, status, statusDescription, addressRange);
-                }
-                else {
-                    sprintf_s(logContent, sizeof(logContent), "[%S] - Operation: %S Status: 0x%08X (%s)\n", timeString, operation, status, statusDescription);
-                }
-
-                // Now you can write the log content to the file
-                ULONG bytesWritten;
-                res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
-                if (!NT_SUCCESS(res)) {
-                    // Handle write failure
-                }
+            // Construct the log content with datetime, operation, status, and address range
+            if (addressRange != NULL) {
+                sprintf_s(logContent, sizeof(logContent), "[%S] - Operation: %S Status: 0x%08X (%s) AddressRange: %S \r\n", timeString, operation, status, statusDescription, addressRange);
             }
             else {
-                // Handle file pointer positioning failure
+                sprintf_s(logContent, sizeof(logContent), "[%S] - Operation: %S Status: 0x%08X (%s) \r\n", timeString, operation, status, statusDescription);
+            }
+
+            // Now you can write the log content to the file
+            res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
+            if (!NT_SUCCESS(res)) {
+                // Handle write failure
             }
 
             ZwClose(hFile);
         }
         else {
-            // Handle file creation failure
+            // Handle file open failure
         }
     }
     except(EXCEPTION_EXECUTE_HANDLER) {
@@ -284,56 +294,65 @@ VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRang
     }
 }
 
-VOID logValues(const WCHAR* operation, const WCHAR* value1, const WCHAR* value2)
+
+
+NTSTATUS RtlTimeToTimeString(const LARGE_INTEGER* SystemTime, WCHAR* Buffer, ULONG* ReturnLength)
 {
-    try {
-        UNICODE_STRING wsFinalPath;
-        RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\D:\\dummy_conversion_logs.txt");
-
-        OBJECT_ATTRIBUTES oa;
-        InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
-
-        IO_STATUS_BLOCK io;
-        HANDLE hFile;
-
-        auto res = ZwCreateFile(&hFile, GENERIC_WRITE, &oa, &io, NULL,
-            FILE_ATTRIBUTE_NORMAL,
-            0,
-            FILE_OPEN_IF,
-            FILE_SYNCHRONOUS_IO_NONALERT,
-            NULL, 0);
-
-        if (NT_SUCCESS(res)) {
-            // Move file pointer to the end of the file
-            LARGE_INTEGER li;
-            li.QuadPart = 0;
-            res = ZwSetInformationFile(hFile, &io, &li, sizeof(LARGE_INTEGER), FileEndOfFileInformation);
-
-            if (NT_SUCCESS(res)) {
-                // Construct log content with operation and values
-                CHAR logContent[256]; // Adjust size according to your needs
-                sprintf_s(logContent, sizeof(logContent), "Operation: %S Value1: %S Value2: %S \n", operation, value1, value2);
-
-                // Now you can write the log content to the file
-                ULONG bytesWritten;
-                res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
-                if (!NT_SUCCESS(res)) {
-                    // Handle write failure
-                }
-            }
-            else {
-                // Handle file pointer positioning failure
-            }
-
-            ZwClose(hFile);
-        }
-        else {
-            // Handle file creation failure
-        }
+    if (SystemTime == NULL || Buffer == NULL || ReturnLength == NULL)
+    {
+        return STATUS_INVALID_PARAMETER;
     }
-    except(EXCEPTION_EXECUTE_HANDLER) {
 
+    TIME_FIELDS TimeFields;
+    LARGE_INTEGER LocalTime;
+
+    // Convert system time to local time
+    ExSystemTimeToLocalTime(SystemTime, &LocalTime);
+
+    // Extract time fields
+    RtlTimeToTimeFields(&LocalTime, &TimeFields);
+
+    // Format the time string
+    *ReturnLength = swprintf(Buffer, L"%04u-%02u-%02u %02u:%02u:%02u:%03u",
+        TimeFields.Year, TimeFields.Month, TimeFields.Day,
+        TimeFields.Hour, TimeFields.Minute, TimeFields.Second,
+        TimeFields.Milliseconds);
+
+    return STATUS_SUCCESS;
+}
+
+
+VOID logValues(const WCHAR* operation, const WCHAR* value)
+{
+    UNICODE_STRING wsFinalPath;
+    RtlInitUnicodeString(&wsFinalPath, L"\\DosDevices\\C:\\dummy_conversion_logs.txt");
+
+    OBJECT_ATTRIBUTES oa;
+    InitializeObjectAttributes(&oa, &wsFinalPath, OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, NULL, NULL);
+
+    IO_STATUS_BLOCK io;
+    HANDLE hFile;
+
+    auto res = ZwCreateFile(&hFile, FILE_APPEND_DATA, &oa, &io, NULL,
+        FILE_ATTRIBUTE_NORMAL,
+        0,
+        FILE_OPEN, // Open the file only if it exists, don't create it
+        FILE_SYNCHRONOUS_IO_NONALERT,
+        NULL, 0);
+
+    if (!NT_SUCCESS(res)) {
+        return;
     }
+
+    CHAR logContent[1024]; // Adjust size according to your needs
+    sprintf_s(logContent, sizeof(logContent), "Operation: %S Value: %S \r\n", operation, value);
+
+    // Now you can write the log content to the file
+    res = ZwWriteFile(hFile, NULL, NULL, NULL, &io, logContent, (ULONG)strlen(logContent), NULL, NULL);
+    if (!NT_SUCCESS(res)) {
+        // Handle write failure
+    }
+    ZwClose(hFile);
 }
 
 
@@ -343,7 +362,8 @@ VOID copy(HANDLE processSrcId, HANDLE processTrgtId, PVOID getFromAddress, PVOID
     NTSTATUS srcStatus = PsLookupProcessByProcessId(processSrcId, &processSource);
     NTSTATUS trgtStatus = PsLookupProcessByProcessId(processTrgtId, &processTarget);
     
-    if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) {
+    if (STATUS_SUCCESS == srcStatus && STATUS_SUCCESS == trgtStatus) 
+    {
         KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size * sizeof(unsigned char));
     }
 }
@@ -352,6 +372,78 @@ VOID read(PEPROCESS processSource, PEPROCESS processTarget, PVOID getFromAddress
     KCopyProcessMemory(processSource, processTarget, getFromAddress, putToAddress, size);
 }*/
 
+
+VOID hardWrite(HANDLE ProcessId, PVOID address) {
+    UCHAR NewValue[] = { 0xB8, 0x00, 0x05, 0x00, 0x00, 0x90, 0x90, 0x90 };
+
+    NTSTATUS status = OverwriteMemory(ProcessId, address, NewValue, sizeof(NewValue));
+    if (!NT_SUCCESS(status)) 
+    {
+        logToFile(L"OverwriteMemory Exception", status, NULL);
+        status = STATUS_UNSUCCESSFUL; // Set a suitable status to indicate exception handling
+    }
+}
+
+
+
+/* alternative 1 */
+
+NTSTATUS OverwriteMemory(HANDLE ProcessId, PVOID VirtualAddress, PVOID NewValue, SIZE_T Size)
+{
+    NTSTATUS status = STATUS_SUCCESS;
+    PEPROCESS TargetProcess = NULL;
+    PVOID MappedAddress = NULL;
+    PHYSICAL_ADDRESS PhysicalAddress;
+
+    // Open a handle to the target process
+    status = PsLookupProcessByProcessId(ProcessId, &TargetProcess);
+    if (!NT_SUCCESS(status))
+    {
+        return status;
+    }
+
+    __try
+    {
+        // Attach to the target process
+        KeAttachProcess(TargetProcess);
+
+        // Step 1: Get the physical address corresponding to the virtual address
+        PhysicalAddress = MmGetPhysicalAddress(VirtualAddress);
+
+        // Step 2: Map the physical address into kernel space
+        MappedAddress = MmMapIoSpace(PhysicalAddress, Size, MmNonCached);
+        if (MappedAddress == NULL)
+        {
+            status = STATUS_UNSUCCESSFUL;
+            __leave;
+        }
+
+        // Step 3: Perform DMA write operation
+        // (Assuming DMA-capable hardware is properly configured)
+
+        // Copy the new value to the mapped kernel virtual address
+        RtlCopyMemory(MappedAddress, NewValue, Size);
+    }
+    __finally
+    {
+        // Step 4: Cleanup
+        // Detach from the target process
+        KeDetachProcess();
+
+        if (MappedAddress)
+        {
+            MmUnmapIoSpace(MappedAddress, Size);
+        }
+
+        // Dereference the target process
+        if (TargetProcess)
+        {
+            ObDereferenceObject(TargetProcess);
+        }
+    }
+
+    return status;
+}
 
 NTSTATUS DevioctlDispatch(
     _In_ struct _DEVICE_OBJECT* DeviceObject,
@@ -388,12 +480,6 @@ NTSTATUS DevioctlDispatch(
                 status = STATUS_INVALID_PARAMETER;
                 break;
             }
-
-            //copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
-            /* 0 - copy specific part 
-               1 - dump all the memory
-               2 - change page access lvl
-            */
             if (rp->Param6 == 0) {
                 copy((HANDLE)rp->Param1, (HANDLE)rp->Param3, (PVOID)rp->Param2, (PVOID)rp->Param4, rp->Param5);
 
@@ -418,7 +504,19 @@ NTSTATUS DevioctlDispatch(
                     rp->Param3,
                     rp->Param6);
 
-                VirtualProtectMem((HANDLE)rp->Param1, (PVOID)rp->Param2, rp->Param3);
+                VirtualProtectMem((HANDLE)rp->Param1, (PVOID)rp->Param2, (ULONGLONG) rp->Param3);
+            }
+            if (rp->Param6 == 4) {
+                DbgPrintEx(DPFLTR_DEFAULT_ID,
+                    DPFLTR_INFO_LEVEL,
+                    "%s PAGEPROT REQUEST: pid - %d, address - %p, size - %d, isReady - %d",
+                    __FUNCTION__,
+                    rp->Param1,
+                    rp->Param2,
+                    rp->Param3,
+                    rp->Param6);
+
+                hardWrite((HANDLE)rp->Param1, (PVOID)rp->Param2);
             }
             /*
             if (rp->Param6 == 1) {
@@ -537,7 +635,7 @@ NTSTATUS DriverInitialize(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&DevName, L"\\Device\\PWN22");
+    RtlInitUnicodeString(&DevName, L"\\Device\\PWN29");
     status = IoCreateDevice(DriverObject, 0, &DevName, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, TRUE, &devobj);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -551,7 +649,7 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
-    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN22");
+    RtlInitUnicodeString(&SymLink, L"\\DosDevices\\PWN29");
     status = IoCreateSymbolicLink(&SymLink, &DevName);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,
@@ -591,7 +689,7 @@ NTSTATUS DriverEntry(
         "%s\n",
         __FUNCTION__);
 
-    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN22");
+    RtlInitUnicodeString(&drvName, L"\\Driver\\PWN29");
     status = IoCreateDriver(&drvName, &DriverInitialize);
 
     DbgPrintEx(DPFLTR_DEFAULT_ID,

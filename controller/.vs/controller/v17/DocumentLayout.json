@@ -27,7 +27,7 @@
               "RelativeDocumentMoniker": "..\\dummy\\main.c",
               "ToolTip": "D:\\workspace\\readDriver\\dummy\\main.c",
               "RelativeToolTip": "..\\dummy\\main.c",
-              "ViewState": "AQIAAGcBAAAAAAAAAAAwwH4BAAAyAAAA",
+              "ViewState": "AQIAABwCAAAAAAAAAAAwwDMCAAA0AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-05-10T10:11:09.958Z"
             },
@@ -37,9 +37,9 @@
               "Title": "Source.c",
               "DocumentMoniker": "D:\\workspace\\readDriver\\controller\\controller\\Source.c",
               "RelativeDocumentMoniker": "controller\\Source.c",
-              "ToolTip": "D:\\workspace\\readDriver\\controller\\controller\\Source.c",
-              "RelativeToolTip": "controller\\Source.c",
-              "ViewState": "AQIAAAUAAAAAAAAAAAAwwCgAAAAoAAAA",
+              "ToolTip": "D:\\workspace\\readDriver\\controller\\controller\\Source.c*",
+              "RelativeToolTip": "controller\\Source.c*",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAwwCYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-05-03T00:55:45.146Z",
               "EditorCaption": ""

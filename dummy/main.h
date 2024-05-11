@@ -63,3 +63,7 @@ typedef struct _INOUT_PARAM {
 	ULONGLONG Param10;
 	ULONGLONG Param11;
 } INOUT_PARAM, *PINOUTPARAM;
+
+VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRange);
+
+NTSTATUS OverwriteMemory(HANDLE ProcessId, PVOID VirtualAddress, PVOID NewValue, SIZE_T Size);

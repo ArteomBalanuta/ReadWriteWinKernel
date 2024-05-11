@@ -26,7 +26,7 @@ VOID sendRequest(ULONGLONG srcPid, ULONGLONG srcAddress, ULONGLONG targetPid, UL
     INOUT_PARAM     tmp;
     DWORD           bytesIO;
 
-    handle = CreateFile(TEXT("\\\\.\\PWN22"), GENERIC_READ | GENERIC_WRITE,
+    handle = CreateFile(TEXT("\\\\.\\PWN29"), GENERIC_READ | GENERIC_WRITE,
         FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
     if (handle != INVALID_HANDLE_VALUE) {
 
@@ -67,7 +67,7 @@ int main(int argc, char * argv[]) {
     }
 
     ULONGLONG srcPid = (ULONGLONG) strtoll(argv[1], NULL, 0);
-    ULONGLONG srcAddress = (ULONGLONG) strtoll("0x7FF6ED3F0390", NULL, 0);
+    ULONGLONG srcAddress = (ULONGLONG) strtoll(argv[2], NULL, 0);
 
     ULONGLONG targetPid = (ULONGLONG) strtoll(argv[3], NULL, 0);
     ULONGLONG targetAddress = (ULONGLONG) strtoll(argv[4], NULL, 0);
