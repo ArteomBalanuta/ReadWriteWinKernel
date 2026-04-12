@@ -1,0 +1,48 @@
+[$RootKey$\Packages\{18b934db-9f52-4f48-a988-b3325dd23a4b}]
+@="Microsoft.DriverKit.WdkTestPackage.DriverTestPackage, DriverTestPackage, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
+"InprocServer32"="$WinDir$\SYSTEM32\MSCOREE.DLL"
+"Class"="Microsoft.DriverKit.WdkTestPackage.DriverTestPackage"
+"CodeBase"="$PackageFolder$\DriverTestPackage.dll"
+"MinEdition"="Standard"
+"ProductVersion"="10.0"
+"ProductName"="Windows Driver Kit"
+"CompanyName"="Microsoft Corporation"
+"ID"=dword:3F2
+[$RootKey$\Editors\{b6c594e4-50b3-4de9-acb0-480584482f0b}]
+@="DeviceMetadata"
+"DisplayName"="#120"
+"Package"="{18b934db-9f52-4f48-a988-b3325dd23a4b}"
+[$RootKey$\Editors\{b6c594e4-50b3-4de9-acb0-480584482f0b}\Extensions]
+"devicemetadata-ms"=dword:00000032
+[$RootKey$\Projects\{a2fe74e1-b743-11d0-ae1a-00a0c90fffc3}\AddItemTemplates\TemplateDirs\{18b934db-9f52-4f48-a988-b3325dd23a4b}\/1]
+@="#120"
+"TemplatesDir"="$PackageFolder$\Templates"
+"SortPriority"=dword:00000032
+[$RootKey$\Editors\{b6c594e4-50b3-4de9-acb0-480584482f0b}]
+@="DeviceMetadataFactory"
+"DisplayName"="#121"
+"Package"="{18b934db-9f52-4f48-a988-b3325dd23a4b}"
+"EditorTrustLevel"=dword:00000001
+"CommonPhysicalViewAttributes"=dword:00000000
+[$RootKey$\Editors\{b6c594e4-50b3-4de9-acb0-480584482f0b}\LogicalViews]
+[$RootKey$\Editors\{5ea465a4-83d7-491b-9b8d-3bc04cda7f91}]
+@="TestGroupFactory"
+"DisplayName"="#100"
+"Package"="{18b934db-9f52-4f48-a988-b3325dd23a4b}"
+"EditorTrustLevel"=dword:00000001
+"CommonPhysicalViewAttributes"=dword:00000000
+[$RootKey$\Editors\{5ea465a4-83d7-491b-9b8d-3bc04cda7f91}\LogicalViews]
+[$RootKey$\Editors\{5ea465a4-83d7-491b-9b8d-3bc04cda7f91}\LogicalViews]
+"{fa298378-f185-4f28-a0ff-69d11e8edf6a}"=""
+[$RootKey$\Editors\{b6c594e4-50b3-4de9-acb0-480584482f0b}\LogicalViews]
+"{287c782b-dd72-42fe-bb77-bd0c107a850d}"=""
+[$RootKey$\Menus]
+"{18b934db-9f52-4f48-a988-b3325dd23a4b}"=", 1000, 1"
+[$RootKey$\ToolWindows\{66030c96-b538-4466-bb39-8a34420e8507}]
+@="{18b934db-9f52-4f48-a988-b3325dd23a4b}"
+"Name"="Microsoft.DriverKit.WdkTestPackage.TestGroupUI.DriverTestGroupExplorerToolWindow"
+"Orientation"="Right"
+"Style"="Tabbed"
+"Window"="3ae79031-e1bc-11d0-8f78-00a0c9110057"
+"Float"="100, 100, 400, 400"
+

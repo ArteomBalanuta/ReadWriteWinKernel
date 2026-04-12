@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name Package="{cf9f860b-255c-4886-9e7a-80ca874d0da9}" ID="211" />
+    <Description Package="{cf9f860b-255c-4886-9e7a-80ca874d0da9}" ID="212" />
+    <Icon>__TemplateIcon.ico</Icon>
+    <ProjectType>VC</ProjectType>
+    <TemplateID>Microsoft.DriverKit.PkgGenMan</TemplateID>
+    <TemplateGroupID>WinRT-Common</TemplateGroupID>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <DefaultName>Package</DefaultName>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true" OpenInEditor="true" ItemType="PkgGen" TargetFileName="$fileinputname$.pkg.xml">Package.pkg.xml</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

@@ -1,0 +1,17 @@
+
+[$RootKey$\InstalledProducts\DriverCommonPackage]
+"Package"="{cf9f860b-255c-4886-9e7a-80ca874d0da9}"
+"UseInterface"=dword:00000001
+[$RootKey$\Packages\{cf9f860b-255c-4886-9e7a-80ca874d0da9}]
+@="DriverCommonPackage"
+"InprocServer32"="$WinDir$\SYSTEM32\MSCOREE.DLL"
+"Class"="Microsoft.DriverKit.DriverCommonPackage"
+"CodeBase"="$PackageFolder$\DriverCommonPackage.dll"
+"MinEdition"="Standard"
+"ProductVersion"="10.0"
+"ProductName"="Windows Driver Kit"
+"CompanyName"="Microsoft Corporation"
+"ID"=dword:3F2
+[$RootKey$\Menus]
+"{cf9f860b-255c-4886-9e7a-80ca874d0da9}"=", 1000, 1"
+

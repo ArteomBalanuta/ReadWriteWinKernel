@@ -1,0 +1,58 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <TemplateID>Microsoft.Cpp.Driver.PrinterDriverV4</TemplateID>
+    <Name>Printer Driver V4</Name>
+    <Description>A V4 printer driver project, either GPD or PPD based. Printer drivers can run only on Windows desktop devices.</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>v4 Printer Driver</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <LanguageTag Value="CPP" />
+    <ProjectTypeTag Value="Driver" />
+    <PlatformTag Value="Windows" />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$drivername$.vcxproj" File="v4Driver.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$.vcxproj.filters">v4Driver.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$-manifest.ini">v4Driver-manifest.ini</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$-constraints.js">constraints.js</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="$drivername$-DriverEvents.xml">DriverEvents.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="$drivername$-DevModeMap.xml">DevModeMap.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="$drivername$-QueueProperties.xml">QueueProperties.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="resource.h">resource.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Resource.rc">Resource.rc</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$.gpd">v4Driver.gpd</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="$drivername$-AutoConfig-uni.gdl">ACnfgUni.gdl</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$.ppd">v4Driver.ppd</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="$drivername$-AutoConfig-ps.gdl">ACnfgPS.gdl</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$-Bidi-Spm.xml">SPM_Bidi_XML.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$-Bidi-Usb.xml">USB_Bidi_XML.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$-Bidi-Wsd.xml">WSD_Bidi_XML.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$-Bidi-Usb.js">USB_JavaScript.js</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$.inf">Driver2.inf</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$-PipelineConfig.xml">PipelineConfig.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="v4PrintDriver-Intellisense.js">v4PrintDriver-Intellisense.js</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="v4PrintDriver-Intellisense-Windows8.1.js">v4PrintDriver-Intellisense-Windows8.1.js</ProjectItem>
+    </Project>
+    <CustomParameters>
+        <CustomParameter
+          Name="$DriverTemplate_ProjectType$"
+          Value="Driver" />
+        <CustomParameter
+          Name="$DriverTemplate_GUID$"
+          Value="{0C0A48DE-84DE-4778-8341-40CB37283ACD}" />
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+        <Assembly>Microsoft.DriverKit.V4PrintDriverWizard, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</Assembly>
+        <FullClassName>Microsoft.DriverKit.V4PrintDriverWizard.Wizard</FullClassName>
+  </WizardExtension>  
+</VSTemplate>

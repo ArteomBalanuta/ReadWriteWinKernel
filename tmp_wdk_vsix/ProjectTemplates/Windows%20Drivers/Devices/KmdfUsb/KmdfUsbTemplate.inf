@@ -1,0 +1,70 @@
+;
+; $drivername$.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USBDevice
+ClassGuid={88BAE032-5A81-49f0-BC3D-A4FF138216D6}
+Provider=%ManufacturerName%
+CatalogFile=$drivername$.cat
+DriverVer=
+PnpLockDown=1
+
+[DestinationDirs]
+DefaultDestDir = 13
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+$drivername$.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$.10.0...16299 ; %13% support introduced in build 16299
+
+[Standard.NT$ARCH$.10.0...16299]
+%$drivername$.DeviceDesc%=$drivername$_Device, USB\VID_vvvv&PID_pppp
+
+[$drivername$_Device.NT]
+CopyFiles=File_Copy
+
+[File_Copy]
+$drivername$.sys
+
+[$drivername$_Device.NT.HW]
+AddReg=$drivername$_AddReg
+
+[$drivername$_AddReg]
+; By default, USBDevice class uses iProduct descriptor to name the device
+; Uncomment for this device to use %$drivername$.DeviceDesc%
+;HKR,,FriendlyName,,%$drivername$.DeviceDesc%
+
+;-------------- Service installation
+[$drivername$_Device.NT.Services]
+AddService = $drivername$,%SPSVCINST_ASSOCSERVICE%, $drivername$_Service_Inst
+
+; -------------- $drivername$ driver install sections
+[$drivername$_Service_Inst]
+DisplayName    = %$drivername$.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %13%\$drivername$.sys
+
+[$drivername$_Device.NT.Wdf]
+KmdfService =  $drivername$, $drivername$_wdfsect
+
+[$drivername$_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "$drivername$ Installation Disk"
+$drivername$.DeviceDesc = "$drivername$ Device"
+$drivername$.SVCDESC = "$drivername$ Service"

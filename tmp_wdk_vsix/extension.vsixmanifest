@@ -1,0 +1,45 @@
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
+  <Metadata>
+    <Identity Id="Microsoft.Windows.DriverKit" Version="10.0.26100.16" Language="en-US" Publisher="Microsoft" />
+    <DisplayName>Windows Driver Kit</DisplayName>
+    <Description xml:space="preserve">A set of extensions that integrates Windows Driver development into Visual Studio.</Description>
+    <License>EULA.rtf</License>
+    <Icon>wdk-vsix_logo.png</Icon>
+    <PackageId>Microsoft.Windows.DriverKit</PackageId>
+    <Preview>false</Preview>
+    <GalleryFlags>Public</GalleryFlags>
+  </Metadata>
+  <Installation AllUsers="true">
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Enterprise">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" Version="[4.7,)" />
+    <Dependency Id="Microsoft.VisualStudio.MPF" DisplayName="Visual Studio MPF" Version="[11.0,12.0)" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" Path="ProjectTemplates" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="MenuContent\DriverCommonPackage.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="MenuContent\DriverTargetConfig.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="MenuContent\DriverTestPackage.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="MenuContent\Script.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="MenuContent\SdvMenuCommand.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" Path="MenuContent\Microsoft.DriverKit.Build.CertificateUI.dll" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" Path="MenuContent\DriverTestPackage.dll" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" Path="MenuContent\DriverProjectUpgrade.dll" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" Path="MenuContent\DriverTargetConfig.dll" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" Path="ItemTemplates" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="MenuContent\DebuggerPackage.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" Path="MenuContent\DebuggerPackage.dll" />
+  </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,18.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+</PackageManifest>

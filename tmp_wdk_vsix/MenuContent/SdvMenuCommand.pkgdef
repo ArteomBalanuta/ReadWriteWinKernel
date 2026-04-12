@@ -1,0 +1,13 @@
+﻿[$RootKey$\Packages\{3718ce5a-503f-4c55-8f70-3a4cc34fb1fb}]
+@="Microsoft.SdvMenuCommand.SdvMenuCommandPackage, SdvMenuCommand, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"
+"InprocServer32"="$WinDir$\SYSTEM32\MSCOREE.DLL"
+"Class"="Microsoft.SdvMenuCommand.SdvMenuCommandPackage"
+"CodeBase"="$PackageFolder$\SdvMenuCommand.dll"
+"MinEdition"="Standard"
+"ProductVersion"="10.0"
+"ProductName"="Windows Driver Kit"
+"CompanyName"="Microsoft Corporation"
+"ID"=dword:3F2
+[$RootKey$\Menus]
+"{3718ce5a-503f-4c55-8f70-3a4cc34fb1fb}"=", 1001, 1"
+

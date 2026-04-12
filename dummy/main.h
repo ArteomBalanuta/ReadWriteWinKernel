@@ -1,5 +1,7 @@
 #pragma once
 
+#include "..\common\protocol.h"
+
 NTKERNELAPI
 NTSTATUS
 IoCreateDriver(
@@ -7,63 +9,68 @@ IoCreateDriver(
     _In_ PDRIVER_INITIALIZE InitializationFunction
 	);
 
-_Dispatch_type_(IRP_MJ_DEVICE_CONTROL)
-DRIVER_DISPATCH DevioctlDispatch;
-_Dispatch_type_(IRP_MJ_CREATE)
-DRIVER_DISPATCH CreateDispatch;
-_Dispatch_type_(IRP_MJ_CLOSE)
-DRIVER_DISPATCH CloseDispatch;
-
-_Dispatch_type_(IRP_MJ_CREATE)
-_Dispatch_type_(IRP_MJ_CREATE_NAMED_PIPE)
-_Dispatch_type_(IRP_MJ_CLOSE)
-_Dispatch_type_(IRP_MJ_READ)
-_Dispatch_type_(IRP_MJ_WRITE)
-_Dispatch_type_(IRP_MJ_QUERY_INFORMATION)
-_Dispatch_type_(IRP_MJ_SET_INFORMATION)
-_Dispatch_type_(IRP_MJ_QUERY_EA)
-_Dispatch_type_(IRP_MJ_SET_EA)
-_Dispatch_type_(IRP_MJ_FLUSH_BUFFERS)
-_Dispatch_type_(IRP_MJ_QUERY_VOLUME_INFORMATION)
-_Dispatch_type_(IRP_MJ_SET_VOLUME_INFORMATION)
-_Dispatch_type_(IRP_MJ_DIRECTORY_CONTROL)
-_Dispatch_type_(IRP_MJ_FILE_SYSTEM_CONTROL)
-_Dispatch_type_(IRP_MJ_DEVICE_CONTROL)
-_Dispatch_type_(IRP_MJ_INTERNAL_DEVICE_CONTROL)
-_Dispatch_type_(IRP_MJ_SHUTDOWN)
-_Dispatch_type_(IRP_MJ_LOCK_CONTROL)
-_Dispatch_type_(IRP_MJ_CLEANUP)
-_Dispatch_type_(IRP_MJ_CREATE_MAILSLOT)
-_Dispatch_type_(IRP_MJ_QUERY_SECURITY)
-_Dispatch_type_(IRP_MJ_SET_SECURITY)
-_Dispatch_type_(IRP_MJ_POWER)
-_Dispatch_type_(IRP_MJ_SYSTEM_CONTROL)
-_Dispatch_type_(IRP_MJ_DEVICE_CHANGE)
-_Dispatch_type_(IRP_MJ_QUERY_QUOTA)
-_Dispatch_type_(IRP_MJ_SET_QUOTA)
-_Dispatch_type_(IRP_MJ_PNP)
-DRIVER_DISPATCH UnsupportedDispatch;
+_Dispatch_type_(IRP_MJ_DEVICE_CONTROL) DRIVER_DISPATCH DevioctlDispatch;
+_Dispatch_type_(IRP_MJ_CREATE) DRIVER_DISPATCH CreateDispatch;
+_Dispatch_type_(IRP_MJ_CLOSE) DRIVER_DISPATCH CloseDispatch;
+_Dispatch_type_(IRP_MJ_DEVICE_CONTROL) DRIVER_DISPATCH UnsupportedDispatch;
 
 DRIVER_INITIALIZE DriverInitialize;
 DRIVER_INITIALIZE DriverEntry;
+DRIVER_UNLOAD DriverUnload;
 #pragma alloc_text(INIT, DriverEntry)
 
-#define DUMMYDRV_REQUEST1    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x0701, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+NTSTATUS AppendLogLine(
+    _In_ PCWSTR path,
+    _In_ PCWSTR operation,
+    _In_opt_ PCWSTR detail,
+    _In_ NTSTATUS status
+);
 
-typedef struct _INOUT_PARAM {
-	ULONGLONG Param1;
-	ULONGLONG Param2;
-	ULONGLONG Param3;
-	ULONGLONG Param4;
-	ULONGLONG Param5;
-	ULONGLONG Param6;
-	ULONGLONG Param7;
-	ULONGLONG Param8;
-	ULONGLONG Param9;
-	ULONGLONG Param10;
-	ULONGLONG Param11;
-} INOUT_PARAM, *PINOUTPARAM;
+VOID LogStatus(
+    _In_ PCWSTR operation,
+    _In_ NTSTATUS status,
+    _In_opt_ PCWSTR detail
+);
 
-VOID logToFile(const WCHAR* operation, NTSTATUS status, const WCHAR* addressRange);
+VOID LogText(
+    _In_ PCWSTR operation,
+    _In_opt_ PCWSTR text
+);
 
-NTSTATUS OverwriteMemory(HANDLE ProcessId, PVOID VirtualAddress, PVOID NewValue, SIZE_T Size);
+NTSTATUS FormatTimestamp(
+    _In_ const LARGE_INTEGER* systemTime,
+    _Out_writes_(bufferLength) PWCHAR buffer,
+    _In_ SIZE_T bufferLength
+);
+
+NTSTATUS CopyProcessMemory(
+    _In_ HANDLE sourceProcessId,
+    _In_ PVOID sourceAddress,
+    _In_ HANDLE targetProcessId,
+    _In_ PVOID targetAddress,
+    _In_ SIZE_T size
+);
+
+NTSTATUS ProtectProcessMemory(
+    _In_ HANDLE processId,
+    _In_ PVOID address,
+    _In_ SIZE_T size
+);
+
+NTSTATUS PatchProcessMemory(
+    _In_ HANDLE processId,
+    _In_ PVOID address
+);
+
+NTSTATUS WriteIntegerProcessMemory(
+    _In_ HANDLE processId,
+    _In_ PVOID address,
+    _In_ ULONGLONG value,
+    _In_ SIZE_T size
+);
+
+NTSTATUS HandleDeviceControl(
+    _In_ PIO_STACK_LOCATION stack,
+    _Inout_ PIRP irp,
+    _Out_ PULONG_PTR bytesReturned
+);

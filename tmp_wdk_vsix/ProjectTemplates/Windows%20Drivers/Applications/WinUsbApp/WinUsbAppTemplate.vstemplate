@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <TemplateID>Microsoft.Cpp.Driver.WinUSBUniversalApplication</TemplateID>
+    <Name>WinUSB Application (Universal)</Name>
+    <Description>Universal application skeleton for accessing a USB device</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType></ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>USB Application</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <LanguageTag Value="CPP" />
+    <ProjectTypeTag Value="Driver" />
+    <PlatformTag Value="Windows" />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="WinUsbAppTemplate.vcxproj" File="WinUsbAppTemplate.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$.vcxproj.filters">WinUsbAppTemplate.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.txt">ReadMe.txt</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="device.cpp">device.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="device.h">device.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="main.cpp">main.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="pch.h">pch.h</ProjectItem>
+    </Project>
+    <CustomParameters>
+      <CustomParameter Name="$DriverTemplate_ProjectType$" Value="Driver" />
+      <CustomParameter Name="$DriverTemplate_GUID$" Value="{CAE09E86-45B5-4C5D-BED2-2726E426D1DD}" />
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>Microsoft.DriverKit.DriverWizard, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</Assembly>
+    <FullClassName>Microsoft.DriverKit.DriverWizard.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

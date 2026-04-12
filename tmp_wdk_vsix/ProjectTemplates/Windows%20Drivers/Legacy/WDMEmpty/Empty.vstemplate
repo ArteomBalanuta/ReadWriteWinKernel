@@ -1,0 +1,40 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <TemplateID>Microsoft.Cpp.Driver.WDMDriverEmpty</TemplateID>
+    <Name>Empty WDM Driver</Name>
+    <Description>An empty project for creating a WDM driver</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>MyDriver</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <LanguageTag Value="CPP" />
+    <ProjectTypeTag Value="Driver" />
+    <PlatformTag Value="Windows" />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="Empty.vcxproj" File="Empty.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$.vcxproj.filters">Empty.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$.inf">Empty.inf</ProjectItem>
+    </Project>
+    <CustomParameters>
+      <CustomParameter
+          Name="$DriverTemplate_ProjectType$"
+          Value="Driver" />
+      <CustomParameter
+          Name="$DriverTemplate_GUID$"
+          Value="{8C85ADD2-54A4-466D-8B19-0F4DCAA18414}" />
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>Microsoft.DriverKit.DriverWizard, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</Assembly>
+    <FullClassName>Microsoft.DriverKit.DriverWizard.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

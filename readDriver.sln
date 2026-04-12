@@ -1,0 +1,33 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dummy", "dummy\dummy.vcxproj", "{3D8146DE-8064-46C0-9E70-CEEC357B2290}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "controller", "controller\controller\controller.vcxproj", "{FFA7A98C-BB2C-4F13-B2F5-C3C68A910585}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "client", "client\client.csproj", "{7D1E38FC-9C71-413F-AA7F-D644FA681C57}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D8146DE-8064-46C0-9E70-CEEC357B2290}.Debug|x64.ActiveCfg = Debug|x64
+		{3D8146DE-8064-46C0-9E70-CEEC357B2290}.Debug|x64.Build.0 = Debug|x64
+		{3D8146DE-8064-46C0-9E70-CEEC357B2290}.Release|x64.ActiveCfg = Release|x64
+		{3D8146DE-8064-46C0-9E70-CEEC357B2290}.Release|x64.Build.0 = Release|x64
+		{FFA7A98C-BB2C-4F13-B2F5-C3C68A910585}.Debug|x64.ActiveCfg = Debug|x64
+		{FFA7A98C-BB2C-4F13-B2F5-C3C68A910585}.Debug|x64.Build.0 = Debug|x64
+		{FFA7A98C-BB2C-4F13-B2F5-C3C68A910585}.Release|x64.ActiveCfg = Release|x64
+		{FFA7A98C-BB2C-4F13-B2F5-C3C68A910585}.Release|x64.Build.0 = Release|x64
+		{7D1E38FC-9C71-413F-AA7F-D644FA681C57}.Debug|x64.ActiveCfg = Debug|x64
+		{7D1E38FC-9C71-413F-AA7F-D644FA681C57}.Debug|x64.Build.0 = Debug|x64
+		{7D1E38FC-9C71-413F-AA7F-D644FA681C57}.Release|x64.ActiveCfg = Release|x64
+		{7D1E38FC-9C71-413F-AA7F-D644FA681C57}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

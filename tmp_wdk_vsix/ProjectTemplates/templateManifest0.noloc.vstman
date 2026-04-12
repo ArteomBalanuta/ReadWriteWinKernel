@@ -1,0 +1,466 @@
+﻿<VSTemplateManifest Version="1.0" xmlns="http://schemas.microsoft.com/developer/vstemplatemanifest/2015">
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Applications\EmptyApplication</RelativePathOnDisk>
+    <TemplateFileName>EmptyApplication.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.EmptyApplication</TemplateID>
+        <Name>Empty Desktop Application for Drivers (Universal)</Name>
+        <Description>An empty project for creating an application that interacts with universal drivers</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ApplicationForDrivers</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Applications\EmptyDll</RelativePathOnDisk>
+    <TemplateFileName>emptydll.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>Empty DLL for Drivers (Universal)</Name>
+        <Description>An empty project for creating a DLL that interacts with universal drivers</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>DllForDrivers</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Applications\EmptyStatic</RelativePathOnDisk>
+    <TemplateFileName>emptystaticlibrary.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.EmptyUniversalStaticLibrary</TemplateID>
+        <Name>Empty Static Library for Drivers (Universal)</Name>
+        <Description>An empty project for creating a static driver library for a universal driver</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>StaticLibraryForDrivers</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Applications\WinUsbApp</RelativePathOnDisk>
+    <TemplateFileName>WinUsbAppTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.WinUSBUniversalApplication</TemplateID>
+        <Name>WinUSB Application (Universal)</Name>
+        <Description>Universal application skeleton for accessing a USB device</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>USB Application</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Devices\KmdfUsb</RelativePathOnDisk>
+    <TemplateFileName>KmdfUsbTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.KMDFUSB</TemplateID>
+        <Name>Kernel Mode Driver, USB (KMDF)</Name>
+        <Description>A USB device project using the Kernel-Mode Driver Framework (KMDF). Builds Universal drivers by default.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>USB Driver</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <Icon>__TemplateIcon.ico</Icon>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Devices\NdisFilter</RelativePathOnDisk>
+    <TemplateFileName>ndislwf.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.NDISFilter</TemplateID>
+        <Name>Filter Driver: NDIS</Name>
+        <Description>A project for NDIS filter drivers. Builds Universal drivers by default.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ndislwf</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Devices\Umdf2Usb</RelativePathOnDisk>
+    <TemplateFileName>UmdfUsbTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.UMDFV2USB</TemplateID>
+        <Name>User Mode Driver, USB (UMDF V2)</Name>
+        <Description>A USB device project using the User-Mode Driver Framework v2 (UMDF2). Builds Universal drivers by default.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>USB UMDF 2 Driver</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Devices\v4PrintDriver</RelativePathOnDisk>
+    <TemplateFileName>v4Driver.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.PrinterDriverV4</TemplateID>
+        <Name>Printer Driver V4</Name>
+        <Description>A V4 printer driver project, either GPD or PPD based. Printer drivers can run only on Windows desktop devices.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>v4 Printer Driver</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Devices\XpsRenderFilter</RelativePathOnDisk>
+    <TemplateFileName>XpsRenderFilter.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.PrinterXPSRender</TemplateID>
+        <Name>Printer XPS Render Filter</Name>
+        <Description>A printer driver XPS render filter project. Printer drivers can run only on Windows desktop devices.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>XpsRenderFilter</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Legacy\WDMEmpty</RelativePathOnDisk>
+    <TemplateFileName>Empty.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.WDMDriverEmpty</TemplateID>
+        <Name>Empty WDM Driver</Name>
+        <Description>An empty project for creating a WDM driver</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>MyDriver</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Package\DriverPackage</RelativePathOnDisk>
+    <TemplateFileName>Package.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.DriverInstallPackage</TemplateID>
+        <Name>Driver Install Package</Name>
+        <Description>A project that creates a driver package that contains driver files from one or more driver projects</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>Driver Package</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Package\PrinterDriverPackage</RelativePathOnDisk>
+    <TemplateFileName>Package.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.PrinterDriverInstallPackage</TemplateID>
+        <Name>Printer Driver Install Package</Name>
+        <Description>A project that creates a driver package that contains driver files from one or more driver projects</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>Driver Package</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <Hidden>true</Hidden>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\Package\WinUsbInfPackage</RelativePathOnDisk>
+    <TemplateFileName>WinusbInfTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.WinUSBINFPackage</TemplateID>
+        <Name>WinUSB INF Driver Package</Name>
+        <Description>Generates a .INF file in a driver package that can be used to load WinUSB on a USB device</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>Driver Package</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\WDF\KMDF</RelativePathOnDisk>
+    <TemplateFileName>kmdf.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.KMDF</TemplateID>
+        <Name>Kernel Mode Driver (KMDF)</Name>
+        <Description>A basic project using the Kernel-Mode Driver Framework (KMDF). Builds Universal drivers by default.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>KMDF Driver</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\WDF\KMDFEmpty</RelativePathOnDisk>
+    <TemplateFileName>KMDFEmpty.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.KMDFEmpty</TemplateID>
+        <Name>Kernel Mode Driver, Empty (KMDF)</Name>
+        <Description>An empty project using the Kernel-Mode Driver Framework (KMDF). Builds Universal drivers by default.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>KMDF Driver</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\WDF\UMDF2</RelativePathOnDisk>
+    <TemplateFileName>UMDF.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.UMDFV2</TemplateID>
+        <Name>User Mode Driver (UMDF V2)</Name>
+        <Description>A basic project using the User-Mode Driver Framework v2 (UMDF2). Builds Universal drivers by default.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>UMDF 2 Driver</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Windows Drivers\WDF\UMDF2Empty</RelativePathOnDisk>
+    <TemplateFileName>UMDFEmpty.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.Cpp.Driver.UMDFV2Empty</TemplateID>
+        <Name>User Mode Driver, Empty (UMDF V2)</Name>
+        <Description>An empty project using the User-Mode Driver Framework v2 (UMDF2). Builds Universal drivers by default.</Description>
+        <ProjectType>VC</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>UMDF 2 Driver</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CPP" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>CSharp\Windows Drivers\v4PrintDriverPropertyBag</RelativePathOnDisk>
+    <TemplateFileName>PropertyBag.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <TemplateID>Microsoft.CSharp.Driver.PrinterDriverV4PropertyBag</TemplateID>
+        <Name>Printer Driver V4 Property Bag</Name>
+        <Description>A V4 printer driver property bag project. Printer drivers can run only on Windows desktop devices.</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>1000</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>v4 printer driver property bag</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.ico</Icon>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <LanguageTag Value="CSharp" />
+        <ProjectTypeTag Value="Driver" />
+        <PlatformTag Value="Windows" />
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+</VSTemplateManifest>

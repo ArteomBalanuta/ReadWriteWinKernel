@@ -27,6 +27,8 @@
     <ConfigurationType>Driver</ConfigurationType>
     <DriverType>KMDF</DriverType>
     <DriverTargetPlatform>Desktop</DriverTargetPlatform>
+    <Driver_SpectreMitigation>false</Driver_SpectreMitigation>
+    <EnableTestSign>false</EnableTestSign>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <TargetVersion>Windows10</TargetVersion>
@@ -37,6 +39,7 @@
     <DriverTargetPlatform>Desktop</DriverTargetPlatform>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <Driver_SpectreMitigation>false</Driver_SpectreMitigation>
+    <EnableTestSign>false</EnableTestSign>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -49,18 +52,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <OutDir>.\output\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>.\output\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)build\driver\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\driver\obj\$(Platform)\$(Configuration)\</IntDir>
     <EnableInf2cat>false</EnableInf2cat>
+    <EnableTestSign>false</EnableTestSign>
+    <SignMode>Off</SignMode>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <OutDir>.\output\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>.\output\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)build\driver\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\driver\obj\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>dummy2</TargetName>
     <EnableInf2cat>false</EnableInf2cat>
+    <EnableTestSign>false</EnableTestSign>
+    <SignMode>Off</SignMode>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -89,9 +96,6 @@
       <Profile>false</Profile>
       <AdditionalOptions>/NOCOFFGRPINFO %(AdditionalOptions)</AdditionalOptions>
     </Link>
-    <PostBuildEvent>
-      <Command>copy D:\workspace\readDriver\dummy\output\x64\Release\dummy2.sys C:\Users\arteo\Desktop\matrix /Y</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -105,10 +109,15 @@
     <FilesToPackage Include="$(TargetPath)" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dispatch.c" />
+    <ClCompile Include="driver_lifecycle.c" />
+    <ClCompile Include="logging.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="memory_ops.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
+    <ClInclude Include="..\common\protocol.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme.txt" />

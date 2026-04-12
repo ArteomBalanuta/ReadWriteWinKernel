@@ -1,0 +1,40 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <TemplateID>Microsoft.Cpp.Driver.PrinterDriverInstallPackage</TemplateID>
+    <Name>Printer Driver Install Package</Name>
+    <Description>A project that creates a driver package that contains driver files from one or more driver projects</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>Driver Package</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+	<Hidden>true</Hidden>
+    <LanguageTag Value="CPP" />
+    <ProjectTypeTag Value="Driver" />
+    <PlatformTag Value="Windows" />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="Package.vcxproj" File="Package.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$.vcxproj.filters">Package.vcxproj.filters</ProjectItem>
+    </Project>
+    <CustomParameters>
+      <CustomParameter
+          Name="$DriverTemplate_ProjectType$"
+          Value="Driver Package" />
+      <CustomParameter
+          Name="$DriverTemplate_GUID$"
+          Value="{7AA29B34-0467-46BF-A633-4073AE419292}" />
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>Microsoft.DriverKit.DriverWizard, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</Assembly>
+    <FullClassName>Microsoft.DriverKit.DriverWizard.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

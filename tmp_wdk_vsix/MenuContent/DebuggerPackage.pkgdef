@@ -1,0 +1,74 @@
+[$RootKey$\InstalledProducts\DebuggerPackage]
+"Package"="{22686b14-da89-4978-a469-b4f8a565e2c9}"
+"UseInterface"=dword:00000001
+[$RootKey$\Packages\{22686b14-da89-4978-a469-b4f8a565e2c9}]
+@="Microsoft.Windows.Tools.WinIDE.Debugger.DebuggerPackage, DebuggerPackage, Version=10.0.0.0, Culture=neutral, PublicKeyToken=null"
+"InprocServer32"="$WinDir$\SYSTEM32\MSCOREE.DLL"
+"Class"="Microsoft.Windows.Tools.WinIDE.Debugger.DebuggerPackage"
+"CodeBase"="$PackageFolder$\DebuggerPackage.dll"
+[$RootKey$\Packages\{22686b14-da89-4978-a469-b4f8a565e2c9}]
+"WDExpressId"=dword:000003F2
+"ID"=dword:00000071
+"MinEdition"="Standard"
+"ProductVersion"="1.0"
+"ProductName"="Debugger Package"
+"CompanyName"="Microsoft"
+[$RootKey$\Menus]
+"{22686b14-da89-4978-a469-b4f8a565e2c9}"=", 1000, 1"
+[$RootKey$\ToolsOptionsPages\Debugging Tools for Windows]
+@="#117"
+"Package"="{22686b14-da89-4978-a469-b4f8a565e2c9}"
+[$RootKey$\ToolsOptionsPages\Debugging Tools for Windows\Debugging]
+@="#118"
+"Package"="{22686b14-da89-4978-a469-b4f8a565e2c9}"
+"Page"="{757f4182-ffba-4d35-ab5c-89f4d0163bcc}"
+[$RootKey$\AutomationProperties\Debugging Tools for Windows\Debugging]
+"Name"="Debugging Tools for Windows.Debugging"
+"Package"="{22686b14-da89-4978-a469-b4f8a565e2c9}"
+[$RootKey$\ToolWindows\{238199b4-ebbf-4572-b6ce-0c246ceda6e2}]
+@="{22686b14-da89-4978-a469-b4f8a565e2c9}"
+"Name"="Microsoft.Windows.Tools.WinIDE.Debugger.DbgCmdWin"
+"Style"="Tabbed"
+"Window"="{0504ff91-9d61-11d0-a794-00a0c9110051}"
+[$RootKey$\CLSID\{f91972fd-5a43-47c7-a0c5-6052db26faac}]
+"Assembly"="DebuggerPackage, Version=10.0.0.0, Culture=neutral, PublicKeyToken=null"
+"Codebase"="DebuggerPackage.dll"
+"Class"="Microsoft.Windows.Tools.WinIDE.Debugger.XKDebug.UserPortPicker"
+"InprocServer32"="$WinDir$\SysWOW64\mscoree.dll"
+"ThreadingModel"="Both"
+[$RootKey$\CLSID\{d332cdda-15c3-464a-864c-3365c0e577fa}]
+"Assembly"="DebuggerPackage, Version=10.0.0.0, Culture=neutral, PublicKeyToken=null"
+"Codebase"="DebuggerPackage.dll"
+"Class"="Microsoft.Windows.Tools.WinIDE.Debugger.XKDebug.KernelPortPicker"
+"InprocServer32"="$WinDir$\SysWOW64\mscoree.dll"
+"ThreadingModel"="Both"
+[$RootKey$\Config\AD7Metrics\Engine\{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}]
+"Disassembly"=dword:00000001
+[$RootKey$\AD7Metrics\PortSupplier\{F913A0DF-BE31-4E54-92B4-896F8DC8E1B3}]
+"CLSID"="{F913A0DF-BE31-4E54-92B4-896F8DC8E1B3}"
+[$RootKey$\AD7Metrics\PortSupplier\{7A9C2658-67FF-4B62-991A-890572E191BB}]
+"PortPickerCLSID"="{D332CDDA-15C3-464A-864C-3365C0E577FA}"
+[$RootKey$\AD7Metrics\Engine\{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}]
+"EngineCanWatchProcess"=dword:00000001
+[$RootKey$\AD7Metrics\PortSupplier\{7A9C2658-67FF-4B62-991A-890572E191BB}]
+"CLSID"="{7A9C2658-67FF-4B62-991A-890572E191BB}"
+[$RootKey$\AD7Metrics\Engine\{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}]
+"Name"="WINDBG Debugger"
+[$RootKey$\AD7Metrics\Engine\{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}]
+"Disassembly"=dword:00000001
+[$RootKey$\AD7Metrics\PortSupplier\{F913A0DF-BE31-4E54-92B4-896F8DC8E1B3}]
+"Name"="Windows Debugger user mode"
+[$RootKey$\AD7Metrics\Engine\{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}]
+"CLSID"="{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}"
+[$RootKey$\AD7Metrics\PortSupplier\{7A9C2658-67FF-4B62-991A-890572E191BB}]
+"Name"="Windows Debugger kernel mode"
+[$RootKey$\AD7Metrics\PortSupplier\{F913A0DF-BE31-4E54-92B4-896F8DC8E1B3}]
+"PortPickerCLSID"="{F91972FD-5A43-47C7-A0C5-6052DB26FAAC}"
+[$RootKey$\AD7Metrics\Engine\{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}]
+"DataBP"=dword:00000001
+[$RootKey$\AD7Metrics\Engine\{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}]
+"ProgramProvider"="{FDF01632-DBB0-4E32-9427-32CE0C8ECB5E}"
+[$RootKey$\AppCommandLine\xkdebugpath]
+"Arguments"="*"
+"DemandLoad"=dword:00000000
+"Package"="{22686b14-da89-4978-a469-b4f8a565e2c9}"

@@ -1,0 +1,39 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <TemplateID>Microsoft.CSharp.Driver.PrinterDriverV4PropertyBag</TemplateID>
+    <Name>Printer Driver V4 Property Bag</Name>
+    <Description>A V4 printer driver property bag project. Printer drivers can run only on Windows desktop devices.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>v4 printer driver property bag</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <LanguageTag Value="CSharp" />
+    <ProjectTypeTag Value="Driver" />
+    <PlatformTag Value="Windows" />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="Driver property bag.csproj" File="Driver property bag.csproj" ReplaceParameters="true">
+      <Folder Name="ByteArray" TargetFolderName="ByteArray">
+      </Folder>
+      <Folder Name="IStream" TargetFolderName="IStream">
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="PropertySet.xml">PropertySet.xml</ProjectItem>
+    </Project>
+    <CustomParameters>
+        <CustomParameter
+        Name="$DriverTemplate_ProjectType$"
+        Value="Driver Property Bag" />
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+      <Assembly>Microsoft.DriverKit.V4PrintDriverWizard, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</Assembly>
+      <FullClassName>Microsoft.DriverKit.V4PrintDriverWizard.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

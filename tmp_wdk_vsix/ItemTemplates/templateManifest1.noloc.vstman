@@ -1,0 +1,19 @@
+﻿<VSTemplateManifest Version="1.0" xmlns="http://schemas.microsoft.com/developer/vstemplatemanifest/2015">
+  <VSTemplateContainer TemplateType="Item">
+    <RelativePathOnDisk>PackageManifest</RelativePathOnDisk>
+    <TemplateFileName>PkgGenMan.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name Package="{cf9f860b-255c-4886-9e7a-80ca874d0da9}" ID="211" />
+        <Description Package="{cf9f860b-255c-4886-9e7a-80ca874d0da9}" ID="212" />
+        <Icon>__TemplateIcon.ico</Icon>
+        <ProjectType>VC</ProjectType>
+        <TemplateID>Microsoft.DriverKit.PkgGenMan</TemplateID>
+        <TemplateGroupID>WinRT-Common</TemplateGroupID>
+        <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+        <DefaultName>Package</DefaultName>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+</VSTemplateManifest>

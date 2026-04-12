@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="v4PrintDriver-Intellisense.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="v4PrintDriver-Intellisense-Windows8.1.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    $if$ ($v4PrinterDriverWizard_GPDDriver$ > 0)
+    <None Include="$drivername$.gpd" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_GPDAutoConfigurationGDL$ > 0)
+    <None Include="$drivername$-AutoConfig-uni.gdl" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_PPDDriver$ > 0)
+    <None Include="$drivername$.ppd" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_PPDAutoConfigurationGDL$ > 0)
+    <None Include="$drivername$-AutoConfig-ps.gdl" />
+    $endif$
+    <None Include="$drivername$-manifest.ini" />
+    $if$ ($v4PrinterDriverWizard_ConstraintsJS$ > 0)
+    <None Include="$drivername$-constraints.js" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_EventFile$ > 0)
+    <None Include="$drivername$-DriverEvents.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_QueueProperties$ > 0)
+    <None Include="$drivername$-QueueProperties.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_DevModeMap$ > 0)
+    <None Include="$drivername$-DevModeMap.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_TCPMonBidiXML$ > 0)
+    <None Include="$drivername$-Bidi-Spm.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_WSDMonBidiXML$ > 0)
+    <None Include="$drivername$-Bidi-Wsd.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_USBMonBidiXML$ > 0)
+    <None Include="$drivername$-Bidi-Usb.xml" />
+    <None Include="$drivername$-Bidi-Usb.js" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_IncludePipelineConfig$ > 0)
+    <None Include="$drivername$-PipelineConfig.xml" />
+    $endif$
+  </ItemGroup>
+  $if$ ($v4PrinterDriverWizard_ResourceDll$ > 0)
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  $endif$
+  <ItemGroup>
+    <Inf Include="$drivername$.inf" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>$guid1$</ProjectGuid>
+    <TemplateGuid>{68fdc621-7e7b-47c5-acd7-ddcfa68cb8c4}</TemplateGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <SignMode>Off</SignMode>
+    <DriverType>Package</DriverType>
+    <Configuration>Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">Win32</Platform>
+    <INFGateToolPath>Tools\x86\</INFGateToolPath>
+    <RootNamespace>$safeprojectname$</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+    <PlatformToolset>$wdkUMDriverToolsetName$</PlatformToolset>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+	<PlatformToolset>$wdkUMDriverToolsetName$</PlatformToolset>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+	<PlatformToolset>$wdkUMDriverToolsetName$</PlatformToolset>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+	<PlatformToolset>$wdkUMDriverToolsetName$</PlatformToolset>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+	<PlatformToolset>$wdkUMDriverToolsetName$</PlatformToolset>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <TargetVersion>Windows10</TargetVersion>
+	<PlatformToolset>$wdkUMDriverToolsetName$</PlatformToolset>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <DebuggerFlavor>DbgengRemoteDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <DebuggerFlavor>DbgengRemoteDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebuggerFlavor>DbgengRemoteDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebuggerFlavor>DbgengRemoteDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <DebuggerFlavor>DbgengRemoteDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <DebuggerFlavor>DbgengRemoteDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Link>
+      <NoEntryPoint>true</NoEntryPoint>
+    </Link>
+    <DriverSign>
+      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
+    </DriverSign>
+    <PostBuildEvent>
+      <Command>"$(WDKContentRoot)$(INFGateToolPath)INFGate.exe" $drivername$.inf /WDK</Command>
+      <Message>Running INFGate...</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Link>
+      <NoEntryPoint>true</NoEntryPoint>
+    </Link>
+    <DriverSign>
+      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
+    </DriverSign>
+    <PostBuildEvent>
+      <Command>"$(WDKContentRoot)$(INFGateToolPath)INFGate.exe" $drivername$.inf /WDK</Command>
+      <Message>Running INFGate...</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <NoEntryPoint>true</NoEntryPoint>
+    </Link>
+    <DriverSign>
+      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
+    </DriverSign>
+    <PostBuildEvent>
+      <Command>"$(WDKContentRoot)$(INFGateToolPath)INFGate.exe" $drivername$.inf /WDK</Command>
+      <Message>Running INFGate...</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <NoEntryPoint>true</NoEntryPoint>
+    </Link>
+    <DriverSign>
+      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
+    </DriverSign>
+    <PostBuildEvent>
+      <Command>"$(WDKContentRoot)$(INFGateToolPath)INFGate.exe" $drivername$.inf /WDK</Command>
+      <Message>Running INFGate...</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <Link>
+      <NoEntryPoint>true</NoEntryPoint>
+    </Link>
+    <DriverSign>
+      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
+    </DriverSign>
+    <PostBuildEvent>
+      <Command>"$(WDKContentRoot)$(INFGateToolPath)INFGate.exe" $drivername$.inf /WDK</Command>
+      <Message>Running INFGate...</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <Link>
+      <NoEntryPoint>true</NoEntryPoint>
+    </Link>
+    <DriverSign>
+      <FileDigestAlgorithm>sha256</FileDigestAlgorithm>
+    </DriverSign>
+    <PostBuildEvent>
+      <Command>"$(WDKContentRoot)$(INFGateToolPath)INFGate.exe" $drivername$.inf /WDK</Command>
+      <Message>Running INFGate...</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    $if$ ($v4PrinterDriverWizard_ResourceDll$ > 0)
+    <FilesToPackage Include="$(TargetPath)" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_GPDDriver$ > 0)
+    <FilesToPackage Include="$drivername$.gpd" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_GPDAutoConfigurationGDL$ > 0)
+    <FilesToPackage Include="$drivername$-AutoConfig-uni.gdl" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_PPDDriver$ > 0)
+    <FilesToPackage Include="$drivername$.ppd" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_PPDAutoConfigurationGDL$ > 0)
+    <FilesToPackage Include="$drivername$-AutoConfig-ps.gdl" />
+    $endif$
+    <FilesToPackage Include="$drivername$-manifest.ini" />
+    $if$ ($v4PrinterDriverWizard_ConstraintsJS$ > 0)
+    <FilesToPackage Include="$drivername$-constraints.js" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_EventFile$ > 0)
+    <FilesToPackage Include="$drivername$-DriverEvents.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_QueueProperties$ > 0)
+    <FilesToPackage Include="$drivername$-QueueProperties.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_DevModeMap$ > 0)
+    <FilesToPackage Include="$drivername$-DevModeMap.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_TCPMonBidiXML$ > 0)
+    <FilesToPackage Include="$drivername$-Bidi-Spm.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_WSDMonBidiXML$ > 0)
+    <FilesToPackage Include="$drivername$-Bidi-Wsd.xml" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_USBMonBidiXML$ > 0)
+    <FilesToPackage Include="$drivername$-Bidi-Usb.xml" />
+    <FilesToPackage Include="$drivername$-Bidi-Usb.js" />
+    $endif$
+    $if$ ($v4PrinterDriverWizard_IncludePipelineConfig$ > 0)
+    <FilesToPackage Include="$drivername$-PipelineConfig.xml" />
+    $endif$
+    $v4PrinterDriverWizard_PackageDriverPropertyBag$
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

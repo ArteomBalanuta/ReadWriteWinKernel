@@ -1,0 +1,48 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <TemplateID>Microsoft.Cpp.Driver.UMDFV2USB</TemplateID>
+    <Name>User Mode Driver, USB (UMDF V2)</Name>
+    <Description>A USB device project using the User-Mode Driver Framework v2 (UMDF2). Builds Universal drivers by default.</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>USB UMDF 2 Driver</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <LanguageTag Value="CPP" />
+    <ProjectTypeTag Value="Driver" />
+    <PlatformTag Value="Windows" />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="UmdfUsbTemplate.vcxproj" File="UmdfUsbTemplate.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$.vcxproj.filters">UmdfUsbTemplate.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$drivername$.inf">UmdfUsbTemplate.inf</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.txt">ReadMe.txt</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Device.c">Device.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Device.h">Device.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Driver.c">Driver.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Driver.h">Driver.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Trace.h">Trace.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Queue.c">Queue.c</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Queue.h">Queue.h</ProjectItem>
+    </Project>
+    <CustomParameters>
+      <CustomParameter
+          Name="$DriverTemplate_ProjectType$"
+          Value="Driver" />
+      <CustomParameter
+          Name="$DriverTemplate_GUID$"
+          Value="{9db8ddf4-d482-432d-9729-a115eed7203f}" />
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>Microsoft.DriverKit.DriverWizard, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</Assembly>
+    <FullClassName>Microsoft.DriverKit.DriverWizard.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

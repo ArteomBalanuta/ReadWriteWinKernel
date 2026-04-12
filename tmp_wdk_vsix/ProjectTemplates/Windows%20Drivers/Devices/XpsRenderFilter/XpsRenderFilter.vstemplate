@@ -1,0 +1,54 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <TemplateID>Microsoft.Cpp.Driver.PrinterXPSRender</TemplateID>
+    <Name>Printer XPS Render Filter</Name>
+    <Description>A printer driver XPS render filter project. Printer drivers can run only on Windows desktop devices.</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>XpsRenderFilter</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <LanguageTag Value="CPP" />
+    <ProjectTypeTag Value="Driver" />
+    <PlatformTag Value="Windows" />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="RenderFilter.vcxproj" File="RenderFilter.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="$projectname$.vcxproj.filters">RenderFilter.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="OMConvertor.cpp">OMConvertor.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Exception.cpp">Exception.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="RenderFilter.cpp">RenderFilter.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="PThandler.cpp">PThandler.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="CustomWppCommands.cpp">CustomWppCommands.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="dllentry.cpp">dllentry.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="RenderFilter.def">RenderFilter.def</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Exception.h">Exception.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="RenderFilter.h">RenderFilter.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="filtertypes.h">filtertypes.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="OMConvertor.h">OMConvertor.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="precomp.h">precomp.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="PThandler.h">PThandler.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="UnknownBase.h">UnknownBase.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="WppTrace.h">WppTrace.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="CustomWppCommands.h">CustomWppCommands.h</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="RenderFilter.rc">RenderFilter.rc</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$RenderFilter_BinaryName$-PipelineConfig.xml">PipelineConfig.xml</ProjectItem>
+    </Project>
+    <CustomParameters>
+      <CustomParameter
+          Name="$DriverTemplate_ProjectType$"
+          Value="Render Filter" />
+    </CustomParameters>
+  </TemplateContent>
+  <WizardExtension>
+        <Assembly>Microsoft.DriverKit.V4PrintDriverWizard, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</Assembly>
+        <FullClassName>Microsoft.DriverKit.V4PrintDriverWizard.Wizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

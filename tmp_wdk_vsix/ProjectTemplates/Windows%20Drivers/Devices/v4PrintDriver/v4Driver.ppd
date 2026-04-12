@@ -1,0 +1,177 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+
+*%******************************************************************************
+*%: The following root-level attributes should be modified to suit your printer
+*%******************************************************************************
+
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*Product: "Product name goes here"
+*PSVersion: "(2015.105) 9"
+*Manufacturer: "Fabrikam"
+*ModelName: "Model name goes here"
+*ShortNickName: "NickName"
+*NickName: "NickName"
+*PCFileName: "$drivername$.PPD"
+
+*MSXPSMaxCopies: "999"
+*MSPrintSchemaPrivateNamespaceURI: "Your private namespace URI goes here"
+
+$v4PrinterDriverWizard_ProtectedPrinting$
+$if$ ($v4PrinterDriverWizard_PPDAutoConfigurationGDL$ > 0)
+
+*%******************************************************************************************
+*% Specify ACnfgPS.GDL as the Bidi query file which has the GDL extensions for
+*% Autoconfig corresponding to the DuplexUnit feature. The
+*% GDL extensions can also be put in the PPD file itself instead of in a separate GDL
+*% file. Using a separate GDL file reduces the amount of change in the original PPD
+*% file, thereby reducing the chances for unintended alteration of the existing PPD data.
+*%
+*% Learn more: Windows Driver Kit "AutoConfig" sample contains more 
+*% GDL Autoconfiguration samples
+*% http://msdn.microsoft.com/en-us/library/ff545148(VS.85).aspx
+*%******************************************************************************************
+*MSBidiQueryFile: "ACnfgPS.gdl"
+
+$endif$
+
+*%******************************************************************************
+*%                  Installable Options 
+*%******************************************************************************
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *DuplexUnit/Duplex Unit: PickOne
+*DefaultDuplexUnit: False
+*DuplexUnit True/Installed: ""
+*DuplexUnit False/Not Installed: ""
+*CloseUI: *DuplexUnit
+
+*CloseGroup: InstallableOptions
+
+*%******************************************************************************
+*%                   Basic Device Capabilities 
+*%******************************************************************************
+
+*LanguageLevel: "2"
+*Protocols: BCP
+
+*FreeVM: "6666752"
+*VMOption  32Meg/32 MB: "6609408"
+
+*%******************************************************************************
+*%                          Resolution
+*%******************************************************************************
+*OpenUI *Resolution/Resolution: PickOne
+*OrderDependency: 40 AnySetup *Resolution
+*DefaultResolution: 600dpi
+*Resolution 300dpi/300 dpi: ""
+*End
+*Resolution 600dpi/600 dpi: ""
+*End
+*?Resolution: ""
+*End
+*CloseUI: *Resolution
+*?Resolution: ""
+*End
+
+
+*%******************************************************************************
+*%                          Tray Selection
+*%******************************************************************************
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 10 AnySetup *InputSlot
+*DefaultInputSlot: Upper
+*InputSlot Upper: ""
+*End
+*InputSlot Lower: ""
+*End
+*?InputSlot: ""
+*End
+*CloseUI: *InputSlot
+
+*%******************************************************************************
+*%                          Paper Handling 
+*%******************************************************************************
+*% Use these entries to set paper size most of the time, unless there is
+*% specific reason to use PageRegion.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 20 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter: ""
+*End
+*PageSize A4: ""
+*End
+*?PageSize: ""
+*End
+*CloseUI: *PageSize
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter: "10.32 15.9 601.68 776.22"
+*ImageableArea A4: "13.44 14.46 581.76 828.54"
+*?ImageableArea: ""
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter: "612 792"
+*PaperDimension A4: "595 842"
+
+*RequiresPageRegion All: True
+
+*%******************************************************************************
+*%                          Page Orientation
+*%******************************************************************************
+*OpenUI *PageOrientation: PickOne
+*DefaultPageOrientation: Portrait
+*PageOrientation Portrait: ""
+*PageOrientation Landscape: ""
+*CloseUI: *PageOrientation
+
+*MSPrintSchemaKeywordMap: PageOrientation  *PageOrientation
+*MSPrintSchemaKeywordMap: PageOrientation Portrait *PageOrientation Portrait
+*MSPrintSchemaKeywordMap: PageOrientation Landscape *PageOrientation Landscape
+
+*%******************************************************************************
+*%                          Two-sided Printing (Duplex)
+*%******************************************************************************
+
+*OpenUI *Duplex/Duplex: PickOne
+*OrderDependency: 50 AnySetup *Duplex
+*DefaultDuplex: None
+*Duplex None/Off: ""
+*End
+*Duplex DuplexNoTumble/Flip on Long Edge (Standard): ""
+*End
+*Duplex DuplexTumble/Flip on Short Edge: ""
+*End
+*?Duplex: ""
+*End
+*CloseUI: *Duplex
+
+*%******************************************************************************
+*%                          User Interface Constraints
+*%******************************************************************************
+
+*% If the duplex unit is not installed disable duplex modes.
+*UIConstraints: *DuplexUnit False *Duplex DuplexNoTumble
+*UIConstraints: *DuplexUnit False *Duplex DuplexTumble
+
+*%******************************************************************************
+*%                              Font Information
+*%******************************************************************************
+*DefaultFont: Courier
+*Font Courier: Standard "(002.003)" Standard ROM
+*Font Courier-Bold: Standard "(002.003)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.003)" Standard ROM
+*Font Courier-Oblique: Standard "(002.003)" Standard ROM
+*Font Symbol: Special "(001.007)" Special ROM
+*Font Times-Bold: Standard "(001.007)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009)" Standard ROM
+*Font Times-Italic: Standard "(001.007)" Standard ROM
+*Font Times-Roman: Standard "(001.007)" Standard ROM
+*?FontQuery: ""
+*End
