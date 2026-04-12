@@ -141,6 +141,24 @@ Release build:
 - Native client: `build\controller\x64\<Configuration>\controller.exe`
 - C# client: `build\client\x64\<Configuration>\net8.0-windows\client.exe`
 
+### 7. Publish standalone C# client (single file)
+
+From the repository root:
+
+```powershell
+.\publish-client.ps1
+```
+
+or
+
+```powershell
+.\publish-client.cmd
+```
+
+Published output:
+
+- `client\bin\Release\net8.0-windows\win-x64\publish\client.exe`
+
 ## Build
 
 ### Recommended
@@ -182,6 +200,20 @@ Successful `Debug|x64` builds currently emit:
 - C# client: [build/client/x64/Debug/net8.0-windows/client.exe](/G:/workspace/projects/readDriver/build/client/x64/Debug/net8.0-windows/client.exe)
 
 The individual project files also support project-local build folders under each project when built directly.
+
+## Publish (Client)
+
+Use this when you want to copy `client.exe` outside the build folder as a standalone app:
+
+```powershell
+.\publish-client.ps1
+```
+
+Custom publish example:
+
+```powershell
+.\publish-client.ps1 -Configuration Release -Runtime win-x64
+```
 
 ## Request Format
 
