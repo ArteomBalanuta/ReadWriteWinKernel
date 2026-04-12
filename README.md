@@ -61,6 +61,86 @@ The driver source is intentionally split by responsibility:
 - sends `READDRIVER_IOCTL_REQUEST` through `DeviceIoControl`
 - prints basic request and completion information
 
+## Setup
+
+Follow these steps on Windows before first build.
+
+### 1. Install required tools
+
+Install Visual Studio 2022 Community:
+
+```powershell
+winget install --id Microsoft.VisualStudio.2022.Community -e
+```
+
+Install .NET 8 SDK:
+
+```powershell
+winget install --id Microsoft.DotNet.SDK.8 -e
+```
+
+Install Windows Driver Kit (WDK):
+
+```powershell
+winget install --id Microsoft.WindowsDriverKit -e
+```
+
+Install Windows 11 SDK (if not already present):
+
+```powershell
+winget install --id Microsoft.WindowsSDK.10.0.26100 -e
+```
+
+### 2. Configure Visual Studio components
+
+Open Visual Studio Installer and make sure these workloads/components are installed:
+
+- `Desktop development with C++`
+- `MSVC v143` toolset
+- `Windows 11 SDK (10.0.26100.x)`
+- `Windows Driver Kit`
+
+### 3. Verify toolchain from terminal
+
+```powershell
+dotnet --info
+```
+
+```powershell
+& "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath
+```
+
+### 4. Clone and enter the repository
+
+```powershell
+git clone <your-repo-url>
+cd readDriver
+```
+
+### 5. Build everything from the parent folder
+
+```powershell
+.\build-all.ps1
+```
+
+or
+
+```powershell
+.\build-all.cmd
+```
+
+Release build:
+
+```powershell
+.\build-all.ps1 -Configuration Release -Platform x64
+```
+
+### 6. Build output locations
+
+- Driver: `build\driver\x64\<Configuration>\dummy.sys`
+- Native client: `build\controller\x64\<Configuration>\controller.exe`
+- C# client: `build\client\x64\<Configuration>\net8.0-windows\client.exe`
+
 ## Build
 
 ### Recommended
