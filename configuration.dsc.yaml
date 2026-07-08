@@ -4,10 +4,10 @@ properties:
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: vsPackage
       directives:
-        description: Install Visual Studio 2022 Community
+        description: Install Visual Studio Community 2026
         allowPrerelease: true
       settings:
-        id: Microsoft.VisualStudio.2022.Community
+        id: Microsoft.VisualStudio.Community
         source: winget
         useLatest: true
     - resource: Microsoft.VisualStudio.DSC/VSComponents
@@ -18,7 +18,7 @@ properties:
         description: Install required VS workloads and components
       settings:
         productId: Microsoft.VisualStudio.Product.Community
-        channelId: VisualStudio.17.Release
+        channelId: VisualStudio.18.Release
         includeRecommended: false
         components:
           - Microsoft.VisualStudio.Component.VC.CoreBuildTools
@@ -46,10 +46,10 @@ properties:
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: sdkPackage
       directives:
-        description: Install Windows SDK version 26100
+        description: Install Windows SDK version 28000
         allowPrerelease: true
       settings:
-        id: Microsoft.WindowsSDK.10.0.26100
+        id: Microsoft.WindowsSDK.10.0.28000
         source: winget
         useLatest: true
     - resource: Microsoft.WinGet.DSC/WinGetPackage
@@ -57,10 +57,10 @@ properties:
       dependsOn:
         - sdkPackage
       directives:
-        description: Install Windows Driver Kit version 26100
+        description: Install Windows Driver Kit version 28000
         allowPrerelease: true
       settings:
-        id: Microsoft.WindowsWDK.10.0.26100
+        id: Microsoft.WindowsWDK.10.0.28000
         source: winget
         useLatest: true
   configurationVersion: 0.2.1

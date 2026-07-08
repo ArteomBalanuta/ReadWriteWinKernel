@@ -64,7 +64,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <OutDir>$(SolutionDir)build\driver\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\driver\obj\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>dummy2</TargetName>
+    <TargetName>dummy</TargetName>
     <EnableInf2cat>false</EnableInf2cat>
     <EnableTestSign>false</EnableTestSign>
     <SignMode>Off</SignMode>

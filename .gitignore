@@ -1,15 +1,20 @@
+# Visual Studio and IDE state
 .vs/
 **/.vs/
-build/
-**/x64/
-**/Debug/
-**/Release/
-**/output/
-
 *.suo
 *.user
 *.VC.db
 *.opendb
+
+# Build output
+build/
+**/build/
+client/bin/
+client/obj/
+**/x64/
+**/Debug/
+**/Release/
+**/output/
 *.ipch
 *.pdb
 *.idb
@@ -28,4 +33,11 @@ build/
 *.sys
 *.exe
 
+# Upgrade reports and local inspection artifacts
 UpgradeLog*.htm
+NUL.obj
+tmp_wdk_build_vsix/
+tmp_wdk_vsix/
+vm_extract/
+_inspect_wdk_build_zip/
+_inspect_wdk_zip/

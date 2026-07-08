@@ -2,7 +2,7 @@
 
 This folder contains the user-mode console application that opens the driver device and sends a single buffered IOCTL request.
 
-The controller project source lives in [G:\workspace\projects\readDriver\controller\controller](/G:/workspace/projects/readDriver/controller/controller), and the solution entry point is [G:\workspace\projects\readDriver\controller\controller.sln](/G:/workspace/projects/readDriver/controller/controller.sln).
+The controller project source lives in [controller](/G:/workspace/projects/readDriver/controller/controller), and the solution entry point is [controller.sln](/G:/workspace/projects/readDriver/controller/controller.sln).
 
 ## What It Does
 
@@ -16,7 +16,7 @@ The controller:
 
 ## Build
 
-Open [G:\workspace\projects\readDriver\controller\controller.sln](/G:/workspace/projects/readDriver/controller/controller.sln) in Visual Studio 2022 and build `Debug|x64`, or build the root solution at [G:\workspace\projects\readDriver\readDriver.sln](/G:/workspace/projects/readDriver/readDriver.sln).
+Open [G:\workspace\projects\readDriver\controller\controller.sln](/G:/workspace/projects/readDriver/controller/controller.sln) in Visual Studio 2026 and build `Debug|x64`, or build the root solution at [G:\workspace\projects\readDriver\readDriver.sln](/G:/workspace/projects/readDriver/readDriver.sln).
 
 Expected debug output:
 
@@ -72,6 +72,14 @@ Current operation values:
   `ReadDriverOperationProtect`
 - `4`
   `ReadDriverOperationPatch`
+- `5`
+  `ReadDriverOperationWriteInteger`
+
+Single-write shortcut form:
+
+```text
+controller.exe <processPid> <integerValue> <targetAddress> <size> 5
+```
 
 ## Current Semantics
 
@@ -162,6 +170,11 @@ Before using the controller:
 - the driver must already be loaded
 - the driver must expose the DOS device name `\\\\.\\PWN29`
 - the controller and driver must use the same `READDRIVER_REQUEST` layout from `common/protocol.h`
+
+## Notes
+
+- The root solution at [readDriver.sln](/G:/workspace/projects/readDriver/readDriver.sln) is the recommended entry point for everyday development.
+- The project is now grouped under the `Applications` solution folder in the root solution for easier navigation.
 
 ## Source Layout
 

@@ -1,132 +1,79 @@
 # readDriver
 
-This repository contains a Windows kernel driver and a small user-mode controller that sends a single buffered IOCTL request format to that driver.
+`readDriver` is a Windows research workspace built around a kernel-mode driver and two user-mode clients that speak the same IOCTL request format.
 
-The codebase is organized as a Visual Studio C/C++ workspace and currently builds successfully with:
+At a high level, the repository contains:
 
-- Visual Studio 2022
-- Windows 11 SDK `10.0.26100.0`
-- Windows Driver Kit `10.0.26100.0`
+- a KMDF driver in [dummy](/G:/workspace/projects/readDriver/dummy)
+- a native C console client in [controller/controller](/G:/workspace/projects/readDriver/controller/controller)
+- a C# client with both CLI and WinForms GUI modes in [client](/G:/workspace/projects/readDriver/client)
+- a shared request contract in [common/protocol.h](/G:/workspace/projects/readDriver/common/protocol.h)
+
+This repo is best treated as a local development and research workspace. It includes build helpers and documentation, but it does not include a full deployment or service-install story for the driver.
+
+The workspace is now prepared to open in Visual Studio 2026. Driver builds still require a matching WDK task assembly for the MSBuild version you use.
+
+## What This Project Is
+
+The project is a Visual Studio solution for experimenting with a Windows driver and small user-mode tools that send `DeviceIoControl` requests to it. The shared request structure lives in `common/protocol.h`, and both clients use that same contract to talk to the driver device `\\\\.\\PWN29`.
+
+The current codebase is organized as one root workspace with three main executable modules:
+
+- `dummy`
+  KMDF kernel driver
+- `controller`
+  native C command-line client
+- `client`
+  .NET client with command-line and GUI entry points
+
+## Start Here
+
+If you are new to the repo, use this order:
+
+1. Read [PROJECT_OVERVIEW.md](/G:/workspace/projects/readDriver/docs/PROJECT_OVERVIEW.md)
+2. Follow [BUILD_AND_RUN.md](/G:/workspace/projects/readDriver/docs/BUILD_AND_RUN.md)
+3. Use [ARCHITECTURE.md](/G:/workspace/projects/readDriver/docs/ARCHITECTURE.md) when you need code-level structure
 
 ## Repository Layout
 
-- `common/`
-  Shared protocol definitions used by both the driver and the controller.
-- `dummy/`
-  Kernel-mode driver project.
-- `controller/controller/`
-  User-mode console application that opens the device and sends IOCTL requests.
-- `readDriver.sln`
-  Root solution that builds driver + both clients together.
-- `dummy.sln`
-  Driver-only solution.
+- [common](/G:/workspace/projects/readDriver/common)
+  Shared protocol definitions.
+- [dummy](/G:/workspace/projects/readDriver/dummy)
+  Driver project source.
+- [controller](/G:/workspace/projects/readDriver/controller)
+  Native client project and controller-only solution.
+- [client](/G:/workspace/projects/readDriver/client)
+  C# client project.
+- [docs](/G:/workspace/projects/readDriver/docs)
+  Project documentation.
+- [readDriver.sln](/G:/workspace/projects/readDriver/readDriver.sln)
+  Root solution for day-to-day development.
+- [build-all.ps1](/G:/workspace/projects/readDriver/build-all.ps1)
+  Root build helper for all projects.
+- [publish-client.ps1](/G:/workspace/projects/readDriver/publish-client.ps1)
+  Standalone publish helper for the C# client.
 
-## Main Components
+## Solution Layout
 
-### Shared protocol
+The root Visual Studio solution is grouped into:
 
-[common/protocol.h](/G:/workspace/projects/readDriver/common/protocol.h) defines:
+- `Applications`
+  User-mode projects.
+- `Driver`
+  Kernel-mode project.
+- `Shared`
+  Shared protocol files.
+- `Scripts`
+  Build and publish helpers.
+- `Docs`
+  High-level documentation.
 
-- the device type and IOCTL code
-- the kernel and DOS device names
-- the `READDRIVER_OPERATION` enum
-- the `READDRIVER_REQUEST` struct shared by kernel-mode and user-mode code
+## Build Summary
 
-This file is the contract between the controller and the driver. If the request layout changes, both sides must be updated together.
-
-### Driver
-
-The driver source is intentionally split by responsibility:
-
-- [dummy/main.c](/G:/workspace/projects/readDriver/dummy/main.c)
-  Driver entry point.
-- [dummy/driver_lifecycle.c](/G:/workspace/projects/readDriver/dummy/driver_lifecycle.c)
-  Device creation, symbolic link setup, dispatch registration, unload.
-- [dummy/dispatch.c](/G:/workspace/projects/readDriver/dummy/dispatch.c)
-  IOCTL validation, request routing, IRP completion.
-- [dummy/memory_ops.c](/G:/workspace/projects/readDriver/dummy/memory_ops.c)
-  Process lookup, memory copy, page protection, patch helper.
-- [dummy/logging.c](/G:/workspace/projects/readDriver/dummy/logging.c)
-  Timestamp formatting and file-based status logging.
-- [dummy/main.h](/G:/workspace/projects/readDriver/dummy/main.h)
-  Shared driver declarations.
-
-### Controller
-
-[controller/controller/Source.c](/G:/workspace/projects/readDriver/controller/controller/Source.c) is a minimal console client that:
-
-- parses six numeric arguments
-- fills a `READDRIVER_REQUEST`
-- opens `\\\\.\\PWN29`
-- sends `READDRIVER_IOCTL_REQUEST` through `DeviceIoControl`
-- prints basic request and completion information
-
-## Setup
-
-Follow these steps on Windows before first build.
-
-### 1. Install required tools
-
-Install Visual Studio 2022 Community:
-
-```powershell
-winget install --id Microsoft.VisualStudio.2022.Community -e
-```
-
-Install .NET 8 SDK:
-
-```powershell
-winget install --id Microsoft.DotNet.SDK.8 -e
-```
-
-Install Windows Driver Kit (WDK):
-
-```powershell
-winget install --id Microsoft.WindowsDriverKit -e
-```
-
-Install Windows 11 SDK (if not already present):
-
-```powershell
-winget install --id Microsoft.WindowsSDK.10.0.26100 -e
-```
-
-### 2. Configure Visual Studio components
-
-Open Visual Studio Installer and make sure these workloads/components are installed:
-
-- `Desktop development with C++`
-- `MSVC v143` toolset
-- `Windows 11 SDK (10.0.26100.x)`
-- `Windows Driver Kit`
-
-### 3. Verify toolchain from terminal
-
-```powershell
-dotnet --info
-```
-
-```powershell
-& "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath
-```
-
-### 4. Clone and enter the repository
-
-```powershell
-git clone <your-repo-url>
-cd readDriver
-```
-
-### 5. Build everything from the parent folder
+From the repository root:
 
 ```powershell
 .\build-all.ps1
-```
-
-or
-
-```powershell
-.\build-all.cmd
 ```
 
 Release build:
@@ -135,135 +82,10 @@ Release build:
 .\build-all.ps1 -Configuration Release -Platform x64
 ```
 
-### 6. Build output locations
-
-- Driver: `build\driver\x64\<Configuration>\dummy.sys`
-- Native client: `build\controller\x64\<Configuration>\controller.exe`
-- C# client: `build\client\x64\<Configuration>\net8.0-windows\client.exe`
-
-### 7. Publish standalone C# client (single file)
-
-From the repository root:
+Standalone C# client publish:
 
 ```powershell
 .\publish-client.ps1
 ```
 
-or
-
-```powershell
-.\publish-client.cmd
-```
-
-Published output:
-
-- `client\bin\Release\net8.0-windows\win-x64\publish\client.exe`
-
-## Build
-
-### Recommended
-
-Open [readDriver.sln](/G:/workspace/projects/readDriver/readDriver.sln) in Visual Studio 2022 and build `Debug|x64`.
-
-### Command line
-
-From the repository root:
-
-```powershell
-.\build-all.ps1
-```
-
-or
-
-```powershell
-.\build-all.cmd
-```
-
-To select configuration:
-
-```powershell
-.\build-all.ps1 -Configuration Release -Platform x64
-```
-
-You can still build manually from a Visual Studio 2022 Developer Command Prompt:
-
-```powershell
-msbuild G:\workspace\projects\readDriver\readDriver.sln /t:Build /p:Configuration=Debug;Platform=x64 /m
-```
-
-## Build Outputs
-
-Successful `Debug|x64` builds currently emit:
-
-- controller: [build/controller/x64/Debug/controller.exe](/G:/workspace/projects/readDriver/build/controller/x64/Debug/controller.exe)
-- driver: [build/driver/x64/Debug/dummy.sys](/G:/workspace/projects/readDriver/build/driver/x64/Debug/dummy.sys)
-- C# client: [build/client/x64/Debug/net8.0-windows/client.exe](/G:/workspace/projects/readDriver/build/client/x64/Debug/net8.0-windows/client.exe)
-
-The individual project files also support project-local build folders under each project when built directly.
-
-## Publish (Client)
-
-Use this when you want to copy `client.exe` outside the build folder as a standalone app:
-
-```powershell
-.\publish-client.ps1
-```
-
-Custom publish example:
-
-```powershell
-.\publish-client.ps1 -Configuration Release -Runtime win-x64
-```
-
-## Request Format
-
-The request layout is fixed-width and uses `ULONGLONG` fields for compatibility between user mode and kernel mode:
-
-- `SourceProcessId`
-- `SourceAddress`
-- `TargetProcessId`
-- `TargetAddress`
-- `Size`
-- `Operation`
-- `Reserved7` through `Reserved11`
-
-Current semantics in the driver:
-
-- `ReadDriverOperationCopy`
-  Uses source PID/address, target PID/address, and size.
-- `ReadDriverOperationProtect`
-  Uses `SourceProcessId` as the target process, `SourceAddress` as the base address, and `TargetProcessId` as the region size.
-- `ReadDriverOperationPatch`
-  Uses `SourceProcessId` as the target process and `SourceAddress` as the patch address.
-
-This field reuse works, but it is one of the main readability issues left in the project. If you extend the protocol, prefer operation-specific naming or separate request payloads.
-
-## Runtime Notes
-
-- The driver creates:
-  - kernel device: `\\Device\\PWN29`
-  - DOS device: `\\DosDevices\\PWN29`
-  - user-visible path: `\\\\.\\PWN29`
-- IOCTL transfer method is `METHOD_BUFFERED`.
-- The driver currently uses buffered I/O via `DO_BUFFERED_IO`.
-- File-based logging writes to:
-  - `C:\dummy_logs.txt`
-  - `C:\dummy_conversion_logs.txt`
-
-## Project Conventions
-
-- Shared protocol code belongs in `common/`.
-- Driver code should stay split by responsibility instead of returning to a single large source file.
-- Build outputs should go to `build/` rather than source folders.
-- Generated Visual Studio artifacts such as `.vs/`, `x64/`, `Debug/`, `Release/`, and `output/` are ignored and should not be committed.
-
-## Documentation
-
-- [docs/ARCHITECTURE.md](/G:/workspace/projects/readDriver/docs/ARCHITECTURE.md)
-  Internal structure, module responsibilities, request flow, and maintenance notes.
-
-## Known Cleanup Opportunities
-
-- Rename `dummy/` to a more descriptive driver project name.
-- Replace the generic `READDRIVER_REQUEST` field overloading with clearer per-operation semantics.
-- Move hard-coded log file paths into a configuration or compile-time option if the project is going to be reused on other machines.
+For the full setup, build, output, and run workflow, see [BUILD_AND_RUN.md](/G:/workspace/projects/readDriver/docs/BUILD_AND_RUN.md).

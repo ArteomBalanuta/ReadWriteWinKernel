@@ -105,18 +105,45 @@ Tradeoff:
 - this is simple to inspect during debugging
 - it also hardcodes log file destinations and keeps logging tightly coupled to the local filesystem
 
-### `controller/controller/Source.c`
+### `controller/controller/main.c`
 
-Single-file console client.
+Small console entry point for the native client.
+
+Owns:
+
+- top-level request flow
+- CLI parsing handoff
+- request summary output
+- transport submission handoff
+
+### `controller/controller/cli.c`
+
+Native client argument parsing and usage text.
 
 Owns:
 
 - command-line parsing
-- basic usage/help output
+- usage/help output
+- request summary printing
+
+### `controller/controller/transport.c`
+
+Native client device transport.
+
+Owns:
+
 - `CreateFileW` against the device path
 - `DeviceIoControl` request submission
 
-Current size is acceptable because the controller is intentionally small and has one main responsibility.
+### `client/`
+
+C# client project with both CLI and GUI entry points.
+
+Owns:
+
+- command-line submission parity with the native client
+- WinForms UI for interactive requests
+- shared .NET transport wrapper in `DriverApi.cs`
 
 ## Request Semantics
 
@@ -172,15 +199,16 @@ This keeps the driver mostly layered:
 
 The repository currently assumes:
 
-- Visual Studio 2022
-- MSVC `v143` for the controller
+- Visual Studio 2026
+- MSVC `v145` for the controller when building under Visual Studio 2026
 - `WindowsKernelModeDriver10.0` for the driver
-- SDK/WDK version `10.0.26100.0`
+- SDK/WDK version `10.0.28000.0`
 
 Current local build policy:
 
 - driver test-signing is disabled in the project so local builds can complete cleanly
 - build output goes to `build/` rather than source folders
+- the root build script prefers MSBuild 18 when WDK 18 task binaries are installed and otherwise falls back to an older compatible MSBuild version
 
 ## Maintenance Guidance
 
@@ -201,8 +229,9 @@ When making changes, prefer these rules:
 
 ### Controller changes
 
-- keep `Source.c` small unless the tool gains multiple commands or modes
-- if it grows beyond simple request submission, split parsing and transport into separate files
+- keep `main.c` small unless the tool gains multiple commands or modes
+- keep parsing in `cli.c` and device submission in `transport.c`
+- keep the C# client transport logic centralized in `client/DriverApi.cs`
 
 ## Suggested Next Refactors
 
