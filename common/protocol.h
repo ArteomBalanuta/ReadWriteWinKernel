@@ -7,7 +7,7 @@
 #define READDRIVER_DRIVER_NAME L"\\Driver\\Ki000"
 #define READDRIVER_DEVICE_NAME L"\\Device\\Ki000"
 #define READDRIVER_DOS_DEVICE_NAME L"\\DosDevices\\Ki000"
-#define READDRIVER_USER_DEVICE_NAME L"\\\\.\\Ki000"
+#define READDRIVER_USER_DEVICE_NAME L"\\\\.\\Global\\Ki000"
 
 typedef enum _READDRIVER_OPERATION {
     ReadDriverOperationCopy = 0,

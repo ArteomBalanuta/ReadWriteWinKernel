@@ -144,8 +144,8 @@ The repo root also contains binary/reference artifacts that are not part of the 
 
 ## Known Behavior Notes
 
-- The driver device path is `\\\\.\\Ki000`.
-- The shared protocol still names `\\\\.\\Ki000`, but the current driver lifecycle code deletes the DOS symbolic link after creating it, changes the device type to `FILE_DEVICE_NULL`, clears parts of the device chain, and zeroes the `DRIVER_OBJECT`. Treat standard user-mode access through that path as a current-code caveat, not a guaranteed runtime property.
+- The driver device path is `\\\\.\\Global\\Ki000`.
+- The driver hides from `\\DosDevices` by creating the link under `\\Global` instead, changes the device type to `FILE_DEVICE_NULL`, clears the device chain, and zeroes the `DRIVER_OBJECT`. Both clients target `\\\\.\\Global\\Ki000`.
 - The driver writes diagnostic logs to `C:\dummy_logs.txt` and `C:\dummy_conversion_logs.txt`.
 - The C# client launches the WinForms GUI when started without arguments.
 - The CLI/transport layers now support operations `0` through `8`, including read, scan, batch-read, read-with-protect, and read-as-hex paths.

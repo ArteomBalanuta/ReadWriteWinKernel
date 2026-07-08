@@ -19,7 +19,7 @@ The root solution also now includes a managed regression-test project in [client
 
 ## What This Project Is
 
-The project is a Visual Studio solution for experimenting with a Windows driver and small user-mode tools that send `DeviceIoControl` requests to it. The shared request structure lives in `common/protocol.h`, and both clients use that same contract to talk to the driver device `\\\\.\\Ki000`.
+The project is a Visual Studio solution for experimenting with a Windows driver and small user-mode tools that send `DeviceIoControl` requests to it. The shared request structure lives in `common/protocol.h`, and both clients use that same contract to talk to the driver device `\\\\.\\Global\\Ki000`.
 
 The current codebase is organized as one root workspace with three main executable modules:
 
