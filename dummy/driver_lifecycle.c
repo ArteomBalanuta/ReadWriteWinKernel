@@ -50,23 +50,18 @@ static NTSTATUS CreateDeviceAndLink(
         return status;
     }
 
-   // Hide: delete the symbolic link so \\DosDevices scans miss us
+    // Hide: delete the local symbolic link so \DosDevices scans miss us.
     IoDeleteSymbolicLink(&symbolicLink);
 
-    // Hide: create a hidden link under \\Global so clients can still find us
-    RtlInitUnicodeString(&symbolicLink, L"\\Global\\Ki000");
-    IoCreateSymbolicLink(&symbolicLink, &deviceName);
-
-    // Hide: set device type to FILE_DEVICE_NULL so we look like nothing
-    (*deviceObject)->DeviceType = FILE_DEVICE_NULL;
-
-    // Hide: clone into our own driver chain so we're never standalone
-    (*deviceObject)->NextDevice = driverObject->DeviceObject;
-    driverObject->DeviceObject = *deviceObject;
-
-    // Hide: clear back-pointers so walkers from DriverObject miss us
-    (*deviceObject)->DriverObject = NULL;
-    (*deviceObject)->NextDevice = NULL;
+    // Keep the user-visible path in the global MS-DOS namespace for clients.
+    RtlInitUnicodeString(&symbolicLink, L"\\DosDevices\\Global\\Ki000");
+    status = IoCreateSymbolicLink(&symbolicLink, &deviceName);
+    if (!NT_SUCCESS(status)) {
+        IoDeleteDevice(*deviceObject);
+        *deviceObject = NULL;
+        LogStatus(L"IoCreateSymbolicLink (Global)", status, NULL, FALSE);
+        return status;
+    }
 
     return STATUS_SUCCESS;
 }
@@ -75,7 +70,7 @@ VOID DriverUnload(_In_ struct _DRIVER_OBJECT* DriverObject)
 {
     UNICODE_STRING symbolicLink;
 
-    RtlInitUnicodeString(&symbolicLink, READDRIVER_DOS_DEVICE_NAME);
+    RtlInitUnicodeString(&symbolicLink, L"\\DosDevices\\Global\\Ki000");
     IoDeleteSymbolicLink(&symbolicLink);
 
     if (DriverObject->DeviceObject != NULL) {
@@ -102,9 +97,6 @@ NTSTATUS DriverInitialize(
 
     deviceObject->Flags |= DO_BUFFERED_IO;
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
-
-    // Hide: zero driver Ex state after init (clear dispatch table to look idle)
-    RtlZeroMemory(DriverObject, sizeof(DRIVER_OBJECT));
 
     return STATUS_SUCCESS;
 }

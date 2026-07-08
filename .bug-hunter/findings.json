@@ -1,42 +1,39 @@
 [
   {
-    "id": "BH-001",
-    "severity": "high",
-    "title": "ScanProcessMemory underflows loop bound and can over-read scanBuffer",
-    "file": "dummy/memory_ops.c",
-    "line": 296,
-    "confidence": "high",
-    "summary": "The scan loop uses `bytesCopied - patternSize` without validating that the copied chunk is at least as large as the pattern.",
-    "impact": "A short chunk can underflow the loop bound and drive out-of-bounds reads from a 4 KB stack buffer in kernel mode."
+    "bugId": "BUG-1",
+    "severity": "Critical",
+    "category": "logic",
+    "file": "dummy/driver_lifecycle.c",
+    "lines": "101-107",
+    "claim": "DriverInitialize wipes the live DRIVER_OBJECT after registering dispatch and unload entry points, so the loaded driver no longer has valid IRP handlers.",
+    "evidence": "dummy/driver_lifecycle.c:101-107 registers MajorFunction handlers and DriverUnload, then immediately calls RtlZeroMemory(DriverObject, sizeof(DRIVER_OBJECT)). Microsoft documents that the driver object stores the dispatch table and unload routine used after DriverEntry.",
+    "runtimeTrigger": "Load the driver successfully, then issue a normal CreateFile or DeviceIoControl against the exposed device path. The I/O manager reaches a DRIVER_OBJECT whose MajorFunction entries and DriverUnload pointer were zeroed after initialization.",
+    "crossReferences": [
+      "dummy/driver_lifecycle.c:5-17",
+      "dummy/dispatch.c:226-253"
+    ],
+    "confidenceScore": 98,
+    "confidenceLabel": "high",
+    "stride": "N/A",
+    "cwe": "N/A"
   },
   {
-    "id": "BH-002",
-    "severity": "medium",
-    "title": "C# response decoding is broken for read-style operations",
-    "file": "client/DriverApi.cs",
-    "line": 39,
-    "confidence": "high",
-    "summary": "GetResponseBytes copies from a `ulong[]` into a `byte[]` with Array.Copy, which is not a valid byte-level serialization strategy.",
-    "impact": "CLI read flows can throw at runtime instead of showing returned data."
-  },
-  {
-    "id": "BH-003",
-    "severity": "medium",
-    "title": "ReadWithProtect fails to restore original page protection on one error path",
-    "file": "dummy/memory_ops.c",
-    "line": 415,
-    "confidence": "high",
-    "summary": "After changing a region to PAGE_EXECUTE_READWRITE, the function returns early on PsLookupProcessByProcessId failure without restoring the old protection.",
-    "impact": "A failed request can leave target memory more permissive than intended."
-  },
-  {
-    "id": "BH-004",
-    "severity": "low",
-    "title": "Silent-mode state races across concurrent requests",
-    "file": "dummy/logging.c",
-    "line": 8,
-    "confidence": "medium",
-    "summary": "Per-request logging state is stored in a shared global boolean and overwritten in dispatch before each request runs.",
-    "impact": "Parallel requests can interfere with each other's logging behavior."
+    "bugId": "BUG-2",
+    "severity": "Medium",
+    "category": "logic",
+    "file": "dummy/driver_lifecycle.c",
+    "lines": "56-58",
+    "claim": "The new user-visible Global link is created in the wrong object-manager namespace and its creation status is ignored, so both clients can target a path that the driver never actually publishes.",
+    "evidence": "common/protocol.h:10, controller/controller/transport.c:8-15, and client/DriverApi.cs:74-112 all open \\\\.\\Global\\Ki000. But dummy/driver_lifecycle.c:56-58 calls IoCreateSymbolicLink on L\"\\Global\\Ki000\" instead of a global MS-DOS name such as \\DosDevices\\Global\\Ki000, and it does not check the return status before reporting success.",
+    "runtimeTrigger": "Load the driver and run either client. CreateFile targets \\\\.\\Global\\Ki000, but if the symbolic link was not created in the MS-DOS namespace the open fails immediately even though DriverInitialize returned STATUS_SUCCESS.",
+    "crossReferences": [
+      "common/protocol.h:10",
+      "controller/controller/transport.c:8-15",
+      "client/DriverApi.cs:74-116"
+    ],
+    "confidenceScore": 92,
+    "confidenceLabel": "high",
+    "stride": "N/A",
+    "cwe": "N/A"
   }
 ]
