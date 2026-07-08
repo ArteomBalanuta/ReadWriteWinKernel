@@ -1,0 +1,42 @@
+[
+  {
+    "id": "BH-001",
+    "severity": "high",
+    "title": "ScanProcessMemory underflows loop bound and can over-read scanBuffer",
+    "file": "dummy/memory_ops.c",
+    "line": 296,
+    "confidence": "high",
+    "summary": "The scan loop uses `bytesCopied - patternSize` without validating that the copied chunk is at least as large as the pattern.",
+    "impact": "A short chunk can underflow the loop bound and drive out-of-bounds reads from a 4 KB stack buffer in kernel mode."
+  },
+  {
+    "id": "BH-002",
+    "severity": "medium",
+    "title": "C# response decoding is broken for read-style operations",
+    "file": "client/DriverApi.cs",
+    "line": 39,
+    "confidence": "high",
+    "summary": "GetResponseBytes copies from a `ulong[]` into a `byte[]` with Array.Copy, which is not a valid byte-level serialization strategy.",
+    "impact": "CLI read flows can throw at runtime instead of showing returned data."
+  },
+  {
+    "id": "BH-003",
+    "severity": "medium",
+    "title": "ReadWithProtect fails to restore original page protection on one error path",
+    "file": "dummy/memory_ops.c",
+    "line": 415,
+    "confidence": "high",
+    "summary": "After changing a region to PAGE_EXECUTE_READWRITE, the function returns early on PsLookupProcessByProcessId failure without restoring the old protection.",
+    "impact": "A failed request can leave target memory more permissive than intended."
+  },
+  {
+    "id": "BH-004",
+    "severity": "low",
+    "title": "Silent-mode state races across concurrent requests",
+    "file": "dummy/logging.c",
+    "line": 8,
+    "confidence": "medium",
+    "summary": "Per-request logging state is stored in a shared global boolean and overwritten in dispatch before each request runs.",
+    "impact": "Parallel requests can interfere with each other's logging behavior."
+  }
+]

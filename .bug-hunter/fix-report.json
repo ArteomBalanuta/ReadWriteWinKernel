@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-07-08T23:06:00+03:00",
+  "summary": {
+    "bugsAssigned": 4,
+    "bugsFixed": 4,
+    "bugsNeedingLargerRefactor": 0,
+    "bugsSkipped": 0,
+    "filesModified": [
+      "client/DriverApi.cs",
+      "dummy/dispatch.c",
+      "dummy/driver_lifecycle.c",
+      "dummy/logging.c",
+      "dummy/main.c",
+      "dummy/main.h",
+      "dummy/memory_ops.c",
+      "client.Tests/client.Tests.csproj",
+      "client.Tests/UnitTest1.cs",
+      "readDriver.sln"
+    ]
+  },
+  "fixes": [
+    {
+      "bugId": "BH-001",
+      "severity": "high",
+      "filesChanged": [
+        "dummy/memory_ops.c:255-368"
+      ],
+      "whatChanged": "Replaced the underflow-prone scan loop with a bounded helper, added overlap-aware scanning across chunk boundaries, and moved the 4 KB scan buffer off the kernel stack.",
+      "confidenceLabel": "high",
+      "sideEffects": [
+        "Scan now allocates a nonpaged buffer and can return STATUS_INSUFFICIENT_RESOURCES if allocation fails."
+      ],
+      "notes": "Minimal behavior-preserving fix with a safer scan implementation."
+    },
+    {
+      "bugId": "BH-002",
+      "severity": "medium",
+      "filesChanged": [
+        "client/DriverApi.cs:39-51",
+        "client.Tests/UnitTest1.cs:1-49",
+        "client.Tests/client.Tests.csproj:1-22",
+        "readDriver.sln"
+      ],
+      "whatChanged": "Replaced invalid Array.Copy-based response decoding with raw struct-byte serialization via MemoryMarshal and added two regression tests covering byte and string decoding.",
+      "confidenceLabel": "high",
+      "sideEffects": [
+        "Added a new managed test project to the solution."
+      ],
+      "notes": "Regression verified with dotnet test."
+    },
+    {
+      "bugId": "BH-003",
+      "severity": "medium",
+      "filesChanged": [
+        "dummy/memory_ops.c:420-543"
+      ],
+      "whatChanged": "Restructured ReadWithProtect into a cleanup-based flow that always restores protection after a successful protection change and now surfaces restore failures when they are the only failure.",
+      "confidenceLabel": "high",
+      "sideEffects": [
+        "ReadWithProtect can now return the restore failure instead of silent success when the read succeeds but the protection restore fails."
+      ],
+      "notes": "This is a correctness improvement to the protect-read-restore contract."
+    },
+    {
+      "bugId": "BH-004",
+      "severity": "low",
+      "filesChanged": [
+        "dummy/main.h:29-117",
+        "dummy/logging.c:149-178",
+        "dummy/dispatch.c:39-241",
+        "dummy/main.c:1-20",
+        "dummy/driver_lifecycle.c:1-53",
+        "dummy/memory_ops.c:59-603"
+      ],
+      "whatChanged": "Removed the global silent-mode state and threaded per-request silent flags through driver operations and logging calls.",
+      "confidenceLabel": "high",
+      "sideEffects": [
+        "Non-response IOCTLs no longer fabricate bytesReturned output in the driver."
+      ],
+      "notes": "This eliminates request-to-request log suppression races."
+    }
+  ]
+}

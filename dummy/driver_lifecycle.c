@@ -37,7 +37,7 @@ static NTSTATUS CreateDeviceAndLink(
         FALSE,
         deviceObject);
     if (!NT_SUCCESS(status)) {
-        LogStatus(L"IoCreateDevice", status, NULL);
+        LogStatus(L"IoCreateDevice", status, NULL, FALSE);
         return status;
     }
 
@@ -46,7 +46,7 @@ static NTSTATUS CreateDeviceAndLink(
     if (!NT_SUCCESS(status)) {
         IoDeleteDevice(*deviceObject);
         *deviceObject = NULL;
-        LogStatus(L"IoCreateSymbolicLink", status, NULL);
+        LogStatus(L"IoCreateSymbolicLink", status, NULL, FALSE);
         return status;
     }
 

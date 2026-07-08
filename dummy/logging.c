@@ -14,16 +14,24 @@ static PCSTR DescribeStatus(NTSTATUS status)
         return "STATUS_INVALID_PARAMETER";
     case STATUS_ACCESS_DENIED:
         return "STATUS_ACCESS_DENIED";
+    case STATUS_ACCESS_VIOLATION:
+        return "STATUS_ACCESS_VIOLATION";
     case STATUS_NOT_FOUND:
         return "STATUS_NOT_FOUND";
+    case STATUS_BUFFER_TOO_SMALL:
+        return "STATUS_BUFFER_TOO_SMALL";
     case STATUS_INSUFFICIENT_RESOURCES:
         return "STATUS_INSUFFICIENT_RESOURCES";
     case STATUS_NO_MEMORY:
         return "STATUS_NO_MEMORY";
+    case STATUS_INVALID_DEVICE_REQUEST:
+        return "STATUS_INVALID_DEVICE_REQUEST";
     case STATUS_OBJECT_NAME_NOT_FOUND:
         return "STATUS_OBJECT_NAME_NOT_FOUND";
     case STATUS_OBJECT_NAME_COLLISION:
         return "STATUS_OBJECT_NAME_COLLISION";
+    case STATUS_NOT_SUPPORTED:
+        return "STATUS_NOT_SUPPORTED";
     case STATUS_TIMEOUT:
         return "STATUS_TIMEOUT";
     default:
@@ -54,13 +62,13 @@ NTSTATUS FormatTimestamp(
         buffer,
         bufferLength,
         L"%04hu-%02hu-%02hu %02hu:%02hu:%02hu.%03hu",
-        timeFields.Year,
-        timeFields.Month,
-        timeFields.Day,
-        timeFields.Hour,
-        timeFields.Minute,
-        timeFields.Second,
-        timeFields.Milliseconds);
+        (USHORT)timeFields.Year,
+        (USHORT)timeFields.Month,
+        (USHORT)timeFields.Day,
+        (USHORT)timeFields.Hour,
+        (USHORT)timeFields.Minute,
+        (USHORT)timeFields.Second,
+        (USHORT)timeFields.Milliseconds);
 
     return status;
 }
@@ -149,16 +157,22 @@ NTSTATUS AppendLogLine(
 VOID LogStatus(
     _In_ PCWSTR operation,
     _In_ NTSTATUS status,
-    _In_opt_ PCWSTR detail
+    _In_opt_ PCWSTR detail,
+    _In_ BOOLEAN silentMode
 )
 {
-    (VOID)AppendLogLine(READDRIVER_STATUS_LOG_PATH, operation, detail, status);
+    if (!silentMode) {
+        (VOID)AppendLogLine(READDRIVER_STATUS_LOG_PATH, operation, detail, status);
+    }
 }
 
 VOID LogText(
     _In_ PCWSTR operation,
-    _In_opt_ PCWSTR text
+    _In_opt_ PCWSTR text,
+    _In_ BOOLEAN silentMode
 )
 {
-    (VOID)AppendLogLine(READDRIVER_TEXT_LOG_PATH, operation, text, STATUS_SUCCESS);
+    if (!silentMode) {
+        (VOID)AppendLogLine(READDRIVER_TEXT_LOG_PATH, operation, text, STATUS_SUCCESS);
+    }
 }

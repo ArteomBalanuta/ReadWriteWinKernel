@@ -13,9 +13,9 @@ NTSTATUS DriverEntry(
     UNREFERENCED_PARAMETER(DriverObject);
     UNREFERENCED_PARAMETER(RegistryPath);
 
-    RtlInitUnicodeString(&driverName, L"\\Driver\\PWN29");
+    RtlInitUnicodeString(&driverName, READDRIVER_DRIVER_NAME);
     status = IoCreateDriver(&driverName, DriverInitialize);
-    LogStatus(L"IoCreateDriver", status, NULL);
+    LogStatus(L"IoCreateDriver", status, NULL, FALSE);
 
     return status;
 }
