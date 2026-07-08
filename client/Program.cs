@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows.Forms;
 
 internal static class Program
@@ -26,13 +27,19 @@ internal static class Program
 
         PrintRequestSummary(request);
 
-        if (!DriverApi.SendDriverRequest(request, out uint bytesReturned, out string? error))
+        if (!DriverApi.SendDriverRequest(request, out ReadDriverRequest response, out uint bytesReturned, out string? error))
         {
             Console.Error.WriteLine(error ?? "Device request failed.");
             return 1;
         }
 
         Console.WriteLine($"Request completed, bytes returned: {bytesReturned}");
+
+        if (bytesReturned > 0)
+        {
+            PrintResponseData(request, response, (int)bytesReturned);
+        }
+
         return 0;
     }
 
@@ -93,5 +100,42 @@ internal static class Program
         Console.WriteLine($"Target Addr:   0x{request.TargetAddress:X}");
         Console.WriteLine($"Size:          {request.Size}");
         Console.WriteLine($"Operation:     {request.Operation}");
+        Console.WriteLine($"Flags:         0x{request.Flags:X}");
+    }
+
+    private static void PrintResponseData(ReadDriverRequest request, ReadDriverRequest response, int bytesReturned)
+    {
+        if (bytesReturned <= 0)
+            return;
+
+        switch ((ReadDriverOperation)request.Operation)
+        {
+            case ReadDriverOperation.Read:
+            case ReadDriverOperation.ReadWithProtect:
+                var bytes = response.GetResponseBytes(bytesReturned);
+                Console.WriteLine($"Response (hex): {string.Join(" ", bytes.Select(b => b.ToString("X2")))}");
+                break;
+            case ReadDriverOperation.ReadHex:
+                Console.WriteLine($"Response: {response.GetResponseString(bytesReturned)}");
+                break;
+            case ReadDriverOperation.Scan:
+                Console.WriteLine($"Matched address: 0x{response.GetResponseAddress():X}");
+                break;
+            case ReadDriverOperation.BatchRead:
+                var batchBytes = response.GetResponseBytes(bytesReturned);
+                int chunkSize = (int)request.Size;
+                int chunks = bytesReturned / chunkSize;
+                Console.WriteLine($"Response (batch, {chunks} chunks):");
+                for (int i = 0; i < chunks && i * chunkSize < batchBytes.Length; i++)
+                {
+                    var chunk = batchBytes.Skip(i * chunkSize).Take(chunkSize).ToArray();
+                    Console.WriteLine($"  {string.Join(" ", chunk.Select(b => b.ToString("X2")))}");
+                }
+                break;
+            default:
+                var defaultBytes = response.GetResponseBytes(bytesReturned);
+                Console.WriteLine($"Response (hex): {string.Join(" ", defaultBytes.Select(b => b.ToString("X2")))}");
+                break;
+        }
     }
 }

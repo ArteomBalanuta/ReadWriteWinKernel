@@ -10,9 +10,10 @@ The controller:
 
 - parses six numeric command-line arguments
 - fills a `READDRIVER_REQUEST`
-- opens the driver device at `\\\\.\\PWN29`
+- attempts to open the protocol-defined driver device path at `\\\\.\\Ki000`
 - sends `READDRIVER_IOCTL_REQUEST` with `DeviceIoControl`
 - prints the request fields and the returned byte count
+- prints response data for read-style operations
 
 ## Build
 
@@ -22,12 +23,15 @@ Expected debug output:
 
 - [G:\workspace\projects\readDriver\build\controller\x64\Debug\controller.exe](/G:/workspace/projects/readDriver/build/controller/x64/Debug/controller.exe)
 
+Managed regression tests for the C# client live separately in [client.Tests](/G:/workspace/projects/readDriver/client.Tests) and are not part of this controller-only project.
+
 ## Usage
 
-The controller expects exactly six arguments:
+The controller accepts either:
 
 ```text
 controller.exe <srcPid> <srcAddress> <targetPid> <targetAddress> <size> <operation>
+controller.exe <processPid> <integerValue> <targetAddress> <size> 5
 ```
 
 All arguments are parsed as unsigned integers with base auto-detection, so both decimal and `0x` hexadecimal values are accepted.
@@ -36,8 +40,10 @@ Examples:
 
 ```text
 controller.exe 5412 0x6520A9F5 6512 0x0203B3F94940 15 0
+controller.exe 5412 0x0203B3F94940 0 0x90 1 2
 controller.exe 5412 0x0203B3F94940 40000 0 0 3
 controller.exe 5412 0x0203B3F94940 0 0 0 4
+controller.exe 6512 500 0x0203B3F94940 2 5
 ```
 
 ## Arguments
@@ -59,6 +65,17 @@ Fields sent by the controller:
 - `operation`
   Mapped to `Operation`
 
+Operation `5` is the one exception to the generic field naming:
+
+- `SourceProcessId`
+  Process ID to modify
+- `SourceAddress`
+  Integer value to write
+- `TargetAddress`
+  Destination address
+- `Size`
+  Integer width in bytes
+
 ## Operation Codes
 
 Current operation values:
@@ -67,13 +84,20 @@ Current operation values:
   `ReadDriverOperationCopy`
 - `1`
   `ReadDriverOperationRead`
-  Declared in the shared enum, but not currently handled by the driver dispatch path.
+- `2`
+  `ReadDriverOperationScan`
 - `3`
   `ReadDriverOperationProtect`
 - `4`
   `ReadDriverOperationPatch`
 - `5`
   `ReadDriverOperationWriteInteger`
+- `6`
+  `ReadDriverOperationBatchRead`
+- `7`
+  `ReadDriverOperationReadWithProtect`
+- `8`
+  `ReadDriverOperationReadHex`
 
 Single-write shortcut form:
 
@@ -123,6 +147,38 @@ Example:
 controller.exe 5412 0x0203B3F94940 40000 0 0 3
 ```
 
+### Read (`operation = 1`)
+
+Use:
+
+```text
+controller.exe <pid> <address> 0 0 <size> 1
+```
+
+Meaning:
+
+- `srcPid`: process ID to read
+- `srcAddress`: address to read
+- `size`: byte count
+- response: raw bytes printed as hex
+
+### Scan (`operation = 2`)
+
+Use:
+
+```text
+controller.exe <pid> <startAddress> <rangeSize> <patternValue> <patternSize> 2
+```
+
+Meaning in the current driver implementation:
+
+- `srcPid`: process ID to scan
+- `srcAddress`: scan start address
+- `targetPid`: scan range size
+- `targetAddress`: pattern packed into the low 8 bytes
+- `size`: pattern length in bytes (`1`-`8`)
+- response: first matched address
+
 ### Patch (`operation = 4`)
 
 Use:
@@ -143,6 +199,58 @@ Example:
 controller.exe 5412 0x0203B3F94940 0 0 0 4
 ```
 
+### BatchRead (`operation = 6`)
+
+Use:
+
+```text
+controller.exe <pid> <address1> <address2> <address3> <chunkSize> 6
+```
+
+Meaning in the current driver implementation:
+
+- `srcPid`: process ID to read
+- `srcAddress`: first address
+- `targetPid`: second address if non-zero
+- `targetAddress`: third address if non-zero
+- `size`: byte count per address (`1`-`8`)
+- response: one hex row per returned chunk
+
+Note:
+
+- the protocol can currently carry up to five batch-read addresses by also using `Reserved2` and `Reserved3`, but the native CLI parser currently exposes only the first three address slots
+
+### ReadWithProtect (`operation = 7`)
+
+Use:
+
+```text
+controller.exe <pid> <address> 0 0 <size> 7
+```
+
+Meaning:
+
+- `srcPid`: process ID to read
+- `srcAddress`: address to read
+- `size`: byte count
+- behavior: temporary protect, read, restore
+- response: raw bytes printed as hex
+
+### ReadHex (`operation = 8`)
+
+Use:
+
+```text
+controller.exe <pid> <address> 0 0 <size> 8
+```
+
+Meaning:
+
+- `srcPid`: process ID to read
+- `srcAddress`: address to read
+- `size`: byte count
+- response: ASCII hex string
+
 ## Expected Output
 
 On success, the controller prints the request fields and a completion line similar to:
@@ -157,6 +265,14 @@ Operation:     0
 Request completed, bytes returned: 88
 ```
 
+For read-style operations it also prints decoded response data, for example:
+
+```text
+Response (hex): 48 65 6C 6C 6F
+Matched address: 0x203B3F94940
+Response: 48 65 6C 6C 6F
+```
+
 On failure, it prints one of:
 
 - `CreateFile failed with error <code>`
@@ -168,8 +284,14 @@ On failure, it prints one of:
 Before using the controller:
 
 - the driver must already be loaded
-- the driver must expose the DOS device name `\\\\.\\PWN29`
+- the driver must expose the DOS device name `\\\\.\\Ki000`
 - the controller and driver must use the same `READDRIVER_REQUEST` layout from `common/protocol.h`
+
+Current runtime caveat:
+
+- the shared protocol still defines `\\\\.\\Ki000`
+- the current driver lifecycle code deletes the DOS symbolic link right after creating it, changes the device type to `FILE_DEVICE_NULL`, clears parts of the device chain, and zeroes the `DRIVER_OBJECT`
+- so this controller assumes a driver/runtime setup where that path is still reachable, but the current driver source no longer represents a standard always-visible device exposure pattern
 
 ## Notes
 

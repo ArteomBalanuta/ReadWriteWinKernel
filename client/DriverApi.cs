@@ -71,7 +71,7 @@ internal struct ReadDriverRequest
 
 internal static class DriverApi
 {
-    private const string DeviceName = @"\\.\PWN29";
+    private const string DeviceName = @"\\.\Ki000";
 
     private const uint FileDeviceUnknown = 0x00000022;
     private const uint ReadDriverIoctlCode = 0x0701;

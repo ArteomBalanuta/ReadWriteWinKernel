@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include "controller.h"
 
+#define CONTROLLER_SHORTCUT_ARGC 6
+#define CONTROLLER_FULL_ARGC 7
+#define CONTROLLER_PARSE_ERROR "Failed to parse one or more numeric arguments.\n"
+
 static int ParseUnsignedLongLong(const char* text, ULONGLONG* value)
 {
     char* end = NULL;
@@ -33,6 +37,57 @@ void PrintRequestSummary(const READDRIVER_REQUEST* request)
     printf("Target Addr:   0x%llX\n", request->TargetAddress);
     printf("Size:          %llu\n", request->Size);
     printf("Operation:     %llu\n", request->Operation);
+    printf("Flags:         0x%llX\n", request->Flags);
+}
+
+void PrintResponseData(const READDRIVER_REQUEST* request, const BYTE* buffer, DWORD bytesReturned)
+{
+    if (buffer == NULL || bytesReturned == 0) {
+        return;
+    }
+
+    switch ((READDRIVER_OPERATION)request->Operation) {
+    case ReadDriverOperationRead:
+    case ReadDriverOperationReadWithProtect:
+        /* Print raw bytes as hex. */
+        printf("Response (hex): ");
+        for (DWORD i = 0; i < bytesReturned; ++i) {
+            printf("%02X ", buffer[i]);
+        }
+        printf("\n");
+        break;
+    case ReadDriverOperationReadHex:
+        /* Response is already a hex string. */
+        printf("Response: %s\n", (const char*)buffer);
+        break;
+    case ReadDriverOperationScan:
+        /* Response is a matched address (ULONGLONG). */
+        if (bytesReturned >= sizeof(ULONGLONG)) {
+            ULONGLONG matchedAddr;
+            RtlCopyMemory(&matchedAddr, buffer, sizeof(ULONGLONG));
+            printf("Matched address: 0x%llX\n", matchedAddr);
+        }
+        break;
+    case ReadDriverOperationBatchRead:
+        /* Print each read chunk as hex. */
+        printf("Response (batch, %lu chunks):\n", bytesReturned / (DWORD)request->Size);
+        for (DWORD offset = 0; offset < bytesReturned; offset += (DWORD)request->Size) {
+            printf("  ");
+            for (DWORD i = 0; i < request->Size && (offset + i) < bytesReturned; ++i) {
+                printf("%02X ", buffer[offset + i]);
+            }
+            printf("\n");
+        }
+        break;
+    default:
+        /* Generic hex dump for unknown operations. */
+        printf("Response (hex): ");
+        for (DWORD i = 0; i < bytesReturned; ++i) {
+            printf("%02X ", buffer[i]);
+        }
+        printf("\n");
+        break;
+    }
 }
 
 BOOL ParseRequestArguments(int argc, char* argv[], READDRIVER_REQUEST* request)
@@ -43,20 +98,20 @@ BOOL ParseRequestArguments(int argc, char* argv[], READDRIVER_REQUEST* request)
         return FALSE;
     }
 
-    if (argc != 7 && argc != 6) {
+    if (argc != CONTROLLER_FULL_ARGC && argc != CONTROLLER_SHORTCUT_ARGC) {
         PrintUsage();
         return FALSE;
     }
 
     ZeroMemory(request, sizeof(*request));
 
-    if (argc == 6) {
+    if (argc == CONTROLLER_SHORTCUT_ARGC) {
         if (!ParseUnsignedLongLong(argv[1], &request->SourceProcessId) ||
             !ParseUnsignedLongLong(argv[2], &request->SourceAddress) ||
             !ParseUnsignedLongLong(argv[3], &request->TargetAddress) ||
             !ParseUnsignedLongLong(argv[4], &request->Size) ||
             !ParseUnsignedLongLong(argv[5], &operationValue)) {
-            fprintf(stderr, "Failed to parse one or more numeric arguments.\n");
+            fputs(CONTROLLER_PARSE_ERROR, stderr);
             PrintUsage();
             return FALSE;
         }
@@ -68,7 +123,6 @@ BOOL ParseRequestArguments(int argc, char* argv[], READDRIVER_REQUEST* request)
         }
 
         request->Operation = operationValue;
-        request->TargetProcessId = 0;
         return TRUE;
     }
 
@@ -78,7 +132,7 @@ BOOL ParseRequestArguments(int argc, char* argv[], READDRIVER_REQUEST* request)
         !ParseUnsignedLongLong(argv[4], &request->TargetAddress) ||
         !ParseUnsignedLongLong(argv[5], &request->Size) ||
         !ParseUnsignedLongLong(argv[6], &request->Operation)) {
-        fprintf(stderr, "Failed to parse one or more numeric arguments.\n");
+        fputs(CONTROLLER_PARSE_ERROR, stderr);
         PrintUsage();
         return FALSE;
     }

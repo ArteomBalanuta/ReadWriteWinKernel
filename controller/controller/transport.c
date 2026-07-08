@@ -21,10 +21,13 @@ static HANDLE OpenDriverDevice(void)
     return handle;
 }
 
-BOOL SendDriverRequest(const READDRIVER_REQUEST* request, DWORD* bytesReturned)
+BOOL SendDriverRequest(
+    const READDRIVER_REQUEST* request,
+    LPVOID responseBuffer,
+    DWORD responseBufferSize,
+    DWORD* bytesReturned)
 {
     HANDLE handle;
-    READDRIVER_REQUEST response;
 
     if (request == NULL || bytesReturned == NULL) {
         fprintf(stderr, "SendDriverRequest received invalid arguments.\n");
@@ -36,14 +39,13 @@ BOOL SendDriverRequest(const READDRIVER_REQUEST* request, DWORD* bytesReturned)
         return FALSE;
     }
 
-    ZeroMemory(&response, sizeof(response));
     if (!DeviceIoControl(
         handle,
         READDRIVER_IOCTL_REQUEST,
         (LPVOID)request,
         sizeof(*request),
-        &response,
-        sizeof(response),
+        responseBuffer,
+        responseBufferSize,
         bytesReturned,
         NULL)) {
         fprintf(stderr, "DeviceIoControl failed with error %lu\n", GetLastError());

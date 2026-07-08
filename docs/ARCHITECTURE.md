@@ -6,12 +6,18 @@ This document explains how the codebase is structured today and where each respo
 
 1. The controller parses command-line arguments.
 2. The controller creates a `READDRIVER_REQUEST`.
-3. The controller opens `\\\\.\\PWN29`.
+3. The controller attempts to open the protocol-defined path `\\\\.\\Ki000`.
 4. The controller sends `READDRIVER_IOCTL_REQUEST` through `DeviceIoControl`.
 5. The driver receives the IRP in its device-control dispatch path.
 6. The driver validates the request and routes it by `Operation`.
 7. The selected driver helper performs the requested work.
 8. The driver completes the IRP and returns a status to user mode.
+
+Current lifecycle caveat:
+
+- the shared protocol still names `\\\\.\\Ki000`
+- the driver lifecycle code currently creates and then deletes the DOS symbolic link, changes the device type to `FILE_DEVICE_NULL`, clears `DriverObject` and `NextDevice` on the device object, and zeroes the `DRIVER_OBJECT` before returning
+- as a result, step 3 reflects what the clients try to do, not a guarantee that the current driver build leaves that path exposed in the usual way
 
 ## Module Responsibilities
 
@@ -25,6 +31,7 @@ Owns:
 - IOCTL code
 - operation enum
 - request struct definition
+- request flags such as silent mode
 
 Design rule:
 
@@ -50,11 +57,20 @@ Owns:
 - device creation
 - symbolic-link creation
 - dispatch table registration
+- current device-hiding behavior after creation
 
 Why it exists:
 
 - lifecycle code changes for different reasons than request handling
 - it is easier to review device setup when it is isolated from IOCTL logic
+
+Current behavior note:
+
+- after creating the `\\DosDevices\\Ki000` symbolic link, the code deletes it again
+- it changes the created device object type to `FILE_DEVICE_NULL`
+- it also clears `DriverObject` and `NextDevice` on the created device object
+- it zeroes the `DRIVER_OBJECT` after dispatch handlers are registered
+- that is materially different from a normal persistent `\\\\.\\name` driver exposure pattern and should be documented whenever runtime access assumptions are discussed
 
 ### `dummy/dispatch.c`
 
@@ -66,6 +82,7 @@ Owns:
 - buffer size validation
 - conversion from `SystemBuffer` to `READDRIVER_REQUEST`
 - operation switch and dispatch
+- response-buffer population for read-style operations
 - IRP completion helpers
 
 Why it exists:
@@ -83,6 +100,11 @@ Owns:
 - `MmCopyVirtualMemory` wrapper
 - `ZwProtectVirtualMemory` wrapper
 - patch helper
+- read helper
+- scan helper
+- batch-read helper
+- read-with-protect helper
+- read-as-hex helper
 
 Notes:
 
@@ -115,6 +137,7 @@ Owns:
 - CLI parsing handoff
 - request summary output
 - transport submission handoff
+- response-buffer printing handoff
 
 ### `controller/controller/cli.c`
 
@@ -125,6 +148,7 @@ Owns:
 - command-line parsing
 - usage/help output
 - request summary printing
+- response formatting for read, scan, hex, and batch-read operations
 
 ### `controller/controller/transport.c`
 
@@ -134,6 +158,7 @@ Owns:
 
 - `CreateFileW` against the device path
 - `DeviceIoControl` request submission
+- caller-provided response-buffer transport
 
 ### `client/`
 
@@ -144,10 +169,27 @@ Owns:
 - command-line submission parity with the native client
 - WinForms UI for interactive requests
 - shared .NET transport wrapper in `DriverApi.cs`
+- managed decoding helpers for read responses
+
+### `client.Tests/`
+
+Managed regression-test project.
+
+Owns:
+
+- focused tests for the C# request/response helpers
+- verification of raw-byte and string decoding behavior in the managed client layer
 
 ## Request Semantics
 
 `READDRIVER_REQUEST` is generic, but the operations interpret fields differently.
+
+Current protocol caveats:
+
+- the protocol still uses one generic fixed-width request instead of operation-specific payload structs
+- some operations reuse fields in non-obvious ways, especially `WriteInteger` and `BatchRead`
+- read-style operations reuse the buffered IOCTL system buffer as both request input and response output
+- because that response buffer is only `sizeof(READDRIVER_REQUEST)`, all read-style operations are bounded by the request-struct size on the current implementation
 
 ### Copy
 
@@ -156,6 +198,22 @@ Owns:
 - `TargetProcessId`: target process
 - `TargetAddress`: target address
 - `Size`: transfer size
+
+### Read
+
+- `SourceProcessId`: process to read
+- `SourceAddress`: address to read
+- `Size`: byte count
+- return value: raw bytes copied back into the IOCTL response buffer
+
+### Scan
+
+- `SourceProcessId`: process to scan
+- `SourceAddress`: scan start address
+- `TargetProcessId`: scan range size
+- `TargetAddress`: byte pattern packed into the low 8 bytes
+- `Size`: pattern length in bytes (`1`-`8`)
+- return value: first matched address as `ULONGLONG`
 
 ### Protect
 
@@ -167,6 +225,48 @@ Owns:
 
 - `SourceProcessId`: process to modify
 - `SourceAddress`: address to patch
+
+### WriteInteger
+
+- `SourceProcessId`: process to modify
+- `SourceAddress`: integer value to write
+- `TargetAddress`: destination address
+- `Size`: integer width in bytes (`1`, `2`, `4`, or `8`)
+
+### BatchRead
+
+- `SourceProcessId`: process to read
+- `SourceAddress`: first address
+- `TargetProcessId`: second address if non-zero
+- `TargetAddress`: third address if non-zero
+- `Reserved2`: fourth address if non-zero
+- `Reserved3`: fifth address if non-zero
+- `Size`: byte count per address (`1`-`8`)
+- return value: concatenated read chunks in the response buffer
+
+### ReadWithProtect
+
+- `SourceProcessId`: process to read
+- `SourceAddress`: address to read
+- `Size`: byte count
+- behavior: temporarily sets `PAGE_EXECUTE_READWRITE`, reads bytes, then restores the original protection
+- return value: raw bytes copied back into the IOCTL response buffer
+
+### ReadHex
+
+- `SourceProcessId`: process to read
+- `SourceAddress`: address to read
+- `Size`: byte count, capped by the implementation and by the fixed response-buffer budget
+- return value: ASCII hex string written into the response buffer
+
+Current implementation note:
+
+- the hex formatter expands each byte to `"XX "` plus a trailing `\0`
+- with the current fixed-width response buffer, only a short hex string fits in one request/response cycle
+
+### Flags
+
+- `Flags` bit `0`: silent mode, which suppresses `LogStatus` writes for that request
 
 This is functional but not self-describing. A future redesign should either:
 
@@ -204,6 +304,10 @@ The repository currently assumes:
 - `WindowsKernelModeDriver10.0` for the driver
 - SDK/WDK version `10.0.28000.0`
 
+Additional current note:
+
+- the root solution includes a `client.Tests` project that is easiest to run with `dotnet test`
+
 Current local build policy:
 
 - driver test-signing is disabled in the project so local builds can complete cleanly
@@ -232,10 +336,13 @@ When making changes, prefer these rules:
 - keep `main.c` small unless the tool gains multiple commands or modes
 - keep parsing in `cli.c` and device submission in `transport.c`
 - keep the C# client transport logic centralized in `client/DriverApi.cs`
+- remember that the current WinForms GUI does not expose every protocol operation the CLI/transport layers support
+- remember that the clients still target `\\\\.\\Ki000`, while the current driver lifecycle code deletes that symbolic link, mutates the device object, and zeroes the `DRIVER_OBJECT` after initialization
 
 ## Suggested Next Refactors
 
 1. Rename `dummy` to a driver-specific project name.
 2. Replace field overloading in `READDRIVER_REQUEST` with operation-specific payloads.
 3. Move hard-coded log paths behind a single configuration layer.
-4. Add a small verification or smoke-test script for common local build and deployment checks.
+4. Revisit the current symbolic-link deletion, device-object mutation, and `DRIVER_OBJECT` zeroing behavior if standard user-mode access through `\\\\.\\Ki000` is still a requirement.
+5. Bring the WinForms GUI operation list into parity with the current protocol if interactive support for read/scan modes is desired.

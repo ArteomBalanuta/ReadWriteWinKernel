@@ -10,6 +10,8 @@ This workspace currently assumes:
 - Windows Driver Kit `10.0.28000.x`
 - .NET 8 SDK
 
+For managed regression coverage, the repo also now includes [client.Tests](/G:/workspace/projects/readDriver/client.Tests).
+
 ## Install Prerequisites
 
 Install the current Visual Studio 2026 toolchain with C++ support. The repository build script still contains a fallback path for older MSBuild + WDK combinations, but the preferred setup is now Visual Studio 2026 with the `28000` SDK and WDK line.
@@ -78,6 +80,10 @@ Use these smaller entry points only when you intentionally want them:
 - [dummy.sln](/G:/workspace/projects/readDriver/dummy.sln)
 - [controller.sln](/G:/workspace/projects/readDriver/controller/controller.sln)
 
+For managed-only verification, use:
+
+- [client.Tests.csproj](/G:/workspace/projects/readDriver/client.Tests/client.Tests.csproj)
+
 ## Build Everything
 
 From the repository root:
@@ -117,6 +123,12 @@ Build only the C# client:
 
 ```powershell
 dotnet build G:\workspace\projects\readDriver\client\client.csproj -c Debug -p:Platform=x64
+```
+
+Run the managed regression tests:
+
+```powershell
+dotnet test G:\workspace\projects\readDriver\client.Tests\client.Tests.csproj -nologo
 ```
 
 ## Build Outputs
@@ -166,7 +178,19 @@ controller.exe <srcPid> <srcAddress> <targetPid> <targetAddress> <size> <operati
 controller.exe <processPid> <integerValue> <targetAddress> <size> 5
 ```
 
-The controller prints a usage screen if parsing fails.
+Supported operations currently include:
+
+- `0` copy
+- `1` read bytes back into the response buffer
+- `2` scan for a 1-8 byte pattern
+- `3` protect
+- `4` patch
+- `5` write integer
+- `6` batch read up to five addresses
+- `7` read with temporary RWX protection
+- `8` read and return a hex string
+
+The controller prints a usage screen if parsing fails and prints response data for read-style operations.
 
 ## Running the C# Client
 
@@ -181,6 +205,8 @@ client.exe <srcPid> <srcAddress> <targetPid> <targetAddress> <size> <operation>
 client.exe <processPid> <integerValue> <targetAddress> <size> 5
 ```
 
+The C# CLI prints response data for read-style operations and can use the expanded operation set exposed by `DriverApi.cs`.
+
 GUI behavior:
 
 - start `client.exe` with no arguments
@@ -189,18 +215,42 @@ GUI behavior:
 - enter request values
 - click `Send Request`
 
+Current GUI note:
+
+- the WinForms UI currently exposes `Copy`, `Protect`, `Patch`, and `WriteInteger`
+- newer read/scan-style operations exist in the protocol and CLI path, but are not yet surfaced in the GUI
+
 ## Driver Runtime Notes
 
-The current code creates:
+The shared protocol constants define:
 
-- `\\Device\\PWN29`
-- `\\DosDevices\\PWN29`
-- `\\\\.\\PWN29`
+- `\\Device\\Ki000`
+- `\\DosDevices\\Ki000`
+- `\\\\.\\Ki000`
+
+Current lifecycle caveat:
+
+- `driver_lifecycle.c` creates the DOS symbolic link and then immediately deletes it
+- it changes the device type to `FILE_DEVICE_NULL`
+- it also clears `DriverObject` and `NextDevice` on the created device object
+- it zeroes the `DRIVER_OBJECT` before returning from initialization
+- the clients still attempt to open `\\\\.\\Ki000`, but the current driver source no longer behaves like a standard persistently exposed user-mode device path
 
 The driver writes diagnostic files to:
 
 - `C:\dummy_logs.txt`
 - `C:\dummy_conversion_logs.txt`
+
+Silent mode:
+
+- `READDRIVER_REQUEST.Flags` bit `0` suppresses driver status logging for that request
+- the C# helper methods for read-style operations currently set this flag automatically
+
+Current response-buffer note:
+
+- read-style operations reuse the same buffered IOCTL system buffer for output
+- that means one response is currently limited to `sizeof(READDRIVER_REQUEST)`
+- `ReadHex` expands bytes into text, so its practical limit is smaller than raw-byte reads
 
 ## What This Repo Does Not Yet Automate
 
@@ -217,6 +267,10 @@ That means this repo is strongest as a buildable local development workspace rat
 ### `dotnet` app fails after copying only `client.exe`
 
 Use `publish-client.ps1` or copy the entire build output directory. A framework-dependent .NET build needs its companion files unless it is published as self-contained.
+
+### `CreateFile` fails against `\\\\.\\Ki000`
+
+The shared protocol and both clients still target `\\\\.\\Ki000`, but the current `dummy/driver_lifecycle.c` implementation deletes the DOS symbolic link right after creating it, changes the device type to `FILE_DEVICE_NULL`, clears parts of the device chain, and zeroes the `DRIVER_OBJECT`. If you need standard user-mode access through that path, review that lifecycle behavior first.
 
 ### `build-all.ps1` cannot find MSBuild
 

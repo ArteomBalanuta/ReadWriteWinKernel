@@ -60,7 +60,7 @@ internal sealed class ClientForm : Form
             return;
         }
 
-        if (!DriverApi.SendDriverRequest(request, out uint bytesReturned, out string? error))
+        if (!DriverApi.SendDriverRequest(request, out _, out uint bytesReturned, out string? error))
         {
             AppendStatus(error ?? "Device request failed.");
             return;

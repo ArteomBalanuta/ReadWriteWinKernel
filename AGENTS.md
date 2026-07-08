@@ -25,6 +25,8 @@ Read these in order when you need more detail:
   Native C console client.
 - [client](/G:/workspace/projects/readDriver/client)
   C# client with CLI and WinForms GUI entry points.
+- [client.Tests](/G:/workspace/projects/readDriver/client.Tests)
+  Managed regression tests for the C# client helpers.
 - [build-all.ps1](/G:/workspace/projects/readDriver/build-all.ps1)
   Preferred root build entry point.
 - [publish-client.ps1](/G:/workspace/projects/readDriver/publish-client.ps1)
@@ -69,6 +71,12 @@ Publish the C# client:
 
 ```powershell
 .\publish-client.ps1
+```
+
+Run managed regression tests:
+
+```powershell
+dotnet test .\client.Tests\client.Tests.csproj -nologo
 ```
 
 Build only the C# client:
@@ -136,12 +144,17 @@ The repo root also contains binary/reference artifacts that are not part of the 
 
 ## Known Behavior Notes
 
-- The driver device path is `\\\\.\\PWN29`.
+- The driver device path is `\\\\.\\Ki000`.
+- The shared protocol still names `\\\\.\\Ki000`, but the current driver lifecycle code deletes the DOS symbolic link after creating it, changes the device type to `FILE_DEVICE_NULL`, clears parts of the device chain, and zeroes the `DRIVER_OBJECT`. Treat standard user-mode access through that path as a current-code caveat, not a guaranteed runtime property.
 - The driver writes diagnostic logs to `C:\dummy_logs.txt` and `C:\dummy_conversion_logs.txt`.
 - The C# client launches the WinForms GUI when started without arguments.
+- The CLI/transport layers now support operations `0` through `8`, including read, scan, batch-read, read-with-protect, and read-as-hex paths.
 - The C# client and native controller both support:
   - standard 6-argument request form
   - 5-argument write-integer shortcut ending in operation `5`
+- `READDRIVER_REQUEST.Flags` bit `0` enables silent mode and suppresses driver status logging for that request.
+- Read-style operations currently return through the fixed-width request-sized system buffer, so response sizes are tightly bounded.
+- The current WinForms GUI does not expose every protocol operation that the CLI/transport layers support.
 
 ## Editing Rules
 
