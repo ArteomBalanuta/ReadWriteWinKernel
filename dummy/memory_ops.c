@@ -317,7 +317,7 @@ NTSTATUS ScanProcessMemory(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    page = 0;
+ page = 0;
     status = STATUS_NOT_FOUND;
 
     while (page < size) {
@@ -361,6 +361,11 @@ NTSTATUS ScanProcessMemory(
 
         if (!NT_SUCCESS(status)) {
             break;
+        }
+
+        if (bytesCopied < patternSize) {
+            page += (copySize > bytesCopied) ? bytesCopied : 1;
+            continue;
         }
 
         if (FindPatternOffset(scanBuffer, bytesCopied, pattern, patternSize, &matchedOffset)) {
@@ -445,16 +450,8 @@ NTSTATUS ReadWithProtect(
     _In_ BOOLEAN silentMode
 )
 {
-    OBJECT_ATTRIBUTES attributes;
-    CLIENT_ID clientId;
-    HANDLE processHandle = NULL;
-    PVOID baseAddress = address;
-    SIZE_T regionSize = size;
-    ULONG oldProtection = 0;
-    ULONG restoredProtection = 0;
+    PEPROCESS process;
     SIZE_T bytesCopied = 0;
-    PEPROCESS process = NULL;
-    BOOLEAN protectionChanged = FALSE;
     NTSTATUS status;
 
     if (address == NULL || buffer == NULL || size == 0) {
@@ -465,37 +462,10 @@ NTSTATUS ReadWithProtect(
         *originalProtection = 0;
     }
 
-    InitializeObjectAttributes(&attributes, NULL, OBJ_KERNEL_HANDLE, NULL, NULL);
-    clientId.UniqueProcess = processId;
-    clientId.UniqueThread = NULL;
-
-    status = ZwOpenProcess(&processHandle, PROCESS_VM_OPERATION, &attributes, &clientId);
-    if (!NT_SUCCESS(status)) {
-        LogMemoryOpStatus(L"ZwOpenProcess", status, NULL, silentMode);
-        return status;
-    }
-
-    __try {
-        status = ZwProtectVirtualMemory(
-            processHandle,
-            &baseAddress,
-            &regionSize,
-            PAGE_EXECUTE_READWRITE,
-            &oldProtection);
-    } __except (EXCEPTION_EXECUTE_HANDLER) {
-        status = GetExceptionCode();
-        goto Cleanup;
-    }
-    protectionChanged = TRUE;
-
-    if (originalProtection != NULL) {
-        *originalProtection = oldProtection;
-    }
-
     status = PsLookupProcessByProcessId(processId, &process);
     if (!NT_SUCCESS(status)) {
         LogMemoryOpStatus(L"PsLookupProcessByProcessId", status, L"failed to resolve process", silentMode);
-        goto Cleanup;
+        return status;
     }
 
     __try {
@@ -511,44 +481,10 @@ NTSTATUS ReadWithProtect(
         status = GetExceptionCode();
     }
 
+    ObDereferenceObject(process);
+
     if (NT_SUCCESS(status) && bytesCopied != size) {
         status = STATUS_BUFFER_OVERFLOW;
-    }
-
-Cleanup:
-    if (process != NULL) {
-        ObDereferenceObject(process);
-    }
-
-    if (protectionChanged) {
-        baseAddress = address;
-        regionSize = size;
-        __try {
-            NTSTATUS restoreStatus = ZwProtectVirtualMemory(
-                processHandle,
-                &baseAddress,
-                &regionSize,
-                oldProtection,
-                &restoredProtection);
-            if (!NT_SUCCESS(restoreStatus)) {
-                if (NT_SUCCESS(status)) {
-                    status = restoreStatus;
-                } else {
-                    LogStatus(L"ZwProtectVirtualMemory restore", restoreStatus, NULL, silentMode);
-                }
-            }
-        } __except (EXCEPTION_EXECUTE_HANDLER) {
-            NTSTATUS restoreStatus = GetExceptionCode();
-            if (NT_SUCCESS(status)) {
-                status = restoreStatus;
-            } else {
-                LogStatus(L"ZwProtectVirtualMemory restore", restoreStatus, NULL, silentMode);
-            }
-        }
-    }
-
-    if (processHandle != NULL) {
-        ZwClose(processHandle);
     }
 
     LogMemoryOpStatus(L"ReadWithProtect", status, NULL, silentMode);
