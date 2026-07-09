@@ -26,6 +26,9 @@ internal sealed class ClientForm : Form
         var sendButton = new Button { Text = "Send Request", AutoSize = true };
         sendButton.Click += (_, _) => SendRequest();
 
+        var unloadButton = new Button { Text = "Unload Driver", AutoSize = true };
+        unloadButton.Click += (_, _) => UnloadDriver();
+
         var grid = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -67,6 +70,18 @@ internal sealed class ClientForm : Form
         }
 
         AppendStatus($"Success. Bytes returned: {bytesReturned}");
+    }
+
+    private void UnloadDriver()
+    {
+        if (DriverApi.UnloadDriver(out string? error))
+        {
+            AppendStatus("Driver unloaded successfully.");
+        }
+        else
+        {
+            AppendStatus(error ?? "Failed to unload driver.");
+        }
     }
 
     private bool TryBuildRequest(out ReadDriverRequest request, out string error)

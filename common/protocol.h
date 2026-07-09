@@ -18,7 +18,8 @@ typedef enum _READDRIVER_OPERATION {
     ReadDriverOperationWriteInteger = 5,
     ReadDriverOperationBatchRead = 6,
     ReadDriverOperationReadWithProtect = 7,
-    ReadDriverOperationReadHex = 8
+    ReadDriverOperationReadHex = 8,
+    ReadDriverOperationUnload = 9
 } READDRIVER_OPERATION;
 
 /* Silent mode: suppress driver logging (bit 0 of Reserved1). */

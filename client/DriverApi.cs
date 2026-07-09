@@ -12,7 +12,8 @@ internal enum ReadDriverOperation : ulong
     WriteInteger = 5,
     BatchRead = 6,
     ReadWithProtect = 7,
-    ReadHex = 8
+    ReadHex = 8,
+    Unload = 9
 }
 
 internal static class ReadDriverFlags
@@ -203,6 +204,24 @@ internal static class DriverApi
             return resp.GetResponseString((int)bytesReturned);
         }
         return string.Empty;
+    }
+
+    internal static bool UnloadDriver(out string? error)
+    {
+        error = null;
+
+        var request = new ReadDriverRequest
+        {
+            Operation = (ulong)ReadDriverOperation.Unload,
+            Flags = ReadDriverFlags.Silent
+        };
+
+        if (!SendDriverRequest(request, out _, out _, out error))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]

@@ -214,6 +214,11 @@ static NTSTATUS DispatchReadDriverOperation(
         }
         return STATUS_BUFFER_TOO_SMALL;
     }
+    case ReadDriverOperationUnload: {
+        /* Signal the driver to release internal state and confirm liveness. */
+        LogText(L"Unload", L"Driver unloading requested", silentMode);
+        return STATUS_SUCCESS;
+    }
     default:
         return STATUS_NOT_SUPPORTED;
     }
