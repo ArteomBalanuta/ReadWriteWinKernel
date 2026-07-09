@@ -47,31 +47,35 @@ static NTSTATUS DispatchReadDriverOperation(
         *bytesReturned = 0;
     }
 
+    /* Capture request fields before zeroing the shared SystemBuffer. */
+    READDRIVER_REQUEST local;
+    RtlCopyMemory(&local, request, sizeof(READDRIVER_REQUEST));
+
     if (responseBuffer != NULL) {
         RtlZeroMemory(responseBuffer, sizeof(READDRIVER_REQUEST));
     }
 
-    switch ((READDRIVER_OPERATION)request->Operation) {
+    switch ((READDRIVER_OPERATION)local.Operation) {
     case ReadDriverOperationCopy:
         return CopyProcessMemory(
-            (HANDLE)request->SourceProcessId,
-            (PVOID)(ULONG_PTR)request->SourceAddress,
-            (HANDLE)request->TargetProcessId,
-            (PVOID)(ULONG_PTR)request->TargetAddress,
-            (SIZE_T)request->Size,
+            (HANDLE)local.SourceProcessId,
+            (PVOID)(ULONG_PTR)local.SourceAddress,
+            (HANDLE)local.TargetProcessId,
+            (PVOID)(ULONG_PTR)local.TargetAddress,
+            (SIZE_T)local.Size,
             silentMode);
     case ReadDriverOperationRead: {
         /* Read bytes from target process, return in response buffer.
            SourceProcessId = PID, SourceAddress = address, Size = byte count. */
-        if (responseBuffer != NULL && request->Size > 0 && request->Size <= sizeof(READDRIVER_REQUEST)) {
+        if (responseBuffer != NULL && local.Size > 0 && local.Size <= sizeof(READDRIVER_REQUEST)) {
             NTSTATUS status = ReadProcessMemory(
-                (HANDLE)request->SourceProcessId,
-                (PVOID)(ULONG_PTR)request->SourceAddress,
-                (SIZE_T)request->Size,
+                (HANDLE)local.SourceProcessId,
+                (PVOID)(ULONG_PTR)local.SourceAddress,
+                (SIZE_T)local.Size,
                 responseBuffer,
                 silentMode);
             if (NT_SUCCESS(status)) {
-                *bytesReturned = request->Size;
+                *bytesReturned = local.Size;
             }
             return status;
         }
@@ -84,18 +88,18 @@ static NTSTATUS DispatchReadDriverOperation(
            Size = pattern length (1-8). */
         ULONGLONG matchedAddress = 0;
         UCHAR pattern[8];
-        ULONG patternSize = (ULONG)request->Size;
+        ULONG patternSize = (ULONG)local.Size;
 
         if (patternSize == 0 || patternSize > sizeof(pattern)) {
             return STATUS_INVALID_PARAMETER;
         }
 
-        RtlCopyMemory(pattern, &request->TargetAddress, patternSize);
+        RtlCopyMemory(pattern, &local.TargetAddress, patternSize);
 
         NTSTATUS status = ScanProcessMemory(
-            (HANDLE)request->SourceProcessId,
-            (PVOID)(ULONG_PTR)request->SourceAddress,
-            (SIZE_T)request->TargetProcessId,
+            (HANDLE)local.SourceProcessId,
+            (PVOID)(ULONG_PTR)local.SourceAddress,
+            (SIZE_T)local.TargetProcessId,
             pattern,
             patternSize,
             &matchedAddress,
@@ -109,22 +113,22 @@ static NTSTATUS DispatchReadDriverOperation(
     }
     case ReadDriverOperationProtect:
         return ProtectProcessMemory(
-            (HANDLE)request->SourceProcessId,
-            (PVOID)(ULONG_PTR)request->SourceAddress,
-            (SIZE_T)request->TargetProcessId,
+            (HANDLE)local.SourceProcessId,
+            (PVOID)(ULONG_PTR)local.SourceAddress,
+            (SIZE_T)local.TargetProcessId,
             silentMode);
     case ReadDriverOperationPatch:
         return PatchProcessMemory(
-            (HANDLE)request->SourceProcessId,
-            (PVOID)(ULONG_PTR)request->SourceAddress,
+            (HANDLE)local.SourceProcessId,
+            (PVOID)(ULONG_PTR)local.SourceAddress,
             silentMode);
     case ReadDriverOperationWriteInteger:
         /* Operation 5 treats SourceAddress as the integer value and TargetAddress as the destination. */
         return WriteIntegerProcessMemory(
-            (HANDLE)request->SourceProcessId,
-            (PVOID)(ULONG_PTR)request->TargetAddress,
-            request->SourceAddress,
-            (SIZE_T)request->Size,
+            (HANDLE)local.SourceProcessId,
+            (PVOID)(ULONG_PTR)local.TargetAddress,
+            local.SourceAddress,
+            (SIZE_T)local.Size,
             silentMode);
     case ReadDriverOperationBatchRead: {
         /* Batch read multiple addresses in one syscall.
@@ -135,28 +139,28 @@ static NTSTATUS DispatchReadDriverOperation(
         ULONGLONG addresses[5];
         ULONG count = 1;
 
-        addresses[0] = request->SourceAddress;
-        if (request->TargetProcessId != 0) {
-            addresses[count++] = request->TargetProcessId;
+        addresses[0] = local.SourceAddress;
+        if (local.TargetProcessId != 0) {
+            addresses[count++] = local.TargetProcessId;
         }
-        if (request->TargetAddress != 0) {
-            addresses[count++] = request->TargetAddress;
+        if (local.TargetAddress != 0) {
+            addresses[count++] = local.TargetAddress;
         }
-        if (request->Reserved2 != 0) {
-            addresses[count++] = request->Reserved2;
+        if (local.Reserved2 != 0) {
+            addresses[count++] = local.Reserved2;
         }
-        if (request->Reserved3 != 0) {
-            addresses[count++] = request->Reserved3;
+        if (local.Reserved3 != 0) {
+            addresses[count++] = local.Reserved3;
         }
 
-        SIZE_T readSize = request->Size;
+        SIZE_T readSize = local.Size;
         if (readSize == 0 || readSize > sizeof(ULONGLONG)) {
             return STATUS_INVALID_PARAMETER;
         }
 
         if (responseBuffer != NULL) {
             NTSTATUS status = BatchReadProcessMemory(
-                (HANDLE)request->SourceProcessId,
+                (HANDLE)local.SourceProcessId,
                 addresses,
                 count,
                 readSize,
@@ -172,17 +176,17 @@ static NTSTATUS DispatchReadDriverOperation(
     case ReadDriverOperationReadWithProtect: {
         /* Protect → read → restore in one syscall.
            SourceProcessId = PID, SourceAddress = address, Size = byte count. */
-        if (responseBuffer != NULL && request->Size > 0 && request->Size <= sizeof(READDRIVER_REQUEST)) {
+        if (responseBuffer != NULL && local.Size > 0 && local.Size <= sizeof(READDRIVER_REQUEST)) {
             ULONG originalProtection = 0;
             NTSTATUS status = ReadWithProtect(
-                (HANDLE)request->SourceProcessId,
-                (PVOID)(ULONG_PTR)request->SourceAddress,
-                (SIZE_T)request->Size,
+                (HANDLE)local.SourceProcessId,
+                (PVOID)(ULONG_PTR)local.SourceAddress,
+                (SIZE_T)local.Size,
                 responseBuffer,
                 &originalProtection,
                 silentMode);
             if (NT_SUCCESS(status)) {
-                *bytesReturned = request->Size;
+                *bytesReturned = local.Size;
             }
             return status;
         }
@@ -191,20 +195,20 @@ static NTSTATUS DispatchReadDriverOperation(
     case ReadDriverOperationReadHex: {
         /* Read bytes and return as hex string.
            SourceProcessId = PID, SourceAddress = address, Size = byte count. */
-        if (responseBuffer != NULL && request->Size > 0 && request->Size <= 256) {
-            SIZE_T hexBufferSize = request->Size * 3 + 1;
+        if (responseBuffer != NULL && local.Size > 0 && local.Size <= 256) {
+            SIZE_T hexBufferSize = local.Size * 3 + 1;
             if (hexBufferSize > sizeof(READDRIVER_REQUEST)) {
                 return STATUS_BUFFER_TOO_SMALL;
             }
             NTSTATUS status = ReadProcessMemoryAsHex(
-                (HANDLE)request->SourceProcessId,
-                (PVOID)(ULONG_PTR)request->SourceAddress,
-                (SIZE_T)request->Size,
+                (HANDLE)local.SourceProcessId,
+                (PVOID)(ULONG_PTR)local.SourceAddress,
+                (SIZE_T)local.Size,
                 (PCHAR)responseBuffer,
                 hexBufferSize,
                 silentMode);
             if (NT_SUCCESS(status)) {
-                *bytesReturned = (ULONG)(request->Size * 3 + 1);
+                *bytesReturned = (ULONG)(local.Size * 3 + 1);
             }
             return status;
         }
