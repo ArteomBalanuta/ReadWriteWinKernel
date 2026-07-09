@@ -87,6 +87,12 @@ internal static class DriverApi
     private const uint FileShareWrite = 0x00000002;
     private const uint OpenExisting = 3;
 
+    // Common provider service names used by KDU to map drivers
+    private static readonly string[] ProviderServices = {
+        "AsrDrv107", "PROCEXP152", "OHPicture", "i86", "Monitores", "Mini13FP", "OHSensor",
+        "Asus", "AsusNt10", "Mini13", "Monitores13", "OHSensor13", "OHPicture13"
+    };
+
     internal static bool TryParseUlong(string input, out ulong value)
     {
         if (input.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
@@ -210,6 +216,7 @@ internal static class DriverApi
     {
         error = null;
 
+        // First, ping the driver to confirm it's alive
         var request = new ReadDriverRequest
         {
             Operation = (ulong)ReadDriverOperation.Unload,
@@ -221,8 +228,45 @@ internal static class DriverApi
             return false;
         }
 
+        // Unload all common KDU provider services that may have mapped the driver
+        foreach (var service in ProviderServices)
+        {
+            UnloadService(service);
+        }
+
         return true;
     }
+
+    private static void UnloadService(string serviceName)
+    {
+        var regPath = $@"SYSTEM\CurrentControl\Services\{serviceName}";
+
+        // Try to unload each provider
+        var ntPath = new System.Text.StringBuilder($@"C:\Users\arteo\Desktop\KDU-1.4.7\Source\Hamakaze\tanikaze.h", 256);
+
+        // Build NT-style service path
+        var driverName = new System.Text.StringBuilder($@"Services\{serviceName}", 256);
+
+        uint status = NtUnloadDriver(driverName);
+        if (status == 0)
+        {
+            // Clean up registry key
+            DeleteRegistryKey($@"HKLM\SYSTEM\CurrentControl\Services\{serviceName}");
+        }
+    }
+
+    private static void DeleteRegistryKey(string path)
+    {
+        var parts = path.Split('\\');
+        if (parts.Length >= 2)
+        {
+            using var root = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(parts[0]);
+            root?.DeleteSubKeyTree(string.Join("\\", parts.Skip(1)), false);
+        }
+    }
+
+    [DllImport("ntdll.dll", SetLastError = true)]
+    private static extern uint NtUnloadDriver(System.Text.StringBuilder DriverServiceName);
 
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern SafeFileHandle CreateFileW(
