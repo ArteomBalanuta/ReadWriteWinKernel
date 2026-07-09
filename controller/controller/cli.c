@@ -1,8 +1,10 @@
 ﻿#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "controller.h"
 
+#define CONTROLLER_UNLOAD_ARGC 2
 #define CONTROLLER_SHORTCUT_ARGC 6
 #define CONTROLLER_FULL_ARGC 7
 #define CONTROLLER_PARSE_ERROR "Failed to parse one or more numeric arguments.\n"
@@ -19,6 +21,7 @@ static int ParseUnsignedLongLong(const char* text, ULONGLONG* value)
 void PrintUsage(void)
 {
     printf("Usage:\n");
+    printf("  controller.exe unload\n");
     printf("  controller.exe <srcPid> <srcAddress> <targetPid> <targetAddress> <size> <operation>\n");
     printf("  controller.exe <processPid> <integerValue> <targetAddress> <size> 5\n");
     printf("\n");
@@ -96,6 +99,12 @@ BOOL ParseRequestArguments(int argc, char* argv[], READDRIVER_REQUEST* request)
 
     if (request == NULL) {
         return FALSE;
+    }
+
+    if (argc == CONTROLLER_UNLOAD_ARGC && _stricmp(argv[1], "unload") == 0) {
+        ZeroMemory(request, sizeof(*request));
+        request->Operation = ReadDriverOperationUnload;
+        return TRUE;
     }
 
     if (argc != CONTROLLER_FULL_ARGC && argc != CONTROLLER_SHORTCUT_ARGC) {

@@ -215,9 +215,8 @@ static NTSTATUS DispatchReadDriverOperation(
         return STATUS_BUFFER_TOO_SMALL;
     }
     case ReadDriverOperationUnload: {
-        /* Signal the driver to release internal state and confirm liveness. */
-        LogText(L"Unload", L"Driver unloading requested", silentMode);
-        return STATUS_SUCCESS;
+        /* This build cannot self-unload; remove the user-visible link instead. */
+        return RemoveUserVisibleDeviceLink(silentMode);
     }
     default:
         return STATUS_NOT_SUPPORTED;

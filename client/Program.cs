@@ -47,6 +47,12 @@ internal static class Program
     {
         request = default;
 
+        if (args.Length == 1 && string.Equals(args[0], "unload", StringComparison.OrdinalIgnoreCase))
+        {
+            request.Operation = (ulong)ReadDriverOperation.Unload;
+            return true;
+        }
+
         if (args.Length == 5)
         {
             bool parsed =
@@ -82,6 +88,7 @@ internal static class Program
     private static void PrintUsage()
     {
         Console.WriteLine("Usage:");
+        Console.WriteLine("  client.exe unload");
         Console.WriteLine("  client.exe <srcPid> <srcAddress> <targetPid> <targetAddress> <size> <operation>");
         Console.WriteLine("  client.exe <processPid> <integerValue> <targetAddress> <size> 5");
         Console.WriteLine();

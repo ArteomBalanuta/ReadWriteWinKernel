@@ -26,8 +26,18 @@ internal sealed class ClientForm : Form
         var sendButton = new Button { Text = "Send Request", AutoSize = true };
         sendButton.Click += (_, _) => SendRequest();
 
-        var unloadButton = new Button { Text = "Unload Driver", AutoSize = true };
+        var unloadButton = new Button { Text = "Remove Driver Link", AutoSize = true };
         unloadButton.Click += (_, _) => UnloadDriver();
+
+        var actionPanel = new FlowLayoutPanel
+        {
+            AutoSize = true,
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false
+        };
+        actionPanel.Controls.Add(sendButton);
+        actionPanel.Controls.Add(unloadButton);
 
         var grid = new TableLayoutPanel
         {
@@ -46,7 +56,7 @@ internal sealed class ClientForm : Form
         AddRow(grid, 3, "Target PID / Region Size", _targetPid);
         AddRow(grid, 4, "Target Address", _targetAddress);
         AddRow(grid, 5, "Size", _size);
-        AddRow(grid, 6, "Action", sendButton);
+        AddRow(grid, 6, "Action", actionPanel);
         AddRow(grid, 7, "Status", _status);
 
         _status.Dock = DockStyle.Fill;
@@ -76,11 +86,11 @@ internal sealed class ClientForm : Form
     {
         if (DriverApi.UnloadDriver(out string? error))
         {
-            AppendStatus("Driver unloaded successfully.");
+            AppendStatus("Driver link removed successfully.");
         }
         else
         {
-            AppendStatus(error ?? "Failed to unload driver.");
+            AppendStatus(error ?? "Failed to remove driver link.");
         }
     }
 

@@ -19,6 +19,10 @@ DRIVER_INITIALIZE DriverEntry;
 DRIVER_UNLOAD DriverUnload;
 #pragma alloc_text(INIT, DriverEntry)
 
+NTSTATUS RemoveUserVisibleDeviceLink(
+    _In_ BOOLEAN silentMode
+);
+
 NTSTATUS AppendLogLine(
     _In_ PCWSTR path,
     _In_ PCWSTR operation,

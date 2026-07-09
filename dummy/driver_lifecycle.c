@@ -54,7 +54,7 @@ static NTSTATUS CreateDeviceAndLink(
     IoDeleteSymbolicLink(&symbolicLink);
 
     // Keep the user-visible path in the global MS-DOS namespace for clients.
-    RtlInitUnicodeString(&symbolicLink, L"\\DosDevices\\Global\\Ki000");
+    RtlInitUnicodeString(&symbolicLink, READDRIVER_GLOBAL_DOS_DEVICE_NAME);
     status = IoCreateSymbolicLink(&symbolicLink, &deviceName);
     if (!NT_SUCCESS(status)) {
         IoDeleteDevice(*deviceObject);
@@ -66,11 +66,26 @@ static NTSTATUS CreateDeviceAndLink(
     return STATUS_SUCCESS;
 }
 
+NTSTATUS RemoveUserVisibleDeviceLink(_In_ BOOLEAN silentMode)
+{
+    UNICODE_STRING symbolicLink;
+    NTSTATUS status;
+
+    RtlInitUnicodeString(&symbolicLink, READDRIVER_GLOBAL_DOS_DEVICE_NAME);
+    status = IoDeleteSymbolicLink(&symbolicLink);
+    if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
+        status = STATUS_SUCCESS;
+    }
+
+    LogStatus(L"IoDeleteSymbolicLink (Global)", status, NULL, silentMode);
+    return status;
+}
+
 VOID DriverUnload(_In_ struct _DRIVER_OBJECT* DriverObject)
 {
     UNICODE_STRING symbolicLink;
 
-    RtlInitUnicodeString(&symbolicLink, L"\\DosDevices\\Global\\Ki000");
+    RtlInitUnicodeString(&symbolicLink, READDRIVER_GLOBAL_DOS_DEVICE_NAME);
     IoDeleteSymbolicLink(&symbolicLink);
 
     if (DriverObject->DeviceObject != NULL) {
