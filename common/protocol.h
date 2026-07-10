@@ -4,8 +4,10 @@
 #define READDRIVER_IOCTL_CODE 0x0701
 #define READDRIVER_IOCTL_REQUEST CTL_CODE(READDRIVER_DEVICE_TYPE, READDRIVER_IOCTL_CODE, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
-#define READDRIVER_DRIVER_NAME L"\\Driver\\Ki000"
-#define READDRIVER_DEVICE_NAME L"\\Device\\Ki000"
+/* Internal kernel object names — randomized at load time as \Driver\gammaA#### / \Device\gammaA####.
+   These macros are build-time defaults only; the driver generates the actual names in DriverEntry. */
+#define READDRIVER_DRIVER_NAME L"\\Driver\\gammaA3891"
+#define READDRIVER_DEVICE_NAME L"\\Device\\gammaA3891"
 #define READDRIVER_DOS_DEVICE_NAME L"\\DosDevices\\Ki000"
 #define READDRIVER_GLOBAL_DOS_DEVICE_NAME L"\\DosDevices\\Global\\Ki000"
 #define READDRIVER_USER_DEVICE_NAME L"\\\\.\\Global\\Ki000"

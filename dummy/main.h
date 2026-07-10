@@ -9,6 +9,12 @@ IoCreateDriver(
     _In_ PDRIVER_INITIALIZE InitializationFunction
 	);
 
+/* Runtime device name buffers — populated once per load with a random suffix. */
+extern WCHAR g_driverNameBuffer[64];
+extern WCHAR g_deviceNameBuffer[64];
+
+VOID GenerateRandomDeviceNames(VOID);
+
 _Dispatch_type_(IRP_MJ_DEVICE_CONTROL) DRIVER_DISPATCH DevioctlDispatch;
 _Dispatch_type_(IRP_MJ_CREATE) DRIVER_DISPATCH CreateDispatch;
 _Dispatch_type_(IRP_MJ_CLOSE) DRIVER_DISPATCH CloseDispatch;
@@ -22,6 +28,8 @@ DRIVER_UNLOAD DriverUnload;
 NTSTATUS RemoveUserVisibleDeviceLink(
     _In_ BOOLEAN silentMode
 );
+
+BOOLEAN IsDriverDecommissioned(VOID);
 
 NTSTATUS AppendLogLine(
     _In_ PCWSTR path,

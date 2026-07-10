@@ -36,7 +36,7 @@ This is the KMDF kernel-mode driver project. Its current source files are split 
 - [main.c](/G:/workspace/projects/readDriver/dummy/main.c)
   Driver entry point.
 - [driver_lifecycle.c](/G:/workspace/projects/readDriver/dummy/driver_lifecycle.c)
-  Device creation, symbolic-link creation, dispatch registration, unload, and current device-hiding behavior.
+  Device creation, global symbolic-link creation, dispatch registration, unload, and decommission behavior.
 - [dispatch.c](/G:/workspace/projects/readDriver/dummy/dispatch.c)
   IOCTL validation, request routing, IRP completion.
 - [memory_ops.c](/G:/workspace/projects/readDriver/dummy/memory_ops.c)
@@ -46,11 +46,12 @@ This is the KMDF kernel-mode driver project. Its current source files are split 
 - [main.h](/G:/workspace/projects/readDriver/dummy/main.h)
   Shared declarations inside the driver.
 
-Important current caveat:
+Current lifecycle notes:
 
-- the lifecycle code creates `\\DosDevices\\Ki000`, then immediately deletes that symbolic link and clears `DriverObject`/`NextDevice` references on the created device object
-- it also changes the device type to `FILE_DEVICE_NULL` and zeroes the `DRIVER_OBJECT` at the end of initialization
-- this is not standard persistent device exposure behavior, even though the shared protocol still names `\\\\.\\Ki000` as the user-mode path
+- the internal driver object is `\\Driver\\gammaA####` (randomized each load)
+- the internal device object is `\\Device\\gammaA####` (randomized each load)
+- the user-visible path remains `\\\\.\\Global\\Ki000`
+- the `unload` operation removes the global DOS symbolic link and decommissions request handling; it does not force-delete the kernel driver object
 
 ### Native C client
 
@@ -59,7 +60,7 @@ Folder: [controller/controller](/G:/workspace/projects/readDriver/controller/con
 This is a small command-line tool that:
 
 - parses request arguments
-- opens `\\\\.\\Ki000`
+- opens `\\\\.\\Global\\Ki000`
 - submits one buffered IOCTL request
 - prints request and completion information
 - prints operation-specific response data for read-style operations
@@ -104,15 +105,16 @@ This project currently provides focused .NET tests around the managed request/re
 
 The current device names are:
 
-- kernel device: `\\Device\\Ki000`
-- DOS device: `\\DosDevices\\Ki000`
-- user-visible path: `\\\\.\\Ki000`
+- internal driver object: `\\Driver\\gammaA####` (randomized each load)
+- kernel device: `\\Device\\gammaA####` (randomized each load)
+- global DOS symbolic link: `\\DosDevices\\Global\\Ki000`
+- user-visible path: `\\\\.\\Global\\Ki000`
 
 Current lifecycle caveat:
 
-- those names are still the shared protocol constants
-- the driver lifecycle code currently deletes the DOS symbolic link immediately after creating it
-- because of that, the protocol-defined user path is no longer a good assumption for a standard always-visible runtime device
+- the public path is created as a symbolic link to the internal device object
+- removing the public link prevents new opens through `\\\\.\\Global\\Ki000`
+- existing handles are rejected after decommission, but the driver object itself remains owned by the I/O manager until a real unload path or reboot
 
 The request transport uses:
 

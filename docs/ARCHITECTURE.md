@@ -6,18 +6,19 @@ This document explains how the codebase is structured today and where each respo
 
 1. The controller parses command-line arguments.
 2. The controller creates a `READDRIVER_REQUEST`.
-3. The controller attempts to open the protocol-defined path `\\\\.\\Ki000`.
+3. The controller attempts to open the protocol-defined path `\\\\.\\Global\\Ki000`.
 4. The controller sends `READDRIVER_IOCTL_REQUEST` through `DeviceIoControl`.
 5. The driver receives the IRP in its device-control dispatch path.
 6. The driver validates the request and routes it by `Operation`.
 7. The selected driver helper performs the requested work.
 8. The driver completes the IRP and returns a status to user mode.
 
-Current lifecycle caveat:
+Current lifecycle note:
 
-- the shared protocol still names `\\\\.\\Ki000`
-- the driver lifecycle code currently creates and then deletes the DOS symbolic link, changes the device type to `FILE_DEVICE_NULL`, clears `DriverObject` and `NextDevice` on the device object, and zeroes the `DRIVER_OBJECT` before returning
-- as a result, step 3 reflects what the clients try to do, not a guarantee that the current driver build leaves that path exposed in the usual way
+- the internal driver object is `\\Driver\\gammaA####` (randomized each load)
+- the internal device object is `\\Device\\gammaA####` (randomized each load)
+- the public client path remains `\\\\.\\Global\\Ki000`
+- the `unload` operation removes the public symbolic link and decommissions request handling; it is not a forced driver-object unload
 
 ## Module Responsibilities
 
@@ -55,9 +56,9 @@ Owns:
 - `DriverInitialize`
 - `DriverUnload`
 - device creation
-- symbolic-link creation
+- global symbolic-link creation
 - dispatch table registration
-- current device-hiding behavior after creation
+- decommission behavior after link removal
 
 Why it exists:
 
@@ -66,11 +67,10 @@ Why it exists:
 
 Current behavior note:
 
-- after creating the `\\DosDevices\\Ki000` symbolic link, the code deletes it again
-- it changes the created device object type to `FILE_DEVICE_NULL`
-- it also clears `DriverObject` and `NextDevice` on the created device object
-- it zeroes the `DRIVER_OBJECT` after dispatch handlers are registered
-- that is materially different from a normal persistent `\\\\.\\name` driver exposure pattern and should be documented whenever runtime access assumptions are discussed
+- the driver creates `\\Device\\gammaA####` with a random 4-digit suffix (e.g., `\\Device\\gammaA8973`)
+- the driver creates `\\DosDevices\\Global\\Ki000` as the stable user-mode path
+- the link-removal operation deletes the global DOS symbolic link, stops freeze timer activity, and makes existing handles fail future IOCTLs
+- randomized internal names avoid collisions on repeated mapping without reboot
 
 ### `dummy/dispatch.c`
 
@@ -337,12 +337,12 @@ When making changes, prefer these rules:
 - keep parsing in `cli.c` and device submission in `transport.c`
 - keep the C# client transport logic centralized in `client/DriverApi.cs`
 - remember that the current WinForms GUI does not expose every protocol operation the CLI/transport layers support
-- remember that the clients still target `\\\\.\\Ki000`, while the current driver lifecycle code deletes that symbolic link, mutates the device object, and zeroes the `DRIVER_OBJECT` after initialization
+- remember that the clients target `\\\\.\\Global\\Ki000`, while the internal kernel names are `\\Driver\\gammaA####` and `\\Device\\gammaA####` (randomized each load)
 
 ## Suggested Next Refactors
 
 1. Rename `dummy` to a driver-specific project name.
 2. Replace field overloading in `READDRIVER_REQUEST` with operation-specific payloads.
 3. Move hard-coded log paths behind a single configuration layer.
-4. Revisit the current symbolic-link deletion, device-object mutation, and `DRIVER_OBJECT` zeroing behavior if standard user-mode access through `\\\\.\\Ki000` is still a requirement.
+4. Rename the `unload` operation to `decommission` in the protocol and clients so command wording matches behavior.
 5. Bring the WinForms GUI operation list into parity with the current protocol if interactive support for read/scan modes is desired.

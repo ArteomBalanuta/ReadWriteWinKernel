@@ -10,7 +10,7 @@ The controller:
 
 - parses six numeric command-line arguments
 - fills a `READDRIVER_REQUEST`
-- attempts to open the protocol-defined driver device path at `\\\\.\\Ki000`
+- attempts to open the protocol-defined driver device path at `\\\\.\\Global\\Ki000`
 - sends `READDRIVER_IOCTL_REQUEST` with `DeviceIoControl`
 - prints the request fields and the returned byte count
 - prints response data for read-style operations
@@ -284,14 +284,14 @@ On failure, it prints one of:
 Before using the controller:
 
 - the driver must already be loaded
-- the driver must expose the DOS device name `\\\\.\\Ki000`
+- the driver must expose the DOS device name `\\\\.\\Global\\Ki000`
 - the controller and driver must use the same `READDRIVER_REQUEST` layout from `common/protocol.h`
 
 Current runtime caveat:
 
-- the shared protocol still defines `\\\\.\\Ki000`
-- the current driver lifecycle code deletes the DOS symbolic link right after creating it, changes the device type to `FILE_DEVICE_NULL`, clears parts of the device chain, and zeroes the `DRIVER_OBJECT`
-- so this controller assumes a driver/runtime setup where that path is still reachable, but the current driver source no longer represents a standard always-visible device exposure pattern
+- the shared protocol defines `\\\\.\\Global\\Ki000`
+- the current driver can intentionally remove the global symbolic link through the `unload` command, which prevents new opens until a driver creates the link again
+- so this controller assumes a driver/runtime setup where that path is currently reachable
 
 ## Notes
 

@@ -28,7 +28,7 @@ static READDRIVER_FREEZE_SLOT g_freezeSlots[READDRIVER_MAX_FREEZE_SLOTS];
 static KSPIN_LOCK g_freezeLock;
 static KTIMER g_freezeTimer;
 static KDPC g_freezeDpc;
-static BOOLEAN g_freezeInitialized;
+static volatile LONG g_freezeEnabled;
 
 static VOID FreezeTimerDpc(
     _In_ PRKDPC Dpc,
@@ -569,8 +569,13 @@ static VOID FreezeTimerDpc(
 )
 {
     UNREFERENCED_PARAMETER(Dpc);
+    UNREFERENCED_PARAMETER(DeferredContext);
     UNREFERENCED_PARAMETER(SystemArgument1);
     UNREFERENCED_PARAMETER(SystemArgument2);
+
+    if (InterlockedCompareExchange(&g_freezeEnabled, 0, 0) == 0) {
+        return;
+    }
 
     /* Rewrite all active freeze slots. */
     for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
@@ -586,9 +591,11 @@ static VOID FreezeTimerDpc(
     }
 
     /* Re-arm the timer. */
-    LARGE_INTEGER interval;
-    interval.QuadPart = -(LONG)(READDRIVER_FREEZE_INTERVAL_MS * 10000);
-    KeSetTimer(&g_freezeTimer, interval, Dpc);
+    if (InterlockedCompareExchange(&g_freezeEnabled, 0, 0) != 0) {
+        LARGE_INTEGER interval;
+        interval.QuadPart = -(LONG)(READDRIVER_FREEZE_INTERVAL_MS * 10000);
+        KeSetTimer(&g_freezeTimer, interval, Dpc);
+    }
 }
 
 NTSTATUS InitializeFreezeTimer(VOID)
@@ -597,12 +604,12 @@ NTSTATUS InitializeFreezeTimer(VOID)
     KeInitializeSpinLock(&g_freezeLock);
     KeInitializeTimer(&g_freezeTimer);
     KeInitializeDpc(&g_freezeDpc, FreezeTimerDpc, NULL);
+    InterlockedExchange(&g_freezeEnabled, 1);
 
     LARGE_INTEGER interval;
     interval.QuadPart = -(LONG)(READDRIVER_FREEZE_INTERVAL_MS * 10000);
     KeSetTimer(&g_freezeTimer, interval, &g_freezeDpc);
 
-    g_freezeInitialized = TRUE;
     return STATUS_SUCCESS;
 }
 
@@ -610,10 +617,15 @@ VOID StopFreezeTimer(VOID)
 {
     KIRQL oldIrql;
 
+    if (InterlockedExchange(&g_freezeEnabled, 0) == 0) {
+        return;
+    }
+
+    KeCancelTimer(&g_freezeTimer);
+    KeFlushQueuedDpcs();
+
     KeAcquireSpinLock(&g_freezeLock, &oldIrql);
     RtlZeroMemory(g_freezeSlots, sizeof(g_freezeSlots));
-    g_freezeInitialized = FALSE;
-    KeSetTimer(&g_freezeTimer, (LARGE_INTEGER){0}, &g_freezeDpc);
     KeReleaseSpinLock(&g_freezeLock, oldIrql);
 }
 
@@ -628,6 +640,10 @@ NTSTATUS AddFreezeSlot(
 
     if (!IsSupportedIntegerSize(size)) {
         return STATUS_INVALID_PARAMETER;
+    }
+
+    if (InterlockedCompareExchange(&g_freezeEnabled, 0, 0) == 0) {
+        return STATUS_DEVICE_NOT_READY;
     }
 
     KeAcquireSpinLock(&g_freezeLock, &oldIrql);

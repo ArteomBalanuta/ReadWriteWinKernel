@@ -144,8 +144,9 @@ The repo root also contains binary/reference artifacts that are not part of the 
 
 ## Known Behavior Notes
 
-- The driver device path is `\\\\.\\Global\\Ki000`.
-- The driver hides from `\\DosDevices` by creating the link under `\\Global` instead, changes the device type to `FILE_DEVICE_NULL`, clears the device chain, and zeroes the `DRIVER_OBJECT`. Both clients target `\\\\.\\Global\\Ki000`.
+- The client-visible driver path is `\\\\.\\Global\\Ki000`.
+- The internal kernel names are `\\Driver\\gammaA####` and `\\Device\\gammaA####` (randomized 4-digit suffix each load).
+- The `unload` command / GUI button removes the global DOS symbolic link, stops background freeze work, and causes existing handles to receive delete-pending style failures. It is not a true forced kernel driver-object unload.
 - The driver writes diagnostic logs to `C:\dummy_logs.txt` and `C:\dummy_conversion_logs.txt`.
 - The C# client launches the WinForms GUI when started without arguments.
 - The CLI/transport layers now support operations `0` through `8`, including read, scan, batch-read, read-with-protect, and read-as-hex paths.

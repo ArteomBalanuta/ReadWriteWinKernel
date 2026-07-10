@@ -38,14 +38,13 @@ Today the client surfaces are intentionally uneven:
 - the C# CLI can submit the expanded operation set and decode response payloads
 - the WinForms GUI still exposes the older core operations (`Copy`, `Protect`, `Patch`, `WriteInteger`)
 
-The driver lifecycle is also intentionally non-standard right now:
+The driver lifecycle currently uses separate internal and public names:
 
-- it creates the `\\DosDevices\\Ki000` symbolic link and then immediately deletes it
-- it changes the created device object type to `FILE_DEVICE_NULL`
-- it clears `DriverObject` and `NextDevice` references on the created device object
-- it zeroes the `DRIVER_OBJECT` at the end of initialization
+- internal driver object: `\\Driver\\gammaA####` (randomized each load, e.g., `\\Driver\\gammaA8973`)
+- internal device object: `\\Device\\gammaA####` (randomized each load)
+- public client path: `\\\\.\\Global\\Ki000`
 
-That means the protocol still names `\\\\.\\Ki000`, but the current driver source does not behave like a normal persistently exposed user-mode device path.
+The public path is a global DOS symbolic link. The `unload` command and GUI button remove that public link and decommission the current driver surface; they do not force-delete the kernel driver object.
 
 ## Start Here
 

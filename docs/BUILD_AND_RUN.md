@@ -224,17 +224,16 @@ Current GUI note:
 
 The shared protocol constants define:
 
-- `\\Device\\Ki000`
-- `\\DosDevices\\Ki000`
-- `\\\\.\\Ki000`
+- `\\Driver\\gammaA####` (randomized each load, e.g., `\\Driver\\gammaA8973`)
+- `\\Device\\gammaA####` (randomized each load)
+- `\\DosDevices\\Global\\Ki000`
+- `\\\\.\\Global\\Ki000`
 
 Current lifecycle caveat:
 
-- `driver_lifecycle.c` creates the DOS symbolic link and then immediately deletes it
-- it changes the device type to `FILE_DEVICE_NULL`
-- it also clears `DriverObject` and `NextDevice` on the created device object
-- it zeroes the `DRIVER_OBJECT` before returning from initialization
-- the clients still attempt to open `\\\\.\\Ki000`, but the current driver source no longer behaves like a standard persistently exposed user-mode device path
+- `driver_lifecycle.c` creates a global DOS symbolic link for the stable client path
+- the `unload` command and GUI button remove that public link, stop background freeze work, and mark the driver surface as decommissioned
+- this prevents new opens and causes later IOCTLs from existing handles to fail, but it is not a forced unload of the kernel driver object
 
 The driver writes diagnostic files to:
 
@@ -268,9 +267,9 @@ That means this repo is strongest as a buildable local development workspace rat
 
 Use `publish-client.ps1` or copy the entire build output directory. A framework-dependent .NET build needs its companion files unless it is published as self-contained.
 
-### `CreateFile` fails against `\\\\.\\Ki000`
+### `CreateFile` fails against `\\\\.\\Global\\Ki000`
 
-The shared protocol and both clients still target `\\\\.\\Ki000`, but the current `dummy/driver_lifecycle.c` implementation deletes the DOS symbolic link right after creating it, changes the device type to `FILE_DEVICE_NULL`, clears parts of the device chain, and zeroes the `DRIVER_OBJECT`. If you need standard user-mode access through that path, review that lifecycle behavior first.
+The shared protocol and both clients target `\\\\.\\Global\\Ki000`. If `CreateFile` fails after running `client.exe unload`, the public symbolic link was intentionally removed. Remap or reload a driver build that creates `\\DosDevices\\Global\\Ki000`, or reboot if the existing manually mapped driver object is still occupying its internal name.
 
 ### `build-all.ps1` cannot find MSBuild
 

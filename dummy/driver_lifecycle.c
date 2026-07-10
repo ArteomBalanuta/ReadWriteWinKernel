@@ -1,6 +1,33 @@
 #include <ntifs.h>
 #include <ntddk.h>
+#include <ntstrsafe.h>
 #include "main.h"
+
+static volatile LONG g_driverDecommissioned;
+
+/* Runtime device name buffers — shared with main.c for IoCreateDriver. */
+WCHAR g_driverNameBuffer[64];
+WCHAR g_deviceNameBuffer[64];
+
+VOID GenerateRandomDeviceNames(VOID)
+{
+    ULONG randomValue;
+    LARGE_INTEGER tickCount;
+
+    KeQuerySystemTime(&tickCount);
+    randomValue = (ULONG)(tickCount.QuadPart & 0x00000000FFFFFFFF);
+    randomValue = (randomValue % 9000) + 1000; /* 1000..9999 */
+
+    RtlStringCchPrintfW(g_driverNameBuffer, RTL_NUMBER_OF(g_driverNameBuffer),
+        L"\\Driver\\gammaA%04u", randomValue);
+    RtlStringCchPrintfW(g_deviceNameBuffer, RTL_NUMBER_OF(g_deviceNameBuffer),
+        L"\\Device\\gammaA%04u", randomValue);
+}
+
+BOOLEAN IsDriverDecommissioned(VOID)
+{
+    return InterlockedCompareExchange(&g_driverDecommissioned, 0, 0) != 0;
+}
 
 static VOID RegisterDispatchHandlers(_Inout_ PDRIVER_OBJECT driverObject)
 {
@@ -27,7 +54,7 @@ static NTSTATUS CreateDeviceAndLink(
 
     *deviceObject = NULL;
 
-    RtlInitUnicodeString(&deviceName, READDRIVER_DEVICE_NAME);
+    RtlInitUnicodeString(&deviceName, g_deviceNameBuffer);
     status = IoCreateDevice(
         driverObject,
         0,
@@ -41,19 +68,6 @@ static NTSTATUS CreateDeviceAndLink(
         return status;
     }
 
-    RtlInitUnicodeString(&symbolicLink, READDRIVER_DOS_DEVICE_NAME);
-    status = IoCreateSymbolicLink(&symbolicLink, &deviceName);
-    if (!NT_SUCCESS(status)) {
-        IoDeleteDevice(*deviceObject);
-        *deviceObject = NULL;
-        LogStatus(L"IoCreateSymbolicLink", status, NULL, FALSE);
-        return status;
-    }
-
-    // Hide: delete the local symbolic link so \DosDevices scans miss us.
-    IoDeleteSymbolicLink(&symbolicLink);
-
-    // Keep the user-visible path in the global MS-DOS namespace for clients.
     RtlInitUnicodeString(&symbolicLink, READDRIVER_GLOBAL_DOS_DEVICE_NAME);
     status = IoCreateSymbolicLink(&symbolicLink, &deviceName);
     if (!NT_SUCCESS(status)) {
@@ -66,29 +80,52 @@ static NTSTATUS CreateDeviceAndLink(
     return STATUS_SUCCESS;
 }
 
-NTSTATUS RemoveUserVisibleDeviceLink(_In_ BOOLEAN silentMode)
+static NTSTATUS DeleteLinkByName(
+    _In_ PCWSTR linkName,
+    _In_ PCWSTR operationName,
+    _In_ BOOLEAN silentMode
+)
 {
     UNICODE_STRING symbolicLink;
     NTSTATUS status;
 
-    RtlInitUnicodeString(&symbolicLink, READDRIVER_GLOBAL_DOS_DEVICE_NAME);
+    RtlInitUnicodeString(&symbolicLink, linkName);
     status = IoDeleteSymbolicLink(&symbolicLink);
     if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
         status = STATUS_SUCCESS;
     }
 
-    LogStatus(L"IoDeleteSymbolicLink (Global)", status, NULL, silentMode);
+    LogStatus(operationName, status, NULL, silentMode);
     return status;
+}
+
+NTSTATUS RemoveUserVisibleDeviceLink(_In_ BOOLEAN silentMode)
+{
+    NTSTATUS globalStatus;
+
+    InterlockedExchange(&g_driverDecommissioned, 1);
+    StopFreezeTimer();
+
+    globalStatus = DeleteLinkByName(
+        READDRIVER_GLOBAL_DOS_DEVICE_NAME,
+        L"IoDeleteSymbolicLink (Global)",
+        silentMode);
+
+    (VOID)DeleteLinkByName(
+        READDRIVER_DOS_DEVICE_NAME,
+        L"IoDeleteSymbolicLink (Local)",
+        silentMode);
+
+    return globalStatus;
 }
 
 VOID DriverUnload(_In_ struct _DRIVER_OBJECT* DriverObject)
 {
-    UNICODE_STRING symbolicLink;
-
+    InterlockedExchange(&g_driverDecommissioned, 1);
     StopFreezeTimer();
 
-    RtlInitUnicodeString(&symbolicLink, READDRIVER_GLOBAL_DOS_DEVICE_NAME);
-    IoDeleteSymbolicLink(&symbolicLink);
+    (VOID)DeleteLinkByName(READDRIVER_GLOBAL_DOS_DEVICE_NAME, L"IoDeleteSymbolicLink (Global)", FALSE);
+    (VOID)DeleteLinkByName(READDRIVER_DOS_DEVICE_NAME, L"IoDeleteSymbolicLink (Local)", FALSE);
 
     if (DriverObject->DeviceObject != NULL) {
         IoDeleteDevice(DriverObject->DeviceObject);
@@ -105,6 +142,8 @@ NTSTATUS DriverInitialize(
 
     UNREFERENCED_PARAMETER(RegistryPath);
 
+    InterlockedExchange(&g_driverDecommissioned, 0);
+
     status = CreateDeviceAndLink(DriverObject, &deviceObject);
     if (!NT_SUCCESS(status)) {
         return status;
@@ -117,6 +156,9 @@ NTSTATUS DriverInitialize(
 
     status = InitializeFreezeTimer();
     if (!NT_SUCCESS(status)) {
+        (VOID)DeleteLinkByName(READDRIVER_GLOBAL_DOS_DEVICE_NAME, L"IoDeleteSymbolicLink (Global)", FALSE);
+        (VOID)DeleteLinkByName(READDRIVER_DOS_DEVICE_NAME, L"IoDeleteSymbolicLink (Local)", FALSE);
+        IoDeleteDevice(deviceObject);
         return status;
     }
 

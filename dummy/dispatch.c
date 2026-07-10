@@ -285,6 +285,12 @@ NTSTATUS HandleDeviceControl(
     }
 
     silentMode = (request->Flags & READDRIVER_FLAG_SILENT) != 0;
+
+    if (IsDriverDecommissioned() &&
+        request->Operation != ReadDriverOperationUnload) {
+        return STATUS_DELETE_PENDING;
+    }
+
     status = DispatchReadDriverOperation(request, irp->AssociatedIrp.SystemBuffer, bytesReturned, silentMode);
 
     return status;

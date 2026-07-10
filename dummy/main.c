@@ -13,7 +13,9 @@ NTSTATUS DriverEntry(
     UNREFERENCED_PARAMETER(DriverObject);
     UNREFERENCED_PARAMETER(RegistryPath);
 
-    RtlInitUnicodeString(&driverName, READDRIVER_DRIVER_NAME);
+    GenerateRandomDeviceNames();
+
+    RtlInitUnicodeString(&driverName, g_driverNameBuffer);
     status = IoCreateDriver(&driverName, DriverInitialize);
     LogStatus(L"IoCreateDriver", status, NULL, FALSE);
 
