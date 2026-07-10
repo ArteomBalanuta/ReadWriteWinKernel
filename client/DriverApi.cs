@@ -13,7 +13,9 @@ internal enum ReadDriverOperation : ulong
     BatchRead = 6,
     ReadWithProtect = 7,
     ReadHex = 8,
-    Unload = 9
+    Unload = 9,
+    FreezeWrite = 10,
+    Unfreeze = 11
 }
 
 internal static class ReadDriverFlags
@@ -222,6 +224,55 @@ internal static class DriverApi
         }
 
         return true;
+    }
+
+    internal static bool FreezeWrite(ulong pid, ulong value, ulong[] addresses, ulong size, out string? error)
+    {
+        error = null;
+
+        if (addresses == null || addresses.Length == 0 || addresses.Length > 4)
+        {
+            error = "addresses must contain 1-4 entries";
+            return false;
+        }
+
+        var request = new ReadDriverRequest
+        {
+            SourceProcessId = pid,
+            SourceAddress = value,
+            TargetAddress = addresses[0],
+            Operation = (ulong)ReadDriverOperation.FreezeWrite,
+            Size = size,
+            Flags = ReadDriverFlags.Silent
+        };
+
+        if (addresses.Length > 1)
+            request.TargetProcessId = addresses[1];
+        if (addresses.Length > 2)
+            request.Reserved2 = addresses[2];
+        if (addresses.Length > 3)
+            request.Reserved3 = addresses[3];
+
+        return SendDriverRequest(request, out _, out _, out error);
+    }
+
+    internal static bool Unfreeze(ulong address, out string? error)
+    {
+        error = null;
+
+        var request = new ReadDriverRequest
+        {
+            SourceAddress = address,
+            Operation = (ulong)ReadDriverOperation.Unfreeze,
+            Flags = ReadDriverFlags.Silent
+        };
+
+        return SendDriverRequest(request, out _, out _, out error);
+    }
+
+    internal static bool UnfreezeAll(out string? error)
+    {
+        return Unfreeze(0, out error);
     }
 
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]

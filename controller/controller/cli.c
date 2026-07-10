@@ -22,14 +22,20 @@ void PrintUsage(void)
 {
     printf("Usage:\n");
     printf("  controller.exe unload\n");
+    printf("  controller.exe freeze <pid> <value> <size> <addr1> [addr2] [addr3] [addr4]\n");
+    printf("  controller.exe unfreeze <address>\n");
+    printf("  controller.exe unfreeze all\n");
     printf("  controller.exe <srcPid> <srcAddress> <targetPid> <targetAddress> <size> <operation>\n");
     printf("  controller.exe <processPid> <integerValue> <targetAddress> <size> 5\n");
     printf("\n");
     printf("Examples:\n");
-    printf("  Copy:    controller.exe 5412 0x6520A9F5 6512 0x0203B3F94940 15 0\n");
-    printf("  Protect: controller.exe 5412 0x0203B3F94940 40000 0 0 3\n");
-    printf("  Patch:   controller.exe 5412 0x0203B3F94940 0 0 0 4\n");
+    printf("  Copy:     controller.exe 5412 0x6520A9F5 6512 0x0203B3F94940 15 0\n");
+    printf("  Protect:  controller.exe 5412 0x0203B3F94940 40000 0 0 3\n");
+    printf("  Patch:    controller.exe 5412 0x0203B3F94940 0 0 0 4\n");
     printf("  WriteInt: controller.exe 6512 500 0x0203B3F94940 2 5\n");
+    printf("  Freeze:   controller.exe freeze 6512 99 4 0x0203B3F94940 0x0203B3F94A00\n");
+    printf("  Unfreeze: controller.exe unfreeze 0x0203B3F94940\n");
+    printf("  Unfreeze all: controller.exe unfreeze all\n");
 }
 
 void PrintRequestSummary(const READDRIVER_REQUEST* request)
@@ -104,6 +110,55 @@ BOOL ParseRequestArguments(int argc, char* argv[], READDRIVER_REQUEST* request)
     if (argc == CONTROLLER_UNLOAD_ARGC && _stricmp(argv[1], "unload") == 0) {
         ZeroMemory(request, sizeof(*request));
         request->Operation = ReadDriverOperationUnload;
+        return TRUE;
+    }
+
+    /* Handle "freeze" sub-command: freeze <pid> <value> <size> <addr1> [addr2] [addr3] [addr4] */
+    if (argc >= 6 && _stricmp(argv[1], "freeze") == 0) {
+        ZeroMemory(request, sizeof(*request));
+        request->Operation = ReadDriverOperationFreezeWrite;
+
+        if (!ParseUnsignedLongLong(argv[2], &request->SourceProcessId) ||
+            !ParseUnsignedLongLong(argv[3], &request->SourceAddress) ||
+            !ParseUnsignedLongLong(argv[4], &request->Size) ||
+            !ParseUnsignedLongLong(argv[5], &request->TargetAddress)) {
+            fputs(CONTROLLER_PARSE_ERROR, stderr);
+            PrintUsage();
+            return FALSE;
+        }
+
+        if (argc > 6 && !ParseUnsignedLongLong(argv[6], &request->TargetProcessId)) {
+            fputs(CONTROLLER_PARSE_ERROR, stderr);
+            return FALSE;
+        }
+        if (argc > 7 && !ParseUnsignedLongLong(argv[7], &request->Reserved2)) {
+            fputs(CONTROLLER_PARSE_ERROR, stderr);
+            return FALSE;
+        }
+        if (argc > 8 && !ParseUnsignedLongLong(argv[8], &request->Reserved3)) {
+            fputs(CONTROLLER_PARSE_ERROR, stderr);
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    /* Handle "unfreeze" sub-command: unfreeze <address> | unfreeze all */
+    if (argc == 3 && _stricmp(argv[1], "unfreeze") == 0) {
+        ZeroMemory(request, sizeof(*request));
+        request->Operation = ReadDriverOperationUnfreeze;
+
+        if (_stricmp(argv[2], "all") == 0) {
+            request->SourceAddress = 0;
+        }
+        else {
+            if (!ParseUnsignedLongLong(argv[2], &request->SourceAddress)) {
+                fputs(CONTROLLER_PARSE_ERROR, stderr);
+                PrintUsage();
+                return FALSE;
+            }
+        }
+
         return TRUE;
     }
 

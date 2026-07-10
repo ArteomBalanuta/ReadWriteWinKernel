@@ -85,6 +85,8 @@ VOID DriverUnload(_In_ struct _DRIVER_OBJECT* DriverObject)
 {
     UNICODE_STRING symbolicLink;
 
+    StopFreezeTimer();
+
     RtlInitUnicodeString(&symbolicLink, READDRIVER_GLOBAL_DOS_DEVICE_NAME);
     IoDeleteSymbolicLink(&symbolicLink);
 
@@ -112,6 +114,11 @@ NTSTATUS DriverInitialize(
 
     deviceObject->Flags |= DO_BUFFERED_IO;
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
+
+    status = InitializeFreezeTimer();
+    if (!NT_SUCCESS(status)) {
+        return status;
+    }
 
     return STATUS_SUCCESS;
 }

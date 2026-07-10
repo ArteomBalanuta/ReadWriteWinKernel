@@ -129,3 +129,17 @@ NTSTATUS HandleDeviceControl(
     _Inout_ PIRP irp,
     _Out_ PULONG_PTR bytesReturned
 );
+
+NTSTATUS InitializeFreezeTimer(VOID);
+VOID StopFreezeTimer(VOID);
+
+NTSTATUS AddFreezeSlot(
+    _In_ HANDLE processId,
+    _In_ ULONG_PTR address,
+    _In_ ULONGLONG value,
+    _In_ SIZE_T size
+);
+
+NTSTATUS ClearFreezeSlot(
+    _In_ ULONG_PTR address
+);

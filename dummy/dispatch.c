@@ -218,6 +218,46 @@ static NTSTATUS DispatchReadDriverOperation(
         /* This build cannot self-unload; remove the user-visible link instead. */
         return RemoveUserVisibleDeviceLink(silentMode);
     }
+    case ReadDriverOperationFreezeWrite: {
+        /* Freeze value at address(es), rewritten ~10x/sec by timer DPC.
+           SourceProcessId = PID, SourceAddress = value,
+           TargetAddress = address 1, TargetProcessId = address 2 (optional),
+           Reserved2/3 = address 3/4 (optional), Size = integer width. */
+        ULONGLONG addresses[4];
+        ULONG count = 1;
+
+        addresses[0] = local.TargetAddress;
+        if (local.TargetProcessId != 0) {
+            addresses[count++] = local.TargetProcessId;
+        }
+        if (local.Reserved2 != 0) {
+            addresses[count++] = local.Reserved2;
+        }
+        if (local.Reserved3 != 0) {
+            addresses[count++] = local.Reserved3;
+        }
+
+        SIZE_T writeSize = local.Size;
+        if (writeSize == 0 || writeSize > sizeof(ULONGLONG)) {
+            return STATUS_INVALID_PARAMETER;
+        }
+
+        for (ULONG i = 0; i < count; ++i) {
+            NTSTATUS status = AddFreezeSlot(
+                (HANDLE)local.SourceProcessId,
+                addresses[i],
+                local.SourceAddress,
+                writeSize);
+            if (!NT_SUCCESS(status)) {
+                return status;
+            }
+        }
+        return STATUS_SUCCESS;
+    }
+    case ReadDriverOperationUnfreeze: {
+        /* Clear freeze slot(s). SourceAddress = address (0 = clear all). */
+        return ClearFreezeSlot(local.SourceAddress);
+    }
     default:
         return STATUS_NOT_SUPPORTED;
     }

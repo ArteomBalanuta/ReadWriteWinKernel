@@ -13,6 +13,30 @@
 
 #define READDRIVER_SCAN_BUFFER_SIZE 4096
 
+/* Freeze timer fires ~10 times/second (100 ms interval). */
+#define READDRIVER_FREEZE_INTERVAL_MS 100
+
+typedef struct _READDRIVER_FREEZE_SLOT {
+    BOOLEAN active;
+    HANDLE processId;
+    ULONG_PTR address;
+    ULONGLONG value;
+    SIZE_T size;
+} READDRIVER_FREEZE_SLOT;
+
+static READDRIVER_FREEZE_SLOT g_freezeSlots[READDRIVER_MAX_FREEZE_SLOTS];
+static KSPIN_LOCK g_freezeLock;
+static KTIMER g_freezeTimer;
+static KDPC g_freezeDpc;
+static BOOLEAN g_freezeInitialized;
+
+static VOID FreezeTimerDpc(
+    _In_ PRKDPC Dpc,
+    _In_opt_ PVOID DeferredContext,
+    _In_opt_ PVOID SystemArgument1,
+    _In_opt_ PVOID SystemArgument2
+);
+
 NTSYSAPI NTSTATUS NTAPI ZwProtectVirtualMemory(
     _In_ HANDLE ProcessHandle,
     _Inout_ PVOID* BaseAddress,
@@ -534,5 +558,131 @@ NTSTATUS ReadProcessMemoryAsHex(
 
     hexBuffer[requiredSize - 1] = '\0';
 
+    return STATUS_SUCCESS;
+}
+
+static VOID FreezeTimerDpc(
+    _In_ PRKDPC Dpc,
+    _In_opt_ PVOID DeferredContext,
+    _In_opt_ PVOID SystemArgument1,
+    _In_opt_ PVOID SystemArgument2
+)
+{
+    UNREFERENCED_PARAMETER(Dpc);
+    UNREFERENCED_PARAMETER(SystemArgument1);
+    UNREFERENCED_PARAMETER(SystemArgument2);
+
+    /* Rewrite all active freeze slots. */
+    for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+        if (!g_freezeSlots[i].active)
+            continue;
+
+        WriteIntegerProcessMemory(
+            g_freezeSlots[i].processId,
+            (PVOID)g_freezeSlots[i].address,
+            g_freezeSlots[i].value,
+            g_freezeSlots[i].size,
+            TRUE);
+    }
+
+    /* Re-arm the timer. */
+    LARGE_INTEGER interval;
+    interval.QuadPart = -(LONG)(READDRIVER_FREEZE_INTERVAL_MS * 10000);
+    KeSetTimer(&g_freezeTimer, interval, Dpc);
+}
+
+NTSTATUS InitializeFreezeTimer(VOID)
+{
+    RtlZeroMemory(g_freezeSlots, sizeof(g_freezeSlots));
+    KeInitializeSpinLock(&g_freezeLock);
+    KeInitializeTimer(&g_freezeTimer);
+    KeInitializeDpc(&g_freezeDpc, FreezeTimerDpc, NULL);
+
+    LARGE_INTEGER interval;
+    interval.QuadPart = -(LONG)(READDRIVER_FREEZE_INTERVAL_MS * 10000);
+    KeSetTimer(&g_freezeTimer, interval, &g_freezeDpc);
+
+    g_freezeInitialized = TRUE;
+    return STATUS_SUCCESS;
+}
+
+VOID StopFreezeTimer(VOID)
+{
+    KIRQL oldIrql;
+
+    KeAcquireSpinLock(&g_freezeLock, &oldIrql);
+    RtlZeroMemory(g_freezeSlots, sizeof(g_freezeSlots));
+    g_freezeInitialized = FALSE;
+    KeSetTimer(&g_freezeTimer, (LARGE_INTEGER){0}, &g_freezeDpc);
+    KeReleaseSpinLock(&g_freezeLock, oldIrql);
+}
+
+NTSTATUS AddFreezeSlot(
+    _In_ HANDLE processId,
+    _In_ ULONG_PTR address,
+    _In_ ULONGLONG value,
+    _In_ SIZE_T size
+)
+{
+    KIRQL oldIrql;
+
+    if (!IsSupportedIntegerSize(size)) {
+        return STATUS_INVALID_PARAMETER;
+    }
+
+    KeAcquireSpinLock(&g_freezeLock, &oldIrql);
+
+    /* Check if slot for this address already exists, update in-place. */
+    for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+        if (g_freezeSlots[i].active && g_freezeSlots[i].address == address) {
+            g_freezeSlots[i].value = value;
+            g_freezeSlots[i].size = size;
+            g_freezeSlots[i].processId = processId;
+            KeReleaseSpinLock(&g_freezeLock, oldIrql);
+            return STATUS_SUCCESS;
+        }
+    }
+
+    /* Find a free slot. */
+    for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+        if (!g_freezeSlots[i].active) {
+            g_freezeSlots[i].active = TRUE;
+            g_freezeSlots[i].processId = processId;
+            g_freezeSlots[i].address = address;
+            g_freezeSlots[i].value = value;
+            g_freezeSlots[i].size = size;
+            KeReleaseSpinLock(&g_freezeLock, oldIrql);
+            return STATUS_SUCCESS;
+        }
+    }
+
+    KeReleaseSpinLock(&g_freezeLock, oldIrql);
+    return STATUS_INSUFFICIENT_RESOURCES;
+}
+
+NTSTATUS ClearFreezeSlot(
+    _In_ ULONG_PTR address
+)
+{
+    KIRQL oldIrql;
+
+    KeAcquireSpinLock(&g_freezeLock, &oldIrql);
+
+    if (address == 0) {
+        /* address 0 = clear all. */
+        RtlZeroMemory(g_freezeSlots, sizeof(g_freezeSlots));
+    }
+    else {
+        for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+            if (g_freezeSlots[i].active && g_freezeSlots[i].address == address) {
+                g_freezeSlots[i].active = FALSE;
+                g_freezeSlots[i].processId = NULL;
+                KeReleaseSpinLock(&g_freezeLock, oldIrql);
+                return STATUS_SUCCESS;
+            }
+        }
+    }
+
+    KeReleaseSpinLock(&g_freezeLock, oldIrql);
     return STATUS_SUCCESS;
 }

@@ -20,8 +20,13 @@ typedef enum _READDRIVER_OPERATION {
     ReadDriverOperationBatchRead = 6,
     ReadDriverOperationReadWithProtect = 7,
     ReadDriverOperationReadHex = 8,
-    ReadDriverOperationUnload = 9
+    ReadDriverOperationUnload = 9,
+    ReadDriverOperationFreezeWrite = 10,
+    ReadDriverOperationUnfreeze = 11
 } READDRIVER_OPERATION;
+
+/* Max freeze slots the driver can maintain simultaneously. */
+#define READDRIVER_MAX_FREEZE_SLOTS 16
 
 /* Silent mode: suppress driver logging (bit 0 of Reserved1). */
 #define READDRIVER_FLAG_SILENT 0x0000000000000001UL
