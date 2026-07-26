@@ -86,6 +86,54 @@ public class UnitTest1
         AssertFreezeRequestRejected(6512, 99, [1, 2, 3, 4, 5], 4);
     }
 
+    [Fact]
+    public void Unfreeze_all_keeps_the_GUI_address_list_available_for_rearming()
+    {
+        string source = File.ReadAllText(FindRepositoryFile("client", "ClientForm.cs"));
+        int methodStart = source.IndexOf("private void UnfreezeAllAddresses()", StringComparison.Ordinal);
+        int methodEnd = source.IndexOf("private bool TryBuildRequest", methodStart, StringComparison.Ordinal);
+
+        Assert.True(methodStart >= 0 && methodEnd > methodStart, "Could not locate UnfreezeAllAddresses.");
+
+        string handler = source[methodStart..methodEnd];
+        Assert.DoesNotContain("_freezeAddresses.Items.Clear()", handler, StringComparison.Ordinal);
+        Assert.Contains("remain listed", handler, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Request_process_picker_uses_a_separate_target_only_for_copy()
+    {
+        Assembly assembly = LoadClientAssembly();
+        Type formType = assembly.GetType("ClientForm", throwOnError: true)!;
+        Type operationType = assembly.GetType("ReadDriverOperation", throwOnError: true)!;
+        MethodInfo method = formType.GetMethod(
+            "RequestOperationUsesSeparateTargetProcess",
+            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)!;
+
+        object copy = Enum.ToObject(operationType, 0UL);
+        object protect = Enum.ToObject(operationType, 3UL);
+        object patch = Enum.ToObject(operationType, 4UL);
+        object writeInteger = Enum.ToObject(operationType, 5UL);
+
+        Assert.True((bool)method.Invoke(null, [copy])!);
+        Assert.False((bool)method.Invoke(null, [protect])!);
+        Assert.False((bool)method.Invoke(null, [patch])!);
+        Assert.False((bool)method.Invoke(null, [writeInteger])!);
+    }
+
+    [Fact]
+    public void Process_picker_formats_name_and_PID()
+    {
+        Type formType = LoadClientAssembly().GetType("ClientForm", throwOnError: true)!;
+        MethodInfo method = formType.GetMethod(
+            "FormatProcessDisplayName",
+            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)!;
+
+        string displayName = (string)method.Invoke(null, ["notepad", 1234UL])!;
+
+        Assert.Equal("notepad (1234)", displayName);
+    }
+
     private static void AssertFreezeRequestRejected(
         ulong processId,
         ulong value,
@@ -114,5 +162,22 @@ public class UnitTest1
     {
         string assemblyPath = Path.Combine(AppContext.BaseDirectory, "client.dll");
         return Assembly.LoadFrom(assemblyPath);
+    }
+
+    private static string FindRepositoryFile(params string[] pathParts)
+    {
+        DirectoryInfo? directory = new(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            string candidate = Path.Combine([directory.FullName, .. pathParts]);
+            if (File.Exists(candidate))
+            {
+                return candidate;
+            }
+
+            directory = directory.Parent;
+        }
+
+        throw new FileNotFoundException($"Could not find repository file: {Path.Combine(pathParts)}");
     }
 }

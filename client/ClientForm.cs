@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -10,7 +11,12 @@ internal sealed class ClientForm : Form
     private readonly TextBox _targetAddress = new();
     private readonly TextBox _size = new();
     private readonly TextBox _status = new() { Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical };
+    private readonly ComboBox _requestProcess = new() { DropDownStyle = ComboBoxStyle.DropDownList };
+    private readonly ComboBox _requestTargetProcess = new() { DropDownStyle = ComboBoxStyle.DropDownList };
+    private readonly Label _requestProcessLabel = new() { AutoSize = true, TextAlign = ContentAlignment.MiddleLeft };
+    private readonly Label _requestTargetProcessLabel = new() { AutoSize = true, TextAlign = ContentAlignment.MiddleLeft };
     private readonly TextBox _freezePid = new();
+    private readonly ComboBox _freezeProcess = new() { DropDownStyle = ComboBoxStyle.DropDownList };
     private readonly TextBox _freezeValue = new();
     private readonly ComboBox _freezeSize = new() { DropDownStyle = ComboBoxStyle.DropDownList };
     private readonly TextBox _freezeAddress = new();
@@ -29,6 +35,7 @@ internal sealed class ClientForm : Form
         _operation.Items.Add(new OperationItem("Patch (4)", ReadDriverOperation.Patch));
         _operation.Items.Add(new OperationItem("WriteInteger (5)", ReadDriverOperation.WriteInteger));
         _operation.SelectedIndex = 0;
+        _operation.SelectedIndexChanged += (_, _) => UpdateRequestProcessPickerState();
 
         _freezeSize.Items.AddRange(["1 byte", "2 bytes", "4 bytes", "8 bytes"]);
         _freezeSize.SelectedIndex = 2;
@@ -61,11 +68,17 @@ internal sealed class ClientForm : Form
         actionPanel.Controls.Add(sendButton);
         actionPanel.Controls.Add(unloadButton);
 
+        _requestProcess.SelectedIndexChanged += (_, _) => ApplySelectedProcess(_requestProcess, _sourcePid);
+        _requestTargetProcess.SelectedIndexChanged += (_, _) => ApplySelectedProcess(_requestTargetProcess, _targetPid);
+
+        var requestProcessPicker = CreateProcessPicker(_requestProcess);
+        var targetProcessPicker = CreateProcessPicker(_requestTargetProcess);
+
         var grid = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            RowCount = 8,
+            RowCount = 10,
             Padding = new Padding(12),
             AutoSize = true
         };
@@ -73,16 +86,22 @@ internal sealed class ClientForm : Form
         grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
 
         AddRow(grid, 0, "Operation", _operation);
-        AddRow(grid, 1, "Source PID", _sourcePid);
-        AddRow(grid, 2, "Source Address / Integer Value", _sourceAddress);
-        AddRow(grid, 3, "Target PID / Region Size", _targetPid);
-        AddRow(grid, 4, "Target Address", _targetAddress);
-        AddRow(grid, 5, "Size", _size);
-        AddRow(grid, 6, "Action", actionPanel);
-        AddRow(grid, 7, "Status", _status);
+        AddRow(grid, 1, _requestProcessLabel, requestProcessPicker);
+        AddRow(grid, 2, "Process PID", _sourcePid);
+        AddRow(grid, 3, _requestTargetProcessLabel, targetProcessPicker);
+        AddRow(grid, 4, "Target PID / Region Size", _targetPid);
+        AddRow(grid, 5, "Source Address / Integer Value", _sourceAddress);
+        AddRow(grid, 6, "Target Address", _targetAddress);
+        AddRow(grid, 7, "Size", _size);
+        AddRow(grid, 8, "Action", actionPanel);
+        AddRow(grid, 9, "Status", _status);
 
         _status.Dock = DockStyle.Fill;
         _status.Height = 180;
+
+        RefreshProcessPicker(_requestProcess);
+        RefreshProcessPicker(_requestTargetProcess);
+        UpdateRequestProcessPickerState();
 
         var page = new TabPage("Requests");
         page.Controls.Add(grid);
@@ -146,15 +165,19 @@ internal sealed class ClientForm : Form
         actionPanel.Controls.Add(unfreezeAllButton);
         actionPanel.Controls.Add(removeAddressButton);
 
+        _freezeProcess.SelectedIndexChanged += (_, _) => ApplySelectedProcess(_freezeProcess, _freezePid);
+        var freezeProcessPicker = CreateProcessPicker(_freezeProcess);
+
         var grid = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            RowCount = 8,
+            RowCount = 9,
             Padding = new Padding(12)
         };
         grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
         grid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
+        grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         grid.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -165,16 +188,18 @@ internal sealed class ClientForm : Form
         grid.RowStyles.Add(new RowStyle(SizeType.Percent, 60));
 
         AddSpanningRow(grid, 0, intro);
-        AddRow(grid, 1, "Process ID", _freezePid);
-        AddRow(grid, 2, "Integer Value", _freezeValue);
-        AddRow(grid, 3, "Integer Size", _freezeSize);
-        AddRow(grid, 4, "Target Address", addressEditor);
-        AddRow(grid, 5, "Target Addresses", _freezeAddresses);
-        AddRow(grid, 6, "Actions", actionPanel);
-        AddRow(grid, 7, "Freeze Status", _freezeStatus);
+        AddRow(grid, 1, "Process", freezeProcessPicker);
+        AddRow(grid, 2, "Process ID", _freezePid);
+        AddRow(grid, 3, "Integer Value", _freezeValue);
+        AddRow(grid, 4, "Integer Size", _freezeSize);
+        AddRow(grid, 5, "Target Address", addressEditor);
+        AddRow(grid, 6, "Target Addresses", _freezeAddresses);
+        AddRow(grid, 7, "Actions", actionPanel);
+        AddRow(grid, 8, "Freeze Status", _freezeStatus);
 
         _freezeAddresses.Dock = DockStyle.Fill;
         _freezeStatus.Dock = DockStyle.Fill;
+        RefreshProcessPicker(_freezeProcess);
 
         var page = new TabPage("Freeze");
         page.Controls.Add(grid);
@@ -308,8 +333,7 @@ internal sealed class ClientForm : Form
             return;
         }
 
-        _freezeAddresses.Items.Clear();
-        AppendFreezeStatus("All freeze slots were cleared.");
+        AppendFreezeStatus("All freeze slots were cleared. Target addresses remain listed for re-arming.");
     }
 
     private bool TryBuildRequest(out ReadDriverRequest request, out string error)
@@ -322,9 +346,10 @@ internal sealed class ClientForm : Form
             return false;
         }
 
+        bool usesSeparateTargetProcess = RequestOperationUsesSeparateTargetProcess(selected.Operation);
         if (!DriverApi.TryParseUlong(_sourcePid.Text.Trim(), out request.SourceProcessId))
         {
-            error = "Source PID is not a valid number.";
+            error = usesSeparateTargetProcess ? "Source PID is not a valid number." : "Process PID is not a valid number.";
             return false;
         }
 
@@ -334,7 +359,15 @@ internal sealed class ClientForm : Form
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(_targetPid.Text) &&
+        if (usesSeparateTargetProcess &&
+            !DriverApi.TryParseUlong(_targetPid.Text.Trim(), out request.TargetProcessId))
+        {
+            error = "Target PID is not a valid number.";
+            return false;
+        }
+
+        if (!usesSeparateTargetProcess &&
+            !string.IsNullOrWhiteSpace(_targetPid.Text) &&
             !DriverApi.TryParseUlong(_targetPid.Text.Trim(), out request.TargetProcessId))
         {
             error = "Target PID / Region Size is not valid.";
@@ -363,6 +396,97 @@ internal sealed class ClientForm : Form
 
         error = string.Empty;
         return true;
+    }
+
+    internal static bool RequestOperationUsesSeparateTargetProcess(ReadDriverOperation operation)
+    {
+        return operation == ReadDriverOperation.Copy;
+    }
+
+    internal static string FormatProcessDisplayName(string processName, ulong processId)
+    {
+        return $"{processName} ({processId})";
+    }
+
+    private FlowLayoutPanel CreateProcessPicker(ComboBox picker)
+    {
+        picker.Width = 280;
+
+        var refreshButton = new Button { Text = "Refresh", AutoSize = true };
+        refreshButton.Click += (_, _) => RefreshProcessPicker(picker);
+
+        var panel = new FlowLayoutPanel
+        {
+            AutoSize = true,
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false
+        };
+        panel.Controls.Add(picker);
+        panel.Controls.Add(refreshButton);
+        return panel;
+    }
+
+    private void RefreshProcessPicker(ComboBox picker)
+    {
+        ulong? selectedProcessId = (picker.SelectedItem as ProcessItem)?.ProcessId;
+        var processes = new List<ProcessItem>();
+
+        foreach (Process process in Process.GetProcesses())
+        {
+            try
+            {
+                processes.Add(new ProcessItem(process.ProcessName, (ulong)process.Id));
+            }
+            catch (InvalidOperationException)
+            {
+                // The process exited while its details were being read.
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // Windows denied access to its details.
+            }
+            finally
+            {
+                process.Dispose();
+            }
+        }
+
+        processes.Sort((left, right) =>
+        {
+            int nameComparison = string.Compare(left.Name, right.Name, StringComparison.OrdinalIgnoreCase);
+            return nameComparison != 0 ? nameComparison : left.ProcessId.CompareTo(right.ProcessId);
+        });
+
+        picker.BeginUpdate();
+        picker.Items.Clear();
+        foreach (ProcessItem process in processes)
+        {
+            int index = picker.Items.Add(process);
+            if (process.ProcessId == selectedProcessId)
+            {
+                picker.SelectedIndex = index;
+            }
+        }
+        picker.EndUpdate();
+    }
+
+    private static void ApplySelectedProcess(ComboBox picker, TextBox targetPid)
+    {
+        if (picker.SelectedItem is ProcessItem process)
+        {
+            targetPid.Text = process.ProcessId.ToString();
+        }
+    }
+
+    private void UpdateRequestProcessPickerState()
+    {
+        bool usesSeparateTargetProcess = _operation.SelectedItem is OperationItem selected &&
+            RequestOperationUsesSeparateTargetProcess(selected.Operation);
+
+        _requestProcessLabel.Text = usesSeparateTargetProcess ? "Source Process" : "Process";
+        _requestTargetProcessLabel.Text = usesSeparateTargetProcess ? "Target Process" : "Target Process (Copy only)";
+        _requestTargetProcess.Enabled = usesSeparateTargetProcess;
     }
 
     private void AppendStatus(string message)
@@ -399,6 +523,14 @@ internal sealed class ClientForm : Form
             Margin = new Padding(0, 8, 8, 8)
         };
 
+        AddRow(grid, row, label, control);
+    }
+
+    private static void AddRow(TableLayoutPanel grid, int row, Label label, Control control)
+    {
+        label.Anchor = AnchorStyles.Left;
+        label.Margin = new Padding(0, 8, 8, 8);
+
         control.Dock = DockStyle.Fill;
         control.Margin = new Padding(0, 4, 0, 4);
 
@@ -412,6 +544,20 @@ internal sealed class ClientForm : Form
         control.Margin = new Padding(0, 4, 0, 12);
         grid.Controls.Add(control, 0, row);
         grid.SetColumnSpan(control, 2);
+    }
+
+    private sealed class ProcessItem
+    {
+        internal ProcessItem(string name, ulong processId)
+        {
+            Name = name;
+            ProcessId = processId;
+        }
+
+        internal string Name { get; }
+        internal ulong ProcessId { get; }
+
+        public override string ToString() => FormatProcessDisplayName(Name, ProcessId);
     }
 
     private sealed class AddressItem
