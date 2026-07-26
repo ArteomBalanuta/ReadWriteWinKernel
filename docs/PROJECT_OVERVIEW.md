@@ -84,7 +84,8 @@ This project has two modes:
 Current split:
 
 - CLI mode can submit the expanded operation set and decode response payloads
-- GUI mode currently exposes `Copy`, `Protect`, `Patch`, and `WriteInteger`
+- GUI mode exposes `Copy`, `Protect`, `Patch`, and `WriteInteger` on the Requests tab
+- GUI mode provides a dedicated Freeze tab for registering one to four addresses and clearing selected or all freeze entries
 
 Main files:
 
@@ -99,7 +100,7 @@ Main files:
 
 Folder: [client.Tests](/G:/workspace/projects/readDriver/client.Tests)
 
-This project currently provides focused .NET tests around the managed request/response helpers, especially byte and string decoding in the C# client layer.
+This project currently provides focused .NET tests around the managed request/response helpers, including byte/string decoding and freeze-request validation and address packing.
 
 ## Device Contract
 

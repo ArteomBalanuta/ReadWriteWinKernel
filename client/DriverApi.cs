@@ -226,17 +226,52 @@ internal static class DriverApi
         return true;
     }
 
-    internal static bool FreezeWrite(ulong pid, ulong value, ulong[] addresses, ulong size, out string? error)
+    internal static bool TryCreateFreezeRequest(
+        ulong pid,
+        ulong value,
+        IReadOnlyList<ulong>? addresses,
+        ulong size,
+        out ReadDriverRequest request,
+        out string? error)
     {
+        request = default;
         error = null;
 
-        if (addresses == null || addresses.Length == 0 || addresses.Length > 4)
+        if (pid == 0)
+        {
+            error = "process ID must be greater than zero";
+            return false;
+        }
+
+        if (size is not (1 or 2 or 4 or 8))
+        {
+            error = "size must be 1, 2, 4, or 8 bytes";
+            return false;
+        }
+
+        if (addresses == null || addresses.Count == 0 || addresses.Count > 4)
         {
             error = "addresses must contain 1-4 entries";
             return false;
         }
 
-        var request = new ReadDriverRequest
+        var uniqueAddresses = new HashSet<ulong>();
+        for (int i = 0; i < addresses.Count; i++)
+        {
+            if (addresses[i] == 0)
+            {
+                error = $"address {i + 1} must be greater than zero";
+                return false;
+            }
+
+            if (!uniqueAddresses.Add(addresses[i]))
+            {
+                error = $"address {i + 1} duplicates an earlier address";
+                return false;
+            }
+        }
+
+        request = new ReadDriverRequest
         {
             SourceProcessId = pid,
             SourceAddress = value,
@@ -246,12 +281,22 @@ internal static class DriverApi
             Flags = ReadDriverFlags.Silent
         };
 
-        if (addresses.Length > 1)
+        if (addresses.Count > 1)
             request.TargetProcessId = addresses[1];
-        if (addresses.Length > 2)
+        if (addresses.Count > 2)
             request.Reserved2 = addresses[2];
-        if (addresses.Length > 3)
+        if (addresses.Count > 3)
             request.Reserved3 = addresses[3];
+
+        return true;
+    }
+
+    internal static bool FreezeWrite(ulong pid, ulong value, ulong[] addresses, ulong size, out string? error)
+    {
+        if (!TryCreateFreezeRequest(pid, value, addresses, size, out ReadDriverRequest request, out error))
+        {
+            return false;
+        }
 
         return SendDriverRequest(request, out _, out _, out error);
     }

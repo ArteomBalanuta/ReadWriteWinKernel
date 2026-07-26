@@ -211,13 +211,15 @@ GUI behavior:
 
 - start `client.exe` with no arguments
 - the WinForms UI opens
-- choose an operation
-- enter request values
-- click `Send Request`
+- use the `Requests` tab to choose a core operation, enter request values, and click `Send Request`
+- use the `Freeze` tab to enter a PID, integer value, and width, then add one to four target addresses
+- click `Arm Freeze` to register the listed addresses for the driver's fixed 100 ms periodic write cycle
+- use `Unfreeze Selected` or `Unfreeze All` to clear registered addresses
 
 Current GUI note:
 
-- the WinForms UI currently exposes `Copy`, `Protect`, `Patch`, and `WriteInteger`
+- the `Requests` tab exposes `Copy`, `Protect`, `Patch`, and `WriteInteger`
+- the `Freeze` tab exposes multi-address freeze registration and unfreeze controls
 - newer read/scan-style operations exist in the protocol and CLI path, but are not yet surfaced in the GUI
 
 ## Driver Runtime Notes

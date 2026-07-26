@@ -168,6 +168,7 @@ Owns:
 
 - command-line submission parity with the native client
 - WinForms UI for interactive requests
+- dedicated multi-address freeze registration and unfreeze workflow
 - shared .NET transport wrapper in `DriverApi.cs`
 - managed decoding helpers for read responses
 
@@ -179,6 +180,7 @@ Owns:
 
 - focused tests for the C# request/response helpers
 - verification of raw-byte and string decoding behavior in the managed client layer
+- verification of freeze-request validation and four-address field packing
 
 ## Request Semantics
 

@@ -36,7 +36,7 @@ Today the client surfaces are intentionally uneven:
 
 - the native controller can print response data returned by the driver
 - the C# CLI can submit the expanded operation set and decode response payloads
-- the WinForms GUI still exposes the older core operations (`Copy`, `Protect`, `Patch`, `WriteInteger`)
+- the WinForms GUI exposes the core request operations (`Copy`, `Protect`, `Patch`, `WriteInteger`) plus a dedicated Freeze tab for one to four target addresses
 
 The driver lifecycle currently uses separate internal and public names:
 
