@@ -80,10 +80,22 @@ public class UnitTest1
     {
         AssertFreezeRequestRejected(0, 99, [0x1000], 4);
         AssertFreezeRequestRejected(6512, 99, [0x1000], 3);
+        AssertFreezeRequestRejected(6512, 5000, [0x1000], 1);
         AssertFreezeRequestRejected(6512, 99, [], 4);
         AssertFreezeRequestRejected(6512, 99, [0x1000, 0x1000], 4);
         AssertFreezeRequestRejected(6512, 99, [0], 4);
         AssertFreezeRequestRejected(6512, 99, [1, 2, 3, 4, 5], 4);
+    }
+
+    [Fact]
+    public void Freeze_request_builder_accepts_a_value_that_fits_the_selected_width()
+    {
+        object?[] arguments = [6512UL, 5000UL, new ulong[] { 0x1000UL }, 2UL, null, null];
+
+        bool success = (bool)GetFreezeRequestBuilder().Invoke(null, arguments)!;
+
+        Assert.True(success);
+        Assert.Null(arguments[5]);
     }
 
     [Fact]

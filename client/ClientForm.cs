@@ -272,7 +272,14 @@ internal sealed class ClientForm : Form
             return;
         }
 
+        if (!DriverApi.Unfreeze(selected.Value, out string? error))
+        {
+            AppendFreezeStatus(error ?? $"Failed to unfreeze 0x{selected.Value:X}.");
+            return;
+        }
+
         _freezeAddresses.Items.Remove(selected);
+        AppendFreezeStatus($"Freeze cleared for address 0x{selected.Value:X}.");
     }
 
     private void ArmFreeze()
@@ -296,6 +303,18 @@ internal sealed class ClientForm : Form
             addresses[i] = ((AddressItem)_freezeAddresses.Items[i]!).Value;
         }
 
+        if (!DriverApi.TryCreateFreezeRequest(processId, value, addresses, size, out _, out string? validationError))
+        {
+            AppendFreezeStatus(validationError ?? "Invalid freeze request.");
+            return;
+        }
+
+        if (!DriverApi.UnfreezeAll(out string? clearError))
+        {
+            AppendFreezeStatus(clearError ?? "Failed to clear previous freeze slots.");
+            return;
+        }
+
         if (!DriverApi.FreezeWrite(processId, value, addresses, size, out string? error))
         {
             AppendFreezeStatus(error ?? "Freeze request failed.");
@@ -303,7 +322,7 @@ internal sealed class ClientForm : Form
         }
 
         AppendFreezeStatus(
-            $"Freeze armed for PID {processId}: value 0x{value:X}, {size} byte(s), " +
+            $"Previous freeze slots cleared. Freeze armed for PID {processId}: value 0x{value:X}, {size} byte(s), " +
             $"{addresses.Length} address(es).");
     }
 

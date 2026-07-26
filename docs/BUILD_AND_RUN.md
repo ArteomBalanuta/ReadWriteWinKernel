@@ -165,6 +165,8 @@ Published output path:
 
 - `client\bin\Release\net8.0-windows\win-x64\publish\`
 
+The default publish command produces one framework-dependent `client.exe` for `win-x64`. The target machine must have the .NET 8 Windows Desktop Runtime installed.
+
 ## Running the Native Client
 
 Executable:
@@ -213,7 +215,8 @@ GUI behavior:
 - the WinForms UI opens
 - use the `Requests` tab to choose a core operation, enter request values, and click `Send Request`
 - use the `Freeze` tab to enter a PID, integer value, and width, then add one to four target addresses
-- click `Arm Freeze` to register the listed addresses for the driver's fixed 100 ms periodic write cycle
+- choose an integer size that can hold the value (for example, `5000` requires at least two bytes)
+- click `Arm Freeze` to replace all active driver freeze slots with the listed addresses for the driver's fixed 100 ms periodic write cycle
 - use `Unfreeze Selected` or `Unfreeze All` to clear registered addresses
 
 Current GUI note:
@@ -267,7 +270,7 @@ That means this repo is strongest as a buildable local development workspace rat
 
 ### `dotnet` app fails after copying only `client.exe`
 
-Use `publish-client.ps1` or copy the entire build output directory. A framework-dependent .NET build needs its companion files unless it is published as self-contained.
+Use `publish-client.ps1`. Its one-file framework-dependent output still requires the .NET 8 Windows Desktop Runtime on the target machine.
 
 ### `CreateFile` fails against `\\\\.\\Global\\Ki000`
 

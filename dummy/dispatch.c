@@ -238,8 +238,13 @@ static NTSTATUS DispatchReadDriverOperation(
         }
 
         SIZE_T writeSize = local.Size;
-        if (writeSize == 0 || writeSize > sizeof(ULONGLONG)) {
+        if (writeSize != 1 && writeSize != 2 &&
+            writeSize != 4 && writeSize != 8) {
             return STATUS_INVALID_PARAMETER;
+        }
+        if (writeSize < sizeof(ULONGLONG) &&
+            (local.SourceAddress >> (writeSize * 8)) != 0) {
+            return STATUS_INTEGER_OVERFLOW;
         }
 
         for (ULONG i = 0; i < count; ++i) {

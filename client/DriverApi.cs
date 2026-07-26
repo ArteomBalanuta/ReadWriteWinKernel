@@ -249,6 +249,15 @@ internal static class DriverApi
             return false;
         }
 
+        ulong maximumValue = size == 8
+            ? ulong.MaxValue
+            : (1UL << (int)(size * 8)) - 1;
+        if (value > maximumValue)
+        {
+            error = $"value {value} does not fit in {size} byte(s)";
+            return false;
+        }
+
         if (addresses == null || addresses.Count == 0 || addresses.Count > 4)
         {
             error = "addresses must contain 1-4 entries";

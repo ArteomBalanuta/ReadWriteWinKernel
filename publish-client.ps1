@@ -20,8 +20,9 @@ $publishArgs = @(
     $projectPath,
     "-c", $Configuration,
     "-r", $Runtime,
-    "--self-contained", "true",
-    "/p:PublishSingleFile=$($SingleFile.IsPresent.ToString().ToLowerInvariant())"
+    "--self-contained", "false",
+    "/p:PublishSingleFile=$($SingleFile.IsPresent.ToString().ToLowerInvariant())",
+    "/p:DebugType=embedded"
 )
 
 Write-Host "Publishing client with arguments:"
