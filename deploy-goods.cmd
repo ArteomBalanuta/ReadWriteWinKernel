@@ -26,8 +26,8 @@ xcopy /Y /Q "%SRC%\controller\%PLATFORM%\%CONFIG%\controller.exe" "%DEST%\"
 xcopy /Y /Q "%SRC%\controller\%PLATFORM%\%CONFIG%\controller.pdb" "%DEST%\"
 
 rem C# client
-xcopy /Y /Q /S "%SRC%\client\%PLATFORM%\%CONFIG%\net8.0-windows\*.dll" "%DEST%\"
-xcopy /Y /Q /S "%SRC%\client\%PLATFORM%\%CONFIG%\net8.0-windows\*.exe" "%DEST%\"
-xcopy /Y /Q /S "%SRC%\client\%PLATFORM%\%CONFIG%\net8.0-windows\*.pdb" "%DEST%\"
+rem Copy the complete framework-dependent output. client.exe needs the
+rem companion .runtimeconfig.json and .deps.json files when run from goods.
+xcopy /Y /Q "%SRC%\client\%PLATFORM%\%CONFIG%\net8.0-windows\*.*" "%DEST%\"
 
 echo Done.
