@@ -152,7 +152,6 @@ NTSTATUS DriverInitialize(
     RegisterDispatchHandlers(DriverObject);
 
     deviceObject->Flags |= DO_BUFFERED_IO;
-    deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
     status = InitializeFreezeTimer();
     if (!NT_SUCCESS(status)) {
@@ -162,5 +161,6 @@ NTSTATUS DriverInitialize(
         return status;
     }
 
+    deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
     return STATUS_SUCCESS;
 }

@@ -18,23 +18,46 @@
 
 typedef struct _READDRIVER_FREEZE_SLOT {
     BOOLEAN active;
-    HANDLE processId;
+    PEPROCESS process;       /* Referenced process object */
     ULONG_PTR address;
     ULONGLONG value;
     SIZE_T size;
+    NTSTATUS lastStatus;
 } READDRIVER_FREEZE_SLOT;
+
+/* Freeze worker states. */
+typedef enum _READDRIVER_FREEZE_STATE {
+    FreezeIdle = 0,
+    FreezeRunning,
+    FreezeStopping
+} READDRIVER_FREEZE_STATE;
 
 static READDRIVER_FREEZE_SLOT g_freezeSlots[READDRIVER_MAX_FREEZE_SLOTS];
 static KSPIN_LOCK g_freezeLock;
-static KTIMER g_freezeTimer;
-static KDPC g_freezeDpc;
-static volatile LONG g_freezeEnabled;
+static KEVENT g_freezeWakeEvent;
+static volatile LONG g_freezeState;
+static HANDLE g_freezeThreadHandle;
 
-static VOID FreezeTimerDpc(
-    _In_ PRKDPC Dpc,
-    _In_opt_ PVOID DeferredContext,
-    _In_opt_ PVOID SystemArgument1,
-    _In_opt_ PVOID SystemArgument2
+static VOID FreezeWorkerThread(
+    _In_opt_ PVOID Context
+);
+
+static NTSTATUS WriteIntegerProcessMemoryByProcess(
+    _In_ PEPROCESS sourceProcess,
+    _In_ PEPROCESS targetProcess,
+    _In_ PVOID address,
+    _In_ ULONGLONG value,
+    _In_ SIZE_T size
+);
+
+static BOOLEAN RecordFreezeWriteStatus(
+    _In_ PEPROCESS process,
+    _In_ ULONG_PTR address,
+    _In_ NTSTATUS status
+);
+
+static VOID FreezeWorkerThread(
+    _In_opt_ PVOID Context
 );
 
 NTSYSAPI NTSTATUS NTAPI ZwProtectVirtualMemory(
@@ -561,55 +584,168 @@ NTSTATUS ReadProcessMemoryAsHex(
     return STATUS_SUCCESS;
 }
 
-static VOID FreezeTimerDpc(
-    _In_ PRKDPC Dpc,
-    _In_opt_ PVOID DeferredContext,
-    _In_opt_ PVOID SystemArgument1,
-    _In_opt_ PVOID SystemArgument2
+/* Write an integer using PEPROCESS pointers directly (no PID round-trip). */
+static NTSTATUS WriteIntegerProcessMemoryByProcess(
+    _In_ PEPROCESS sourceProcess,
+    _In_ PEPROCESS targetProcess,
+    _In_ PVOID address,
+    _In_ ULONGLONG value,
+    _In_ SIZE_T size
 )
 {
-    UNREFERENCED_PARAMETER(Dpc);
-    UNREFERENCED_PARAMETER(DeferredContext);
-    UNREFERENCED_PARAMETER(SystemArgument1);
-    UNREFERENCED_PARAMETER(SystemArgument2);
+    ULONGLONG valueBuffer;
+    SIZE_T bytesCopied = 0;
+    NTSTATUS status;
 
-    if (InterlockedCompareExchange(&g_freezeEnabled, 0, 0) == 0) {
-        return;
+    if (address == NULL || !IsSupportedIntegerSize(size)) {
+        return STATUS_INVALID_PARAMETER;
     }
 
-    /* Rewrite all active freeze slots. */
+    valueBuffer = value;
+
+    __try {
+        status = MmCopyVirtualMemory(
+            sourceProcess,
+            &valueBuffer,
+            targetProcess,
+            address,
+            size,
+            KernelMode,
+            &bytesCopied);
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
+        status = GetExceptionCode();
+    }
+
+    if (NT_SUCCESS(status) && bytesCopied != size) {
+        status = STATUS_BUFFER_OVERFLOW;
+    }
+
+    return status;
+}
+
+static BOOLEAN RecordFreezeWriteStatus(
+    _In_ PEPROCESS process,
+    _In_ ULONG_PTR address,
+    _In_ NTSTATUS status
+)
+{
+    BOOLEAN shouldLog = FALSE;
+    KIRQL oldIrql;
+
+    KeAcquireSpinLock(&g_freezeLock, &oldIrql);
     for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
-        if (!g_freezeSlots[i].active)
+        if (g_freezeSlots[i].active &&
+            g_freezeSlots[i].process == process &&
+            g_freezeSlots[i].address == address) {
+            shouldLog = !NT_SUCCESS(status) && g_freezeSlots[i].lastStatus != status;
+            g_freezeSlots[i].lastStatus = status;
+            break;
+        }
+    }
+    KeReleaseSpinLock(&g_freezeLock, oldIrql);
+
+    return shouldLog;
+}
+
+static VOID FreezeWorkerThread(
+    _In_opt_ PVOID Context
+)
+{
+    UNREFERENCED_PARAMETER(Context);
+
+    LARGE_INTEGER interval;
+    interval.QuadPart = -(LONGLONG)READDRIVER_FREEZE_INTERVAL_MS * 10000;
+
+    for (;;) {
+        NTSTATUS waitStatus;
+
+        waitStatus = KeWaitForSingleObject(
+            &g_freezeWakeEvent,
+            Executive,
+            KernelMode,
+            FALSE,
+            &interval);
+
+        LONG state = InterlockedCompareExchange(&g_freezeState, 0, 0);
+        if (state == FreezeStopping) {
+            break;
+        }
+        if (state != FreezeRunning) {
             continue;
+        }
 
-        WriteIntegerProcessMemory(
-            g_freezeSlots[i].processId,
-            (PVOID)g_freezeSlots[i].address,
-            g_freezeSlots[i].value,
-            g_freezeSlots[i].size,
-            TRUE);
+        /* Snapshot active slots under lock, adding a reference for each
+           so the EPROCESS can't vanish after we release the lock. */
+        READDRIVER_FREEZE_SLOT localSlots[READDRIVER_MAX_FREEZE_SLOTS];
+        RtlZeroMemory(localSlots, sizeof(localSlots));
+
+        {
+            KIRQL oldIrql;
+            KeAcquireSpinLock(&g_freezeLock, &oldIrql);
+            for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+                if (g_freezeSlots[i].active) {
+                    localSlots[i] = g_freezeSlots[i];
+                    ObReferenceObject(g_freezeSlots[i].process);
+                }
+            }
+            KeReleaseSpinLock(&g_freezeLock, oldIrql);
+        }
+
+        /* Perform writes at PASSIVE_LEVEL using PEPROCESS directly. */
+        for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+            if (!localSlots[i].active)
+                continue;
+
+            NTSTATUS writeStatus = WriteIntegerProcessMemoryByProcess(
+                PsGetCurrentProcess(),
+                localSlots[i].process,
+                (PVOID)localSlots[i].address,
+                localSlots[i].value,
+                localSlots[i].size);
+
+            if (RecordFreezeWriteStatus(
+                localSlots[i].process,
+                localSlots[i].address,
+                writeStatus)) {
+                LogMemoryOpStatus(
+                    L"FreezeWrite",
+                    writeStatus,
+                    L"periodic write failed",
+                    FALSE);
+            }
+
+            ObDereferenceObject(localSlots[i].process);
+        }
     }
 
-    /* Re-arm the timer. */
-    if (InterlockedCompareExchange(&g_freezeEnabled, 0, 0) != 0) {
-        LARGE_INTEGER interval;
-        interval.QuadPart = -(LONG)(READDRIVER_FREEZE_INTERVAL_MS * 10000);
-        KeSetTimer(&g_freezeTimer, interval, Dpc);
-    }
+    PsTerminateSystemThread(STATUS_SUCCESS);
 }
 
 NTSTATUS InitializeFreezeTimer(VOID)
 {
+    NTSTATUS status;
+
     RtlZeroMemory(g_freezeSlots, sizeof(g_freezeSlots));
     KeInitializeSpinLock(&g_freezeLock);
-    KeInitializeTimer(&g_freezeTimer);
-    KeInitializeDpc(&g_freezeDpc, FreezeTimerDpc, NULL);
-    InterlockedExchange(&g_freezeEnabled, 1);
+    KeInitializeEvent(&g_freezeWakeEvent, SynchronizationEvent, FALSE);
+    g_freezeThreadHandle = NULL;
+    InterlockedExchange(&g_freezeState, FreezeIdle);
 
-    LARGE_INTEGER interval;
-    interval.QuadPart = -(LONG)(READDRIVER_FREEZE_INTERVAL_MS * 10000);
-    KeSetTimer(&g_freezeTimer, interval, &g_freezeDpc);
+    status = PsCreateSystemThread(
+        &g_freezeThreadHandle,
+        THREAD_ALL_ACCESS,
+        NULL,
+        NULL,
+        NULL,
+        FreezeWorkerThread,
+        NULL);
 
+    if (!NT_SUCCESS(status)) {
+        return status;
+    }
+
+    InterlockedExchange(&g_freezeState, FreezeRunning);
+    KeSetEvent(&g_freezeWakeEvent, IO_NO_INCREMENT, FALSE);
     return STATUS_SUCCESS;
 }
 
@@ -617,16 +753,28 @@ VOID StopFreezeTimer(VOID)
 {
     KIRQL oldIrql;
 
-    if (InterlockedExchange(&g_freezeEnabled, 0) == 0) {
+    if (InterlockedCompareExchange(&g_freezeState, FreezeStopping, FreezeRunning) != FreezeRunning) {
         return;
     }
 
-    KeCancelTimer(&g_freezeTimer);
-    KeFlushQueuedDpcs();
+    /* Signal the worker to wake and check the stop flag. */
+    KeSetEvent(&g_freezeWakeEvent, IO_NO_INCREMENT, FALSE);
 
+    /* Wait for the worker thread to exit. */
+    ZwWaitForSingleObject(g_freezeThreadHandle, FALSE, NULL);
+    ZwClose(g_freezeThreadHandle);
+    g_freezeThreadHandle = NULL;
+
+    /* Dereference process objects and clear slots. */
     KeAcquireSpinLock(&g_freezeLock, &oldIrql);
+    for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+        if (g_freezeSlots[i].active && g_freezeSlots[i].process) {
+            ObDereferenceObject(g_freezeSlots[i].process);
+        }
+    }
     RtlZeroMemory(g_freezeSlots, sizeof(g_freezeSlots));
     KeReleaseSpinLock(&g_freezeLock, oldIrql);
+    InterlockedExchange(&g_freezeState, FreezeIdle);
 }
 
 NTSTATUS AddFreezeSlot(
@@ -636,44 +784,84 @@ NTSTATUS AddFreezeSlot(
     _In_ SIZE_T size
 )
 {
+    PEPROCESS process;
     KIRQL oldIrql;
+    NTSTATUS status;
+    BOOLEAN addedNewSlot;
 
     if (!IsSupportedIntegerSize(size)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    if (InterlockedCompareExchange(&g_freezeEnabled, 0, 0) == 0) {
+    if (InterlockedCompareExchange(&g_freezeState, 0, 0) != FreezeRunning) {
         return STATUS_DEVICE_NOT_READY;
+    }
+
+    /* Look up and reference the target process. */
+    status = PsLookupProcessByProcessId(processId, &process);
+    if (!NT_SUCCESS(status)) {
+        return status;
     }
 
     KeAcquireSpinLock(&g_freezeLock, &oldIrql);
 
+    /* Recheck state under lock to avoid racing with shutdown. */
+    if (InterlockedCompareExchange(&g_freezeState, 0, 0) != FreezeRunning) {
+        ObDereferenceObject(process);
+        KeReleaseSpinLock(&g_freezeLock, oldIrql);
+        return STATUS_DEVICE_NOT_READY;
+    }
+
     /* Check if slot for this address already exists, update in-place. */
     for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
         if (g_freezeSlots[i].active && g_freezeSlots[i].address == address) {
+            if (g_freezeSlots[i].process != process) {
+                PEPROCESS oldProcess = g_freezeSlots[i].process;
+                g_freezeSlots[i].process = process;
+                ObDereferenceObject(oldProcess);
+                /* 'process' reference transferred to slot, don't double-deref. */
+                g_freezeSlots[i].value = value;
+                g_freezeSlots[i].size = size;
+                g_freezeSlots[i].lastStatus = STATUS_SUCCESS;
+                KeReleaseSpinLock(&g_freezeLock, oldIrql);
+                return STATUS_SUCCESS;
+            }
             g_freezeSlots[i].value = value;
             g_freezeSlots[i].size = size;
-            g_freezeSlots[i].processId = processId;
+            g_freezeSlots[i].lastStatus = STATUS_SUCCESS;
             KeReleaseSpinLock(&g_freezeLock, oldIrql);
+            ObDereferenceObject(process);
             return STATUS_SUCCESS;
         }
     }
 
     /* Find a free slot. */
+    addedNewSlot = FALSE;
     for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
         if (!g_freezeSlots[i].active) {
-            g_freezeSlots[i].active = TRUE;
-            g_freezeSlots[i].processId = processId;
+            /* Set all fields before marking active. */
+            g_freezeSlots[i].process = process;
             g_freezeSlots[i].address = address;
             g_freezeSlots[i].value = value;
             g_freezeSlots[i].size = size;
+            g_freezeSlots[i].lastStatus = STATUS_SUCCESS;
+            g_freezeSlots[i].active = TRUE;
+            addedNewSlot = TRUE;
             KeReleaseSpinLock(&g_freezeLock, oldIrql);
-            return STATUS_SUCCESS;
+            /* The reference is now owned by the slot, don't deref. */
+            break;
         }
     }
 
-    KeReleaseSpinLock(&g_freezeLock, oldIrql);
-    return STATUS_INSUFFICIENT_RESOURCES;
+    if (!addedNewSlot) {
+        KeReleaseSpinLock(&g_freezeLock, oldIrql);
+        ObDereferenceObject(process);
+        return STATUS_INSUFFICIENT_RESOURCES;
+    }
+
+    /* Wake the worker so it processes the new slot immediately. */
+    KeSetEvent(&g_freezeWakeEvent, IO_NO_INCREMENT, FALSE);
+    return STATUS_SUCCESS;
 }
 
 NTSTATUS ClearFreezeSlot(
@@ -685,14 +873,20 @@ NTSTATUS ClearFreezeSlot(
     KeAcquireSpinLock(&g_freezeLock, &oldIrql);
 
     if (address == 0) {
-        /* address 0 = clear all. */
+        /* address 0 = clear all. Dereference process objects first. */
+        for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+            if (g_freezeSlots[i].active && g_freezeSlots[i].process) {
+                ObDereferenceObject(g_freezeSlots[i].process);
+            }
+        }
         RtlZeroMemory(g_freezeSlots, sizeof(g_freezeSlots));
     }
     else {
         for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
             if (g_freezeSlots[i].active && g_freezeSlots[i].address == address) {
                 g_freezeSlots[i].active = FALSE;
-                g_freezeSlots[i].processId = NULL;
+                ObDereferenceObject(g_freezeSlots[i].process);
+                g_freezeSlots[i].process = NULL;
                 KeReleaseSpinLock(&g_freezeLock, oldIrql);
                 return STATUS_SUCCESS;
             }
