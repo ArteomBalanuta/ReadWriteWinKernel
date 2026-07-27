@@ -219,7 +219,7 @@ static NTSTATUS DispatchReadDriverOperation(
         return RemoveUserVisibleDeviceLink(silentMode);
     }
     case ReadDriverOperationFreezeWrite: {
-        /* Freeze value at address(es), rewritten ~10x/sec by timer DPC.
+        /* Freeze value at address(es), rewritten ~10x/sec by the background worker.
            SourceProcessId = PID, SourceAddress = value,
            TargetAddress = address 1, TargetProcessId = address 2 (optional),
            Reserved2/3 = address 3/4 (optional), Size = integer width. */
@@ -260,8 +260,12 @@ static NTSTATUS DispatchReadDriverOperation(
         return STATUS_SUCCESS;
     }
     case ReadDriverOperationUnfreeze: {
-        /* Clear freeze slot(s). SourceAddress = address (0 = clear all). */
-        return ClearFreezeSlot(local.SourceAddress);
+        /* Clear freeze slot(s).
+           SourceProcessId = PID scope (0 = every process),
+           SourceAddress = address scope (0 = every address). */
+        return ClearFreezeSlot(
+            (HANDLE)local.SourceProcessId,
+            local.SourceAddress);
     }
     default:
         return STATUS_NOT_SUPPORTED;

@@ -272,14 +272,19 @@ internal sealed class ClientForm : Form
             return;
         }
 
-        if (!DriverApi.Unfreeze(selected.Value, out string? error))
+        if (!TryGetFreezeProcessId(out ulong processId))
+        {
+            return;
+        }
+
+        if (!DriverApi.Unfreeze(processId, selected.Value, out string? error))
         {
             AppendFreezeStatus(error ?? $"Failed to unfreeze 0x{selected.Value:X}.");
             return;
         }
 
         _freezeAddresses.Items.Remove(selected);
-        AppendFreezeStatus($"Freeze cleared for address 0x{selected.Value:X}.");
+        AppendFreezeStatus($"Freeze cleared for PID {processId}, address 0x{selected.Value:X}.");
     }
 
     private void ArmFreeze()
@@ -309,9 +314,9 @@ internal sealed class ClientForm : Form
             return;
         }
 
-        if (!DriverApi.UnfreezeAll(out string? clearError))
+        if (!DriverApi.UnfreezeAll(processId, out string? clearError))
         {
-            AppendFreezeStatus(clearError ?? "Failed to clear previous freeze slots.");
+            AppendFreezeStatus(clearError ?? $"Failed to clear previous freeze slots for PID {processId}.");
             return;
         }
 
@@ -334,25 +339,47 @@ internal sealed class ClientForm : Form
             return;
         }
 
-        if (!DriverApi.Unfreeze(selected.Value, out string? error))
+        if (!TryGetFreezeProcessId(out ulong processId))
+        {
+            return;
+        }
+
+        if (!DriverApi.Unfreeze(processId, selected.Value, out string? error))
         {
             AppendFreezeStatus(error ?? $"Failed to unfreeze 0x{selected.Value:X}.");
             return;
         }
 
         _freezeAddresses.Items.Remove(selected);
-        AppendFreezeStatus($"Freeze cleared for address 0x{selected.Value:X}.");
+        AppendFreezeStatus($"Freeze cleared for PID {processId}, address 0x{selected.Value:X}.");
     }
 
     private void UnfreezeAllAddresses()
     {
-        if (!DriverApi.UnfreezeAll(out string? error))
+        if (!TryGetFreezeProcessId(out ulong processId))
         {
-            AppendFreezeStatus(error ?? "Failed to clear freeze slots.");
             return;
         }
 
-        AppendFreezeStatus("All freeze slots were cleared. Target addresses remain listed for re-arming.");
+        if (!DriverApi.UnfreezeAll(processId, out string? error))
+        {
+            AppendFreezeStatus(error ?? $"Failed to clear freeze slots for PID {processId}.");
+            return;
+        }
+
+        AppendFreezeStatus(
+            $"All freeze slots for PID {processId} were cleared. Target addresses remain listed for re-arming.");
+    }
+
+    private bool TryGetFreezeProcessId(out ulong processId)
+    {
+        if (!DriverApi.TryParseUlong(_freezePid.Text.Trim(), out processId) || processId == 0)
+        {
+            AppendFreezeStatus("Invalid process ID.");
+            return false;
+        }
+
+        return true;
     }
 
     private bool TryBuildRequest(out ReadDriverRequest request, out string error)

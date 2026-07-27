@@ -310,23 +310,37 @@ internal static class DriverApi
         return SendDriverRequest(request, out _, out _, out error);
     }
 
-    internal static bool Unfreeze(ulong address, out string? error)
+    internal static ReadDriverRequest CreateUnfreezeRequest(ulong pid, ulong address)
     {
-        error = null;
-
-        var request = new ReadDriverRequest
+        return new ReadDriverRequest
         {
+            SourceProcessId = pid,
             SourceAddress = address,
             Operation = (ulong)ReadDriverOperation.Unfreeze,
             Flags = ReadDriverFlags.Silent
         };
+    }
 
+    internal static bool Unfreeze(ulong pid, ulong address, out string? error)
+    {
+        error = null;
+        ReadDriverRequest request = CreateUnfreezeRequest(pid, address);
         return SendDriverRequest(request, out _, out _, out error);
+    }
+
+    internal static bool Unfreeze(ulong address, out string? error)
+    {
+        return Unfreeze(0, address, out error);
+    }
+
+    internal static bool UnfreezeAll(ulong pid, out string? error)
+    {
+        return Unfreeze(pid, 0, out error);
     }
 
     internal static bool UnfreezeAll(out string? error)
     {
-        return Unfreeze(0, out error);
+        return UnfreezeAll(0, out error);
     }
 
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]

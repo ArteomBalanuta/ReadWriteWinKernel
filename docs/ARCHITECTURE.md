@@ -266,6 +266,23 @@ Current implementation note:
 - the hex formatter expands each byte to `"XX "` plus a trailing `\0`
 - with the current fixed-width response buffer, only a short hex string fits in one request/response cycle
 
+### FreezeWrite
+
+- `SourceProcessId`: process whose memory is periodically updated
+- `SourceAddress`: integer value to write
+- `TargetAddress`: first destination address
+- `TargetProcessId`: second destination address if non-zero
+- `Reserved2`: third destination address if non-zero
+- `Reserved3`: fourth destination address if non-zero
+- `Size`: integer width in bytes (`1`, `2`, `4`, or `8`)
+- slot identity: the pair `(process, address)`, allowing identical virtual addresses in different processes
+
+### Unfreeze
+
+- `SourceProcessId`: process scope; `0` means every process for legacy/global commands
+- `SourceAddress`: address scope; `0` means every address in the selected process scope
+- the GUI always supplies its selected PID, so Arm and Unfreeze All do not affect other processes
+
 ### Flags
 
 - `Flags` bit `0`: silent mode, which suppresses `LogStatus` writes for that request

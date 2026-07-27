@@ -216,8 +216,9 @@ GUI behavior:
 - use the `Requests` tab to choose a core operation, enter request values, and click `Send Request`
 - use the `Freeze` tab to enter a PID, integer value, and width, then add one to four target addresses
 - choose an integer size that can hold the value (for example, `5000` requires at least two bytes)
-- click `Arm Freeze` to replace all active driver freeze slots with the listed addresses for the driver's fixed 100 ms periodic write cycle
-- use `Unfreeze Selected` or `Unfreeze All` to clear registered addresses
+- click `Arm Freeze` to replace the selected PID's active freeze slots with the listed addresses for the driver's fixed 100 ms periodic write cycle
+- use `Unfreeze Selected` or `Unfreeze All` to clear registered addresses only for the selected PID
+- separate GUI instances can freeze different PIDs concurrently; instances targeting the same PID intentionally share that PID's freeze scope
 
 Current GUI note:
 

@@ -812,20 +812,11 @@ NTSTATUS AddFreezeSlot(
         return STATUS_DEVICE_NOT_READY;
     }
 
-    /* Check if slot for this address already exists, update in-place. */
+    /* Check if a slot for this process and address already exists. */
     for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
-        if (g_freezeSlots[i].active && g_freezeSlots[i].address == address) {
-            if (g_freezeSlots[i].process != process) {
-                PEPROCESS oldProcess = g_freezeSlots[i].process;
-                g_freezeSlots[i].process = process;
-                ObDereferenceObject(oldProcess);
-                /* 'process' reference transferred to slot, don't double-deref. */
-                g_freezeSlots[i].value = value;
-                g_freezeSlots[i].size = size;
-                g_freezeSlots[i].lastStatus = STATUS_SUCCESS;
-                KeReleaseSpinLock(&g_freezeLock, oldIrql);
-                return STATUS_SUCCESS;
-            }
+        if (g_freezeSlots[i].active &&
+            g_freezeSlots[i].process == process &&
+            g_freezeSlots[i].address == address) {
             g_freezeSlots[i].value = value;
             g_freezeSlots[i].size = size;
             g_freezeSlots[i].lastStatus = STATUS_SUCCESS;
@@ -865,6 +856,7 @@ NTSTATUS AddFreezeSlot(
 }
 
 NTSTATUS ClearFreezeSlot(
+    _In_ HANDLE processId,
     _In_ ULONG_PTR address
 )
 {
@@ -872,24 +864,25 @@ NTSTATUS ClearFreezeSlot(
 
     KeAcquireSpinLock(&g_freezeLock, &oldIrql);
 
-    if (address == 0) {
-        /* address 0 = clear all. Dereference process objects first. */
-        for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
-            if (g_freezeSlots[i].active && g_freezeSlots[i].process) {
-                ObDereferenceObject(g_freezeSlots[i].process);
-            }
+    for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
+        BOOLEAN processMatches;
+        BOOLEAN addressMatches;
+
+        if (!g_freezeSlots[i].active || g_freezeSlots[i].process == NULL) {
+            continue;
         }
-        RtlZeroMemory(g_freezeSlots, sizeof(g_freezeSlots));
-    }
-    else {
-        for (ULONG i = 0; i < READDRIVER_MAX_FREEZE_SLOTS; ++i) {
-            if (g_freezeSlots[i].active && g_freezeSlots[i].address == address) {
-                g_freezeSlots[i].active = FALSE;
-                ObDereferenceObject(g_freezeSlots[i].process);
-                g_freezeSlots[i].process = NULL;
-                KeReleaseSpinLock(&g_freezeLock, oldIrql);
-                return STATUS_SUCCESS;
-            }
+
+        processMatches =
+            processId == NULL ||
+            PsGetProcessId(g_freezeSlots[i].process) == processId;
+        addressMatches =
+            address == 0 ||
+            g_freezeSlots[i].address == address;
+
+        if (processMatches && addressMatches) {
+            PEPROCESS process = g_freezeSlots[i].process;
+            RtlZeroMemory(&g_freezeSlots[i], sizeof(g_freezeSlots[i]));
+            ObDereferenceObject(process);
         }
     }
 

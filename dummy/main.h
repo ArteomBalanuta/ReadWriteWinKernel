@@ -149,5 +149,6 @@ NTSTATUS AddFreezeSlot(
 );
 
 NTSTATUS ClearFreezeSlot(
+    _In_ HANDLE processId,
     _In_ ULONG_PTR address
 );

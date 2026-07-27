@@ -85,7 +85,8 @@ Current split:
 
 - CLI mode can submit the expanded operation set and decode response payloads
 - GUI mode exposes `Copy`, `Protect`, `Patch`, and `WriteInteger` on the Requests tab
-- GUI mode provides a dedicated Freeze tab for registering one to four addresses and clearing selected or all freeze entries
+- GUI mode provides a dedicated Freeze tab for registering one to four addresses and clearing selected or all freeze entries within the selected PID
+- separate GUI instances can maintain freeze slots for different PIDs concurrently
 
 Main files:
 

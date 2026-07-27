@@ -99,6 +99,24 @@ public class UnitTest1
     }
 
     [Fact]
+    public void Unfreeze_request_builder_scopes_clear_all_to_one_process()
+    {
+        Type driverApi = LoadClientAssembly().GetType("DriverApi", throwOnError: true)!;
+        MethodInfo? method = driverApi.GetMethod(
+            "CreateUnfreezeRequest",
+            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+
+        Assert.NotNull(method);
+
+        object request = method.Invoke(null, [6512UL, 0UL])!;
+        Type requestType = request.GetType();
+
+        Assert.Equal(6512UL, requestType.GetField("SourceProcessId")!.GetValue(request));
+        Assert.Equal(0UL, requestType.GetField("SourceAddress")!.GetValue(request));
+        Assert.Equal(11UL, requestType.GetField("Operation")!.GetValue(request));
+    }
+
+    [Fact]
     public void Unfreeze_all_keeps_the_GUI_address_list_available_for_rearming()
     {
         string source = File.ReadAllText(FindRepositoryFile("client", "ClientForm.cs"));

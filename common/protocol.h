@@ -34,15 +34,15 @@ typedef enum _READDRIVER_OPERATION {
 #define READDRIVER_FLAG_SILENT 0x0000000000000001UL
 
 typedef struct _READDRIVER_REQUEST {
-    ULONGLONG SourceProcessId; /* Source PID for copy, or the target PID for single-process operations. */
-    ULONGLONG SourceAddress;   /* Source address for copy, patch address for op 4, or integer payload for op 5. */
-    ULONGLONG TargetProcessId; /* Target PID for copy, or region size for op 3. */
-    ULONGLONG TargetAddress;   /* Target address for copy, or write destination for op 5. */
+    ULONGLONG SourceProcessId; /* Source PID for copy, target PID for single-process operations, or unfreeze scope. */
+    ULONGLONG SourceAddress;   /* Source address for copy, integer payload for op 5, or address to unfreeze. */
+    ULONGLONG TargetProcessId; /* Target PID for copy, region size for op 3, or second freeze address. */
+    ULONGLONG TargetAddress;   /* Target address for copy/write, or first freeze address. */
     ULONGLONG Size;            /* Transfer size, or integer width for op 5. */
     ULONGLONG Operation;       /* One of READDRIVER_OPERATION. */
     ULONGLONG Flags;           /* Bit 0 = silent mode (no logging). Reserved bits must be 0. */
-    ULONGLONG Reserved2;
-    ULONGLONG Reserved3;
+    ULONGLONG Reserved2;       /* Third freeze address when operation is FreezeWrite. */
+    ULONGLONG Reserved3;       /* Fourth freeze address when operation is FreezeWrite. */
     ULONGLONG Reserved4;
     ULONGLONG Reserved5;
 } READDRIVER_REQUEST, *PREADDRIVER_REQUEST;
